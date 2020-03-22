@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, Container } from "@material-ui/core";
+import { Button, Container, TextField } from "@material-ui/core";
 import "./JoinComponent.css";
+
 
 interface JoinComponentState {
   testBool: boolean;
@@ -24,11 +25,14 @@ export class JoinComponent extends React.Component<JoinComponentProps, JoinCompo
       <Container>
         <Container className="join-component-button-area">
           <Container className="join-component-button-area-row">
-            <Button color="primary">
+            <Button color="primary" href="/create" >
               New Game!
             </Button>
           </Container>
           <Container className="join-component-button-area-row">
+            <form className="join-component-form" noValidate autoComplete="off">
+              <TextField id="game-uuid" label="Spiel-Code" variant="outlined" />
+            </form>
             <Button color="primary">
               Beitreten
             </Button>
