@@ -13,6 +13,9 @@
 
 
 
+    
+
+
 ## GET	/api/game/<gid>
     HTTP/1.1 200 OK
     Content-Type: text/json
@@ -22,22 +25,22 @@ Move an Game ?? move : Hans bzw ID???
        
 ```json
 "Stack" : 10,
-"State" : "String"
+"State" : "String",
 "First_Halfe" : true,
 "Move" : "Userid",
 "First" : "Userid",
 "Users": [{
-	"id" : 11
-	"Name"  : "Hans"
-	"Chips" : 2
-	"passive" : false
+	"id" : 11,
+	"Name"  : "Hans",
+	"Chips" : 2,
+	"passive" : false,
 	"visible" : false
 	},
 	{
-	"id" : 11
-	"Name"  : "Hans"
-	"Chips" : 2
-	"passive" : false
+	"id" : 11,
+	"Name"  : "Hans",
+	"Chips" : 2,
+	"passive" : false,
 	"visible" : false
 	}
 ]
@@ -45,13 +48,24 @@ Move an Game ?? move : Hans bzw ID???
 ### Error Response:
 
 
+
 ## POST	/api/game	
+### given:
+{'name': 'Tim123'}
+
+### response:
     HTTP/1.1 200 OK
     Content-Type: text/json
 ```json
 "Link" : "tele-schocken.de/abc123",
 "UUID": "abc123"
 ```
+
+
+##  POST	/api/game/<gid>/user/
+{'name': 'Tim123'}
+
+ 
 
 ## POST	/api/game/<gid>/user/<uid>/dice
 ```json
@@ -75,6 +89,14 @@ Move an Game ?? move : Hans bzw ID???
 ```json
 "count" : 1 (Allowed Values 1,2)
 
+```
+
+    HTTP/1.1 200 OK
+    Content-Type: text/json
+```json
+"dice1" : 2, (Optional)
+"dice2" : 3, (Optional)
+"dice3" : 6, (Optional)
 ```
 
 
