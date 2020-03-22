@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button, Container, TextField } from '@material-ui/core';
 import './JoinComponent.css';
+import {observable, action, computed} from "mobx";
 import { observer } from 'mobx-react';
 import { makeStyles } from '@material-ui/core/styles';
 
 @observer
 export class JoinComponent extends React.Component {
+  @observable private textInput: string = "";
+
   render() {
     return (
       <div style={{ alignContent: 'center', display: 'flex', height: "60%" }}>
@@ -29,6 +32,8 @@ export class JoinComponent extends React.Component {
                   id='game-uuid'
                   label='Spiel-Code'
                   variant='outlined'
+                  defaultValue="test"
+                  onChange={this.handleInputChange}
                 />
               </form>
             </div>
@@ -41,4 +46,12 @@ export class JoinComponent extends React.Component {
       </div>
     );
   }
+
+  @action.bound
+  private handleInputChange(e: any): void{
+    this.textInput = e.target.value;
+  }
+
+
+
 }

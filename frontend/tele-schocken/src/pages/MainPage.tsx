@@ -1,5 +1,4 @@
 import React from 'react';
-import { CreateGamePage } from './create-game/CreateGamePage';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Container, AppBar, Toolbar, Button } from '@material-ui/core';
 import './MainPage.css';
@@ -20,7 +19,6 @@ export class MainPage extends React.Component {
 
         <Router>
           <Switch>
-            <Route exact path='/create' component={CreateGamePage} />
             <Route exact path='/play' component={PlayGamePage} />
             <Route path='' component={JoinComponent} />
           </Switch>
