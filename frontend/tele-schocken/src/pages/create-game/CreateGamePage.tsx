@@ -22,6 +22,7 @@ export class CreateGamePage extends React.Component<CreateGamePageProps, CreateG
     return(
       <Container>
         <h2>Create new Game</h2>
+        <p>Hello</p>
       </Container>
       
     );
