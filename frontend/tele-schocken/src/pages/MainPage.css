@@ -1,0 +1,16 @@
+
+.main-page-header{
+  height: 8vh;
+  flex: 1;
+  display: flex;
+}
+
+.main-page-header-text{
+  flex:1;
+}
+
+.main-page{
+  display: flex;
+  flex-direction: row;
+  background-color: aqua;
+}
