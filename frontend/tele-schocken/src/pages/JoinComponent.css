@@ -1,11 +1,22 @@
-.join-component-button-area{
-    flex-direction: column;
-  }
-  
-  .join-component-button-area-row{
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .join-component-form{
+.join-component-button-area {
+  flex:2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
 
-  }
+.join-component-button-area-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.join-component-button-area-button{
+  flex:1;
+  align-self: center;
+}

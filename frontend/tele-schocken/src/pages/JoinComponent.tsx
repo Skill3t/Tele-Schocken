@@ -1,45 +1,44 @@
-import React from "react";
-import { Button, Container, TextField } from "@material-ui/core";
-import "./JoinComponent.css";
+import React from 'react';
+import { Button, Container, TextField } from '@material-ui/core';
+import './JoinComponent.css';
+import { observer } from 'mobx-react';
+import { makeStyles } from '@material-ui/core/styles';
 
-
-interface JoinComponentState {
-  testBool: boolean;
-}
-
-interface JoinComponentProps {
-  testBool: boolean;
-}
-
-export class JoinComponent extends React.Component<JoinComponentProps, JoinComponentState> {
-
-  public constructor(props: any) {
-    super(props);
-    this.state = {
-      testBool: true
-    }
-  }
-
+@observer
+export class JoinComponent extends React.Component {
   render() {
     return (
-      <Container>
-        <Container className="join-component-button-area">
-          <Container className="join-component-button-area-row">
-            <Button color="primary" href="/create" >
-              New Game!
-            </Button>
-          </Container>
-          <Container className="join-component-button-area-row">
-            <form className="join-component-form" noValidate autoComplete="off">
-              <TextField id="game-uuid" label="Spiel-Code" variant="outlined" />
-            </form>
-            <Button color="primary">
-              Beitreten
-            </Button>
-          </Container>
-        </Container>
-      </Container>
-
+      <div style={{ alignContent: 'center', display: 'flex', height: "60%" }}>
+        <div style={{ flex: '1' }} />
+        <div className='join-component-button-area'>
+          <div className='join-component-button-area-row'>
+            <div className='join-component-button-area-button' />
+            <div className='join-component-button-area-button'>
+              <Button color='primary' href='/create'>
+                New Game!
+              </Button>
+            </div>
+          </div>
+          <div className='join-component-button-area-row'>
+            <div className='join-component-button-area-button'>
+              <form
+                className='join-component-form'
+                noValidate
+                autoComplete='off'>
+                <TextField
+                  id='game-uuid'
+                  label='Spiel-Code'
+                  variant='outlined'
+                />
+              </form>
+            </div>
+            <div className='join-component-button-area-button'>
+              <Button color='primary'>Beitreten</Button>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: '1' }} />
+      </div>
     );
   }
 }

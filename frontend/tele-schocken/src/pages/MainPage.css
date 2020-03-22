@@ -10,8 +10,7 @@
 }
 
 .main-page{
-  display: flex;
-  flex-direction: row;
-  background-color: aqua;
+  height: 100%;
+  width: 100%;
 }
 
