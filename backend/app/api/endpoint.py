@@ -92,6 +92,32 @@ def start_game(gid):
     response.status_code = 201
     return response
 
+
+# user finisch bevor 3 rolls
+@bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
+def finish_throwing(gid, uid):
+    game = Game.query.filter_by(UUID=gid).first()
+    user = User.query.get_or_404(uid)
+    if game is None:
+        response = jsonify()
+        response.status_code = 404
+        return response
+    if user.game_id != game.id:
+        response = jsonify()
+        response.status_code = 404
+        return response
+    aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+    if len(game.users) > aktualuserid[0]+1:
+        game.move_user_id = game.users[aktualuserid[0]+1].id
+    else:
+        game.move_user_id = game.users[0].id
+    db.session.add(game)
+    db.session.commit()
+    response = jsonify()
+    response.status_code = 201
+    return response
+
+
 # roll dice
 @bp.route('/game/<gid>/user/<uid>/dice', methods=['POST'])
 def roll_dice(gid, uid):
@@ -106,38 +132,44 @@ def roll_dice(gid, uid):
         response.status_code = 404
         return response
     data = request.get_json() or {}
-    if user.number_dice >= 3:
-        response = jsonify()
-        response.status_code = 404
-        return response
-    user.number_dice = user.number_dice + 1
-    if user.number_dice == 3:
-        i = 0
-        print(game.users)
-        for user in game.users:
-            i = i + 1
-        # game.move_user_id = next
-    if 'dice1' in data:
-        if data['dice1']:
-            user.dice1 = randint(1, 6)
-    if 'dice2' in data:
-        if data['dice2']:
-            user.dice2 = randint(1, 6)
-    if 'dice3' in data:
-        if data['dice3']:
-            user.dice3 = randint(1, 6)
-    if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
-        if game.firsthalf:
-            game.status = Status.FINISCH
-        else:
-            game.firsthalf = True
-        db.session.add(game)
+    # Cloud be improved to game.first_user_id first user.number_dice
+    if user.number_dice is not None:
+        if user.number_dice >= 3:
+            response = jsonify()
+            response.status_code = 404
+            return response
+        user.number_dice = user.number_dice + 1
+        if user.number_dice == 3:
+            aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+            if len(game.users) > aktualuserid[0]+1:
+                game.move_user_id = game.users[aktualuserid[0]+1].id
+            else:
+                game.move_user_id = game.users[0].id
+        if 'dice1' in data:
+            if data['dice1']:
+                user.dice1 = randint(1, 6)
+        if 'dice2' in data:
+            if data['dice2']:
+                user.dice2 = randint(1, 6)
+        if 'dice3' in data:
+            if data['dice3']:
+                user.dice3 = randint(1, 6)
+        if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
+            if game.firsthalf:
+                game.status = Status.FINISCH
+            else:
+                game.firsthalf = True
+            db.session.add(game)
+            db.session.commit()
+        fallen = decision(game.changs_of_fallling_dice)
+        response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
+        response.status_code = 201
+        db.session.add(user)
         db.session.commit()
-    fallen = decision(game.changs_of_fallling_dice)
-    response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
-    response.status_code = 201
-    db.session.add(user)
-    db.session.commit()
+        return response
+    else:
+        response = jsonify(Message='User not correct initialted')
+        response.status_code = 400
     return response
 
 # turn dice (2 or 3 6er to 1 or 2 1er)

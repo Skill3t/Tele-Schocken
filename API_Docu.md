@@ -7,7 +7,7 @@
 	* POST	/api/game							Add a new Game.
 	* POST	/api/game/<gid>/user/				Add a new User to a Game.
 	* GET	/api/game/<gid>/user/<uid>/dice 	Roll a given number of dice  
-	* POST	/api/game/<gid>/user/<uid>/finisch 	finisch        	
+	* POST	/api/game/<gid>/user/<uid>/finisch 	finisch throwing dice (bevor 3)      
 	* POST	/api/game/<gid>/chips				move chips from user to user or
 	 											stack to user
 	* POST	/api/game/<gid>/start				Start the Game
@@ -31,6 +31,7 @@ Move an Game ?? move : Hans bzw ID???
 "First_Halfe" : true,
 "Move" : "Userid",
 "First" : "Userid",
+"Admin" : "Userid",
 "Users": [{
 	"id" : 11,
 	"Name"  : "Hans",

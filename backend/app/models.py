@@ -36,6 +36,7 @@ class Game(db.Model):
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'First': self.first_user_id,
+            'Admin': self.admin_user_id,
             'User': arrayuser,
         }
         return data
