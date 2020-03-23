@@ -62,6 +62,10 @@ def set_game_user(gid):
         response = jsonify()
         response.status_code = 404
         return response
+    if game.status != Status.WAITING:
+        response = jsonify(Status='Game already Startet create new Game')
+        response.status_code = 404
+        return response
     data = request.get_json() or {}
     if 'name' not in data:
         return bad_request('must include name field')

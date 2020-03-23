@@ -42,6 +42,7 @@ class Game(db.Model):
 
     def __init__(self):
         self.stack = 13
+        self.status = Status.WAITING
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.01
