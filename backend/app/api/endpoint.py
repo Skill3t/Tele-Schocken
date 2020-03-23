@@ -203,6 +203,8 @@ def transfer_chips(gid):
         if userA.chips >= data['count']:
             userA.chips = userA.chips - data['count']
             userB.chips = userB.chips + data['count']
+            game.first_user_id = userB.id
+            db.session.add(game)
             db.session.add(userA)
             db.session.add(userB)
             db.session.commit()
@@ -212,6 +214,7 @@ def transfer_chips(gid):
         if game.stack >= data['count']:
             game.stack = game.stack - data['count']
             userB.chips = userB.chips + data['count']
+            game.first_user_id = userB.id
             db.session.add(game)
             db.session.add(userB)
             db.session.commit()

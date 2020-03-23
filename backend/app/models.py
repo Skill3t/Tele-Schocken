@@ -58,6 +58,7 @@ class User(db.Model):
     dice1 = db.Column(db.Integer)
     dice2 = db.Column(db.Integer)
     dice3 = db.Column(db.Integer)
+    number_dice = db.Column(db.Integer)  # Max Value = 3
 
     def to_dict(self):
         data = {
