@@ -7,9 +7,10 @@
 	* POST	/api/game							Add a new Game.
 	* POST	/api/game/<gid>/user/				Add a new User to a Game.
 	* GET	/api/game/<gid>/user/<uid>/dice 	Roll a given number of dice     	
-	*  POST /api/game/<gid>/chips			move chips from user to user or
-	 										stack to user
-	*
+	* POST	/api/game/<gid>/chips				move chips from user to user or
+	 											stack to user
+	* POST	/api/game/<gid>/start				Start the Game
+ 
 
 
 
@@ -108,7 +109,6 @@ Move an Game ?? move : Hans bzw ID???
 "source" : <userid>, (Optional)
 "target" : <userid>
 
-
 ```
 
 	HTTP/1.1 200 OK
@@ -121,8 +121,4 @@ Move an Game ?? move : Hans bzw ID???
 	* GET	/game/<gid> 	    			View play game
 	* GET	/game							View Create new Game
 
-
-
-Photo by Tembela Bohle from Pexels
-https://www.pexels.com/photo/two-persons-holding-drinking-glasses-filled-with-beer-1089930/
 
