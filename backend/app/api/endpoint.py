@@ -106,6 +106,17 @@ def roll_dice(gid, uid):
         response.status_code = 404
         return response
     data = request.get_json() or {}
+    if user.number_dice >= 3:
+        response = jsonify()
+        response.status_code = 404
+        return response
+    user.number_dice = user.number_dice + 1
+    if user.number_dice == 3:
+        i = 0
+        print(game.users)
+        for user in game.users:
+            i = i + 1
+        # game.move_user_id = next
     if 'dice1' in data:
         if data['dice1']:
             user.dice1 = randint(1, 6)

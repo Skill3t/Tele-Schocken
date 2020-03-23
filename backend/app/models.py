@@ -81,3 +81,4 @@ class User(db.Model):
         self.chips = 0
         self.visible = False
         self.passive = False
+        self.number_dice = 0
