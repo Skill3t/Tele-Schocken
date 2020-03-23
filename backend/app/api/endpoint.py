@@ -36,6 +36,11 @@ def create_Game():
     if 'name' not in data:
         return bad_request('must include name field')
     game = Game()
+    inuse = User.query.filter_by(name=data['name']).first()
+    if inuse is None:
+        response = jsonify(Message='username in use!')
+        response.status_code = 400
+        return response
     user = User()
     user.name = data['name']
     game.users.append(user)
