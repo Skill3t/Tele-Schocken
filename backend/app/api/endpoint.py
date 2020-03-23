@@ -37,7 +37,7 @@ def create_Game():
         return bad_request('must include name field')
     game = Game()
     inuse = User.query.filter_by(name=data['name']).first()
-    if inuse is None:
+    if inuse is not None:
         response = jsonify(Message='username in use!')
         response.status_code = 400
         return response
