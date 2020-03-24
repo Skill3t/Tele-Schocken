@@ -106,6 +106,7 @@ def finish_throwing(gid, uid):
         response = jsonify()
         response.status_code = 404
         return response
+    # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
     aktualuserid = [i for i, x in enumerate(game.users) if x == user]
     if len(game.users) > aktualuserid[0]+1:
         game.move_user_id = game.users[aktualuserid[0]+1].id
@@ -140,6 +141,7 @@ def roll_dice(gid, uid):
             return response
         user.number_dice = user.number_dice + 1
         if user.number_dice == 3:
+            # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
             aktualuserid = [i for i, x in enumerate(game.users) if x == user]
             if len(game.users) > aktualuserid[0]+1:
                 game.move_user_id = game.users[aktualuserid[0]+1].id
