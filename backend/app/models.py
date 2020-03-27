@@ -38,7 +38,7 @@ class Game(db.Model):
             arrayuser.append(user.to_dict())
         data = {
             'Stack': self.stack,
-            'State': self.status2,
+            'State': self.status2.value,
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'First': self.first_user_id,
@@ -52,7 +52,7 @@ class Game(db.Model):
         Init a Game with 13 chips on the Stack an a changs of 1 % that a dice cann fall frome the table (Liquer round)
         """
         self.stack = 13
-        self.status = Status2.WAITING
+        self.status2 = Status2.WAITING
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.01
