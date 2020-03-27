@@ -87,7 +87,7 @@ def create_Game():
 
     .. code-block:: json
 
-        {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800"}
+        {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800", "Admin_Id":11}
 
     """
     seed(1)
@@ -108,7 +108,7 @@ def create_Game():
     game.admin_user_id = user.id
     db.session.add(game)
     db.session.commit()
-    response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID, Admin_id=user.id)
+    response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID, Admin_Id=user.id)
     response.status_code = 201
     return response
 
@@ -178,7 +178,7 @@ def start_game(gid):
     return response
 
 
-# Start the Game
+#
 @bp.route('game/<gid>/user/<uid>/visible', methods=['POST'])
 def pull_up_dice_cup(gid, uid):
     """
