@@ -1,12 +1,15 @@
+"""
+models.py
+====================================
+The Models Packages withe the Entities Game, User and Status.
+A Game Class represent a hole Schocken game
+"""
 from app import db
 import enum
 import uuid
 
-# from sqlalchemy.ext.declarative import declarative_base
 
-
-# Base = declarative_base()
-class Status(enum.Enum):
+class Status2(enum.Enum):
     WAITING = "waiting"
     STARTED = "started"
     FINISCH = "finish"
@@ -18,7 +21,7 @@ class Game(db.Model):
     users = db.relationship('User')
 
     firsthalf = db.Column(db.Boolean(), default=False)
-    status = db.Column(db.Enum(Status))
+    status2 = db.Column(db.Enum(Status2))
     stack = db.Column(db.Integer)
     changs_of_fallling_dice = db.Column(db.Float)
 
@@ -27,12 +30,15 @@ class Game(db.Model):
     admin_user_id = db.Column(db.Integer)
 
     def to_dict(self):
+        """
+        return a API conform Key Value Store that can convert to JSON
+        """
         arrayuser = []
         for user in self.users:
             arrayuser.append(user.to_dict())
         data = {
-            'stack': self.stack,
-            'state': self.status,
+            'Stack': self.stack,
+            'State': self.status,
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'First': self.first_user_id,
@@ -42,8 +48,11 @@ class Game(db.Model):
         return data
 
     def __init__(self):
+        """
+        Init a Game with 13 chips on the Stack an a changs of 1 % that a dice cann fall frome the table (Liquer round)
+        """
         self.stack = 13
-        self.status = Status.WAITING
+        self.status = Status2.WAITING
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.01
@@ -63,21 +72,14 @@ class User(db.Model):
 
     def to_dict(self):
         data = {
-            'id': self.id,
+            'Id': self.id,
             'Name': self.name,
             'Chips': self.chips,
-            'passive': self.passive,
-            'visible': self.visible
+            'Passive': self.passive,
+            'Visible': self.visible
         }
         return data
-    '''
-    def __init__(self, **kwargs):
-        print("user")
-        super().__init__(**kwargs)
-        self.chips = 0
-        self.visible = False
-        self.passive = False
-    '''
+
     def __init__(self):
         self.chips = 0
         self.visible = False

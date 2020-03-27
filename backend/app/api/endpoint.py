@@ -1,36 +1,77 @@
+"""
+endpoint.py
+====================================
+
+.. code-block:: none
+
+    JSON REST API
+    * GET   /api/game/<gid>                     Return the State of the Game (Polling)
+    * POST  /api/game                           Add a new Game.
+    * POST  /api/game/<gid>/user/               Add a new User to a Game.
+    * GET   /api/game/<gid>/user/<uid>/dice     Roll a given number of dice
+
+"""
 from app.api import bp
 from app import db
 
 from flask import jsonify
 from flask import request
-from app.models import User, Game, Status
+from app.models import User, Game, Status2
 from random import seed, randint, random
 
 
 from app.api.errors import bad_request
 
-'''
-* GET   /api/game/<gid>                     Return the State of the Game (Polling)
-* POST  /api/game                           Add a new Game.
-* POST  /api/game/<gid>/user/               Add a new User to a Game.
-* GET   /api/game/<gid>/user/<uid>/dice     Roll a given number of dice
-'''
-
 
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
 def get_game(gid):
+    """
+    Return a hole game as json
+    JSON example:
+
+    .. code-block:: json
+
+        {
+        "Stack" : 10,
+        "State" : "String",
+        "First_Halfe" : true,
+        "Move" : "Userid",
+        "First" : "Userid",
+        "Admin" : "Userid",
+        "Users": [{
+            "id" : 11,
+            "Name"  : "Hans",
+            "Chips" : 2,
+            "passive" : false,
+            "visible" : false
+            },
+            {
+            "id" : 11,
+            "Name"  : "Hans",
+            "Chips" : 2,
+            "passive" : false,
+            "visible" : false
+            }
+        ]
+        }
+
+    or a 404 if the given game ID ist not in the Database
+    """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify()
         response.status_code = 404
         return response
-    return jsonify(game.to_dict())
+    response = jsonify(game.to_dict())
+    response.status_code = 200
+    return response
 
 
 # Create new Game
 @bp.route('/game', methods=['POST'])
 def create_Game():
+
     seed(1)
     data = request.get_json() or {}
     if 'name' not in data:
@@ -57,12 +98,20 @@ def create_Game():
 # set User to Game
 @bp.route('/game/<gid>/user', methods=['POST'])
 def set_game_user(gid):
+    """
+    Add a User to a game with the STATUS WAITING
+
+    Parameters
+    ----------
+    gid
+        A Game UUID
+    """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify()
         response.status_code = 404
         return response
-    if game.status != Status.WAITING:
+    if game.status2 != Status2.WAITING:
         response = jsonify(Status='Game already Startet create new Game')
         response.status_code = 404
         return response
@@ -85,7 +134,7 @@ def start_game(gid):
         response = jsonify()
         response.status_code = 404
         return response
-    game.status = Status.STARTED
+    game.status2 = Status2.STARTED
     db.session.add(game)
     db.session.commit()
     response = jsonify()
@@ -134,9 +183,10 @@ def roll_dice(gid, uid):
         return response
     data = request.get_json() or {}
     # Cloud be improved to game.first_user_id first user.number_dice
-    if user.number_dice is not None:
+    first_user = User.query.get_or_404(game.first_user_id)
+    if first_user.number_dice is None or user.number_dice < first_user.number_dice:
         if user.number_dice >= 3:
-            response = jsonify()
+            response = jsonify(Message='User hase alread dice 3 times')
             response.status_code = 404
             return response
         user.number_dice = user.number_dice + 1
@@ -158,7 +208,7 @@ def roll_dice(gid, uid):
                 user.dice3 = randint(1, 6)
         if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
             if game.firsthalf:
-                game.status = Status.FINISCH
+                game.status2 = Status2.FINISCH
             else:
                 game.firsthalf = True
             db.session.add(game)
@@ -263,10 +313,24 @@ def transfer_chips(gid):
             db.session.add(game)
             db.session.add(userB)
             db.session.commit()
+    for user in game.users:
+        user.dice1 = None
+        user.dice2 = None
+        user.dice3 = None
+        user.number_dice = 0
+    db.session.add(game)
+    db.session.commit()
     response = jsonify()
     response.status_code = 201
     return response
 
 
-def decision(probability):
+def decision(probability) -> bool:
+    """
+    Return a Boolen that reprenet a fallen dice
+    Parameters
+    ----------
+    probability
+        A Float that represent a changs that a dice will fall
+    """
     return random() < probability
