@@ -53,9 +53,9 @@ def get_game(gid):
             "passive" : false,
             "visible" : true,
             "Dices":[
-                {'Dice1': 2},
-                {'Dice2': 6},
-                {'Dice3': 6},
+                {"Dice1": 2},
+                {"Dice2": 6},
+                {"Dice3": 6},
             ]
             }
         ]
@@ -92,7 +92,7 @@ def create_Game():
 
     .. code-block:: json
 
-        {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800", "Admin_Id":11}
+        {"Link": "tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID": "a8a5fbc2-706e-11ea-825e-fa00a8584800", "Admin_Id": 11}
 
     """
     seed(1)
@@ -129,9 +129,11 @@ def set_game_user(gid):
     gid
         A Game UUID
 
+    json
+
         .. code-block:: json
 
-            {"name":"jimbo10"}
+            {"name": "jimbo10"}
 
     """
     game = Game.query.filter_by(UUID=gid).first()
@@ -195,10 +197,15 @@ def pull_up_dice_cup(gid, uid):
         A Game UUID
     uid
         A User ID
+    json
 
-    .. code-block:: json
+        .. code-block:: json
 
-        {"value": true}
+            {"value": true}
+
+    Returns:
+
+        201, 400, 404
 
     """
     game = Game.query.filter_by(UUID=gid).first()
@@ -210,11 +217,16 @@ def pull_up_dice_cup(gid, uid):
     data = request.get_json() or {}
     if 'value' in data:
         user.visible = data['dice1']
-    db.session.add(user)
-    db.session.commit()
-    response = jsonify()
-    response.status_code = 201
-    return response
+        db.session.add(user)
+        db.session.commit()
+        response = jsonify()
+        response.status_code = 201
+        return response
+    else:
+        response = jsonify(Message="Request must include value")
+        response.status_code = 400
+        return response
+
 
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
@@ -281,10 +293,8 @@ def roll_dice(gid, uid):
         .. code-block:: json
 
             {
-            fallen=true, dice1=3, dice2=4, dice3=6
+            "fallen": true, "dice1": 3, "dice2": 4, "dice3": 6
             }
-        bool: The return value. True for success, False otherwise.
-
 
     """
     game = Game.query.filter_by(UUID=gid).first()
