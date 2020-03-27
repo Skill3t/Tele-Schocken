@@ -71,13 +71,28 @@ class User(db.Model):
     number_dice = db.Column(db.Integer)  # Max Value = 3
 
     def to_dict(self):
-        data = {
-            'Id': self.id,
-            'Name': self.name,
-            'Chips': self.chips,
-            'Passive': self.passive,
-            'Visible': self.visible
-        }
+        dice = [
+            {'Dice1': self.dice1},
+            {'Dice2': self.dice2},
+            {'Dice3': self.dice3},
+        ]
+        if self.visible:
+            data = {
+                'Id': self.id,
+                'Name': self.name,
+                'Chips': self.chips,
+                'Passive': self.passive,
+                'Visible': self.visible,
+                'Dices': dice
+            }
+        else:
+            data = {
+                'Id': self.id,
+                'Name': self.name,
+                'Chips': self.chips,
+                'Passive': self.passive,
+                'Visible': self.visible
+            }
         return data
 
     def __init__(self):

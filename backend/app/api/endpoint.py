@@ -51,7 +51,12 @@ def get_game(gid):
             "Name"  : "Hans",
             "Chips" : 2,
             "passive" : false,
-            "visible" : false
+            "visible" : true,
+            "Dices":[
+                {'Dice1': 2},
+                {'Dice2': 6},
+                {'Dice3': 6},
+            ]
             }
         ]
         }
@@ -178,11 +183,11 @@ def start_game(gid):
     return response
 
 
-#
+# pull up the dice cup
 @bp.route('game/<gid>/user/<uid>/visible', methods=['POST'])
 def pull_up_dice_cup(gid, uid):
     """
-    The Admin can use This rout to Start the game and set the STATUS started
+    Pull the Dice cup up so that every user can see the dice's
 
     Parameters
     ----------
@@ -202,8 +207,10 @@ def pull_up_dice_cup(gid, uid):
         response = jsonify()
         response.status_code = 404
         return response
-    game.status2 = Status2.STARTED
-    db.session.add(game)
+    data = request.get_json() or {}
+    if 'value' in data:
+        user.visible = data['dice1']
+    db.session.add(user)
     db.session.commit()
     response = jsonify()
     response.status_code = 201
@@ -274,7 +281,7 @@ def roll_dice(gid, uid):
         .. code-block:: json
 
             {
-            fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3
+            fallen=true, dice1=3, dice2=4, dice3=6
             }
         bool: The return value. True for success, False otherwise.
 
