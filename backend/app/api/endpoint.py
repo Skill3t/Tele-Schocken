@@ -71,7 +71,22 @@ def get_game(gid):
 # Create new Game
 @bp.route('/game', methods=['POST'])
 def create_Game():
+    """
+    Create a new Game the creater is the Admin send the folowing json
+    JSON example:
 
+    .. code-block:: json
+
+        {"name":"jimbo10"}
+
+    return 201 if the game is sucesccfully reated
+
+    or a 400 if the username is aready in use
+
+    return
+    {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800"}
+
+    """
     seed(1)
     data = request.get_json() or {}
     if 'name' not in data:
@@ -118,6 +133,11 @@ def set_game_user(gid):
     data = request.get_json() or {}
     if 'name' not in data:
         return bad_request('must include name field')
+    inuse = User.query.filter_by(name=data['name']).first()
+    if inuse is not None:
+        response = jsonify(Message='username in use!')
+        response.status_code = 400
+        return response
     user = User()
     user.name = data['name']
     game.users.append(user)
@@ -129,6 +149,14 @@ def set_game_user(gid):
 # Start the Game
 @bp.route('/game/<gid>/start', methods=['POST'])
 def start_game(gid):
+    """
+    The Admin can use This rout to Start the game and set the STATUS started
+
+    Parameters
+    ----------
+    gid
+        A Game UUID
+    """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify()
@@ -145,6 +173,16 @@ def start_game(gid):
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
+    """
+    The Admin can use This rout to Start the game and set the STATUS started
+
+    Parameters
+    ----------
+    gid
+        A Game UUID
+    uid
+        A User ID
+    """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
