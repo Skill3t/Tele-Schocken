@@ -38,7 +38,7 @@ class Game(db.Model):
             arrayuser.append(user.to_dict())
         data = {
             'Stack': self.stack,
-            'State': self.status,
+            'State': self.status2,
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'First': self.first_user_id,
