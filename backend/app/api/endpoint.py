@@ -84,7 +84,10 @@ def create_Game():
     or a 400 if the username is aready in use
 
     return
-    {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800"}
+
+    .. code-block:: json
+
+        {"Link":"tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID":"a8a5fbc2-706e-11ea-825e-fa00a8584800"}
 
     """
     seed(1)
@@ -105,7 +108,7 @@ def create_Game():
     game.admin_user_id = user.id
     db.session.add(game)
     db.session.commit()
-    response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID)
+    response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID, Admin_id=user.id)
     response.status_code = 201
     return response
 
@@ -120,6 +123,11 @@ def set_game_user(gid):
     ----------
     gid
         A Game UUID
+
+        .. code-block:: json
+
+            {"name":"jimbo10"}
+
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
@@ -170,6 +178,37 @@ def start_game(gid):
     return response
 
 
+# Start the Game
+@bp.route('game/<gid>/user/<uid>/visible', methods=['POST'])
+def pull_up_dice_cup(gid, uid):
+    """
+    The Admin can use This rout to Start the game and set the STATUS started
+
+    Parameters
+    ----------
+    gid
+        A Game UUID
+    uid
+        A User ID
+
+    .. code-block:: json
+
+        {"value": true}
+
+    """
+    game = Game.query.filter_by(UUID=gid).first()
+    user = User.query.get_or_404(uid)
+    if game is None:
+        response = jsonify()
+        response.status_code = 404
+        return response
+    game.status2 = Status2.STARTED
+    db.session.add(game)
+    db.session.commit()
+    response = jsonify()
+    response.status_code = 201
+    return response
+
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
@@ -209,6 +248,38 @@ def finish_throwing(gid, uid):
 # roll dice
 @bp.route('/game/<gid>/user/<uid>/dice', methods=['POST'])
 def roll_dice(gid, uid):
+    """
+    A user can roll up to 3 dice
+
+    Parameters
+    ----------
+    gid
+        A Game UUID
+    uid
+        A User ID
+
+    json
+        dice1, dice2, dice3 are optional attributes depending on witch one you will roll again
+
+        .. code-block:: json
+
+            {
+            "dice1" : 2,
+            "dice2" : 3,
+            "dice3" : 6,
+            }
+
+    Returns:
+
+        .. code-block:: json
+
+            {
+            fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3
+            }
+        bool: The return value. True for success, False otherwise.
+
+
+    """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
@@ -222,7 +293,7 @@ def roll_dice(gid, uid):
     data = request.get_json() or {}
     # Cloud be improved to game.first_user_id first user.number_dice
     first_user = User.query.get_or_404(game.first_user_id)
-    if first_user.number_dice is None or user.number_dice < first_user.number_dice:
+    if first_user.number_dice == 0 or user.number_dice < first_user.number_dice:
         if user.number_dice >= 3:
             response = jsonify(Message='User hase alread dice 3 times')
             response.status_code = 404
