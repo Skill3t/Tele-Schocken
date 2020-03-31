@@ -9,7 +9,6 @@ endpoint.py
     * POST  /api/game                           Add a new Game.
     * POST  /api/game/<gid>/user/               Add a new User to a Game.
     * GET   /api/game/<gid>/user/<uid>/dice     Roll a given number of dice
-
 """
 from app.api import bp
 from app import db
@@ -26,46 +25,68 @@ from app.api.errors import bad_request
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
 def get_game(gid):
-    """
-    Return a hole game as json
-    JSON example:
+    """Return a hole game as json
 
-    .. code-block:: json
+    Parameters
+    ----------
+    gid : 'Integer'
+        A Game UUID
 
-        {
-        "Stack" : 10,
-        "State" : "String",
-        "First_Halfe" : true,
-        "Move" : "Userid",
-        "First" : "Userid",
-        "Admin" : "Userid",
-        "Users": [{
-            "id" : 11,
-            "Name"  : "Hans",
-            "Chips" : 2,
-            "passive" : false,
-            "visible" : false
-            },
+    Examples
+    --------
+
+    .. sourcecode:: http
+
+         HTTP/1.1 200 OK
+         Content-Type: text/json
+
             {
-            "id" : 11,
-            "Name"  : "Hans",
-            "Chips" : 2,
-            "passive" : false,
-            "visible" : true,
-            "Dices":[
-                {"Dice1": 2},
-                {"Dice2": 6},
-                {"Dice3": 6},
-            ]
+               "Stack":10,
+               "State":"String",
+               "First_Halfe":true,
+               "Move":"Userid",
+               "First":"Userid",
+               "Admin":"Userid",
+               "Users":[
+                  {
+                     "id":11,
+                     "Name":"Hans",
+                     "Chips":2,
+                     "passive":false,
+                     "visible":false
+                  },
+                  {
+                     "id":11,
+                     "Name":"Hans",
+                     "Chips":2,
+                     "passive":false,
+                     "visible":true,
+                     "Dices":[
+                        {
+                           "Dice1":2
+                        },
+                        {
+                           "Dice2":6
+                        },
+                        {
+                           "Dice3":6
+                        }
+                     ]
+                  }
+               ]
             }
-        ]
-        }
 
-    or a 404 if the given game ID ist not in the Database
+    .. sourcecode:: http
+
+      HTTP/1.1 404
+      Content-Type: text/json
+          {
+            "Message": "Game id not in Database"
+          }
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game id not in Database')
         response.status_code = 404
         return response
     response = jsonify(game.to_dict())
@@ -76,24 +97,49 @@ def get_game(gid):
 # Create new Game
 @bp.route('/game', methods=['POST'])
 def create_Game():
-    """
-    Create a new Game the creater is the Admin send the folowing json
-    JSON example:
+    """Create a new Game the creater is the Admin send the folowing json
+
+    Parameters
+    ----------
+    name : 'str'
+        Admin user name
+
+    Examples
+    --------
 
     .. code-block:: json
 
         {"name":"jimbo10"}
 
-    return 201 if the game is sucesccfully reated
+    Returns
+    -------
+    Link : 'str'
+        Link to Share  and join new users
+    UUID : 'str'
+        UUID to identify the new Game
+    Admin_Id : 'int'
+        ID of the new Admin
 
-    or a 400 if the username is aready in use
+    Examples
+    --------
 
-    return
+    .. sourcecode:: http
 
-    .. code-block:: json
+      HTTP/1.1 201
+      Content-Type: text/json
+          {
+            "Link": "tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800",
+            "UUID": "a8a5fbc2-706e-11ea-825e-fa00a8584800",
+            "Admin_Id": 11
+          }
 
-        {"Link": "tele-schocken.de/a8a5fbc2-706e-11ea-825e-fa00a8584800","UUID": "a8a5fbc2-706e-11ea-825e-fa00a8584800", "Admin_Id": 11}
+    .. sourcecode:: http
 
+      HTTP/1.1 400
+      Content-Type: text/json
+          {
+            "Message": "username in use!",
+          }
     """
     seed(1)
     data = request.get_json() or {}
@@ -121,19 +167,72 @@ def create_Game():
 # set User to Game
 @bp.route('/game/<gid>/user', methods=['POST'])
 def set_game_user(gid):
-    """
-    Add a User to a game with the STATUS WAITING
+    """Add a User to a game with the STATUS WAITING
 
     Parameters
     ----------
-    gid
+    gid : 'int'
         A Game UUID
+    name : 'str'
+        Username
 
-    json
+    Examples
+    --------
 
-        .. code-block:: json
+    .. code-block:: json
 
-            {"name": "jimbo10"}
+        {"name": "jimbo10"}
+
+    Examples
+    --------
+    .. sourcecode:: http
+
+         HTTP/1.1 200 OK
+         Content-Type: text/json
+
+            {
+               "Stack":10,
+               "State":"String",
+               "First_Halfe":true,
+               "Move":"Userid",
+               "First":"Userid",
+               "Admin":"Userid",
+               "Users":[
+                  {
+                     "id":11,
+                     "Name":"Hans",
+                     "Chips":2,
+                     "passive":false,
+                     "visible":false
+                  },
+                  {
+                     "id":11,
+                     "Name":"Hans",
+                     "Chips":2,
+                     "passive":false,
+                     "visible":true,
+                     "Dices":[
+                        {
+                           "Dice1":2
+                        },
+                        {
+                           "Dice2":6
+                        },
+                        {
+                           "Dice3":6
+                        }
+                     ]
+                  }
+               ]
+            }
+
+    .. sourcecode:: http
+
+      HTTP/1.1 400
+      Content-Type: text/json
+          {
+            "Status": "Game already Startet create new Game",
+          }
 
     """
     game = Game.query.filter_by(UUID=gid).first()
@@ -142,8 +241,8 @@ def set_game_user(gid):
         response.status_code = 404
         return response
     if game.status2 != Status2.WAITING:
-        response = jsonify(Status='Game already Startet create new Game')
-        response.status_code = 404
+        response = jsonify(Message='Game already Startet create new Game')
+        response.status_code = 400
         return response
     data = request.get_json() or {}
     if 'name' not in data:
@@ -169,18 +268,36 @@ def start_game(gid):
 
     Parameters
     ----------
-    gid
+    gid : 'int'
         A Game UUID
+
+    Examples
+    --------
+    .. sourcecode:: http
+
+        HTTP/1.1 404
+        Content-Type: text/json
+            {
+                "Message": "Game already Startet create new Game",
+            }
+
+    .. sourcecode:: http
+
+        HTTP/1.1 201
+        Content-Type: text/json
+            {
+                "Message": "suscess",
+            }
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     game.status2 = Status2.STARTED
     db.session.add(game)
     db.session.commit()
-    response = jsonify()
+    response = jsonify(Message='suscess')
     response.status_code = 201
     return response
 
@@ -193,25 +310,42 @@ def pull_up_dice_cup(gid, uid):
 
     Parameters
     ----------
-    gid
+    gid : 'int'
         A Game UUID
-    uid
+    uid : 'int'
         A User ID
-    json
+    value : 'bool'
+        True = Visible False = invisible. So change the visibility of your dices
+    Examples
+    --------
+    .. code-block:: json
 
-        .. code-block:: json
+        {
+            "value": true
+        }
 
-            {"value": true}
+    Examples
+    --------
+    .. sourcecode:: http
 
-    Returns:
+        HTTP/1.1 400
+        Content-Type: text/json
+            {
+                "Message": "Request must include value",
+            }
 
-        201, 400, 404
+    .. sourcecode:: http
 
+        HTTP/1.1 201
+        Content-Type: text/json
+            {
+                "Message": "suscess",
+            }
     """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -219,7 +353,7 @@ def pull_up_dice_cup(gid, uid):
         user.visible = data['dice1']
         db.session.add(user)
         db.session.commit()
-        response = jsonify()
+        response = jsonify(Message='suscess')
         response.status_code = 201
         return response
     else:
@@ -231,20 +365,25 @@ def pull_up_dice_cup(gid, uid):
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
-    """
-    The Admin can use This rout to Start the game and set the STATUS started
+    """The Admin can use This rout to Start the game and set the STATUS started
 
     Parameters
     ----------
-    gid
+    gid : 'int'
         A Game UUID
-    uid
+    uid : 'int'
         A User ID
+    Returns
+    -------
+    status : 'int'
+        HTTP Statuscode 404, 200
+    Message : 'str'
+        Error Message of the Request
     """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     if user.game_id != game.id:
@@ -259,43 +398,64 @@ def finish_throwing(gid, uid):
         game.move_user_id = game.users[0].id
     db.session.add(game)
     db.session.commit()
-    response = jsonify()
-    response.status_code = 201
+    response = jsonify(Message='suscess')
+    response.status_code = 200
     return response
 
 
 # roll dice
 @bp.route('/game/<gid>/user/<uid>/dice', methods=['POST'])
 def roll_dice(gid, uid):
-    """
-    A user can roll up to 3 dice
+    """A user can roll up to 3 dice. dice1, dice2, dice3 are optional attributes depending on witch one you will roll again
 
     Parameters
     ----------
-    gid
+    gid : 'int'
         A Game UUID
-    uid
+    uid : 'int'
         A User ID
+    dice1 : 'int', optional
+        Roll dice 1 again
+    dice2 : 'int', optional
+        Roll dice 2 again
+    dice3 : 'int', optional
+        Roll dice 3 again
 
-    json
-        dice1, dice2, dice3 are optional attributes depending on witch one you will roll again
+    Examples
+    --------
 
-        .. code-block:: json
+    .. code-block:: json
 
-            {
+        {
             "dice1" : 2,
             "dice2" : 3,
             "dice3" : 6,
-            }
+        }
 
-    Returns:
+    Returns
+    -------
+    fallen : 'bool'
+        one dice is rollen from the table (shot round)
+    dice1 : 'int'
+        value of the first dice
+    dice2 : 'int'
+        value of the second dice
+    dice3 : 'int'
+        value of the third dice
 
-        .. code-block:: json
+    Examples
+    --------
 
+    .. sourcecode:: http
+
+        HTTP/1.1 201
+        Content-Type: text/json
             {
-            "fallen": true, "dice1": 3, "dice2": 4, "dice3": 6
+                "fallen": true,
+                "dice1": 3,
+                "dice2": 4,
+                "dice3": 6
             }
-
     """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
@@ -353,14 +513,56 @@ def roll_dice(gid, uid):
 # turn dice (2 or 3 6er to 1 or 2 1er)
 @bp.route('/game/<gid>/user/<uid>/diceturn', methods=['POST'])
 def turn_dice(gid, uid):
+    """If a User Throws tow or three 6er in Throw 1 or 2 he/ she ist allowed
+    to turn 1 dice (tow 6er) or 2 dice (three 6er) to dice with the numer 1
+
+    Parameters
+    ----------
+    gid : 'int'
+        A Game UUID
+    uid : 'int'
+        A User ID
+    count : 'int'
+        allowed values 1 or 2. To change 1 or 2 6er dice to 1er dice
+
+    Examples
+    --------
+
+    .. code-block:: json
+
+        {
+            "count" : 1
+        }
+
+    Returns
+    -------
+    dice1 : 'int'
+        value of the first dice
+    dice2 : 'int'
+        value of the second dice
+    dice3 : 'int'
+        value of the third dice
+
+    Examples
+    --------
+    .. sourcecode:: http
+
+        HTTP/1.1 201
+        Content-Type: text/json
+            {
+                "dice1": 1,
+                "dice2": 2,
+                "dice3": None
+            }
+    """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify()
+        response = jsonify(Message='User not in game')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -376,7 +578,7 @@ def turn_dice(gid, uid):
                 user.dice1 = 1
                 user.dice3 = None
             else:
-                response = jsonify()
+                response = jsonify(Message='Could not finde tow dices with value 6')
                 response.status_code = 400
                 return response
         elif data['count'] == 2:
@@ -385,15 +587,15 @@ def turn_dice(gid, uid):
                 user.dice2 = 1
                 user.dice3 = None
             else:
-                response = jsonify()
+                response = jsonify(Message='Could not finde three dices with value 6')
                 response.status_code = 400
                 return response
         else:
-            response = jsonify()
+            response = jsonify(Message='count value not 1 or 2')
             response.status_code = 400
             return response
     else:
-        response = jsonify()
+        response = jsonify(Message='count not in data')
         response.status_code = 400
         return response
     response = jsonify(dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
@@ -406,6 +608,65 @@ def turn_dice(gid, uid):
 # transfer chips
 @bp.route('/game/<gid>/user/chips', methods=['POST'])
 def transfer_chips(gid):
+    """At the end of a round the Admin Transers chips from the Stack to a User or
+    Form User A to User B
+
+    Parameters
+    ----------
+    gid : 'int'
+        A Game UUID
+    uid : 'int'
+        A User ID
+    count : 'int'
+    source : 'int', optional
+    stack : 'int', optional
+    target : 'int'
+
+    Examples
+    --------
+
+    .. code-block:: json
+
+        {
+            "count" : 1,
+            "source": 12,
+            "stack": true,
+            "target": 13
+        }
+
+    Examples
+    --------
+    **Example 1**
+    Transfere 5 Chip from User A (User ID 12) to User with UserB (User ID 13)
+    {
+    "count" : 5,
+    "source": 12,
+    "target": 13
+    }
+
+    **Example 2**
+    Transfere 3 Chip from Stack to User with User ID 13
+    {
+    "count" : 3,
+    "stack": true,
+    "target": 13
+    }
+
+    Returns
+    -------
+    Message : 'str'
+        Return Message with reson
+
+    Examples
+    --------
+    .. sourcecode:: http
+
+        HTTP/1.1 400
+        Content-Type: text/json
+            {
+                "Message": "Request must include value",
+            }
+    """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify()
@@ -447,7 +708,7 @@ def transfer_chips(gid):
     db.session.add(game)
     db.session.commit()
     response = jsonify()
-    response.status_code = 201
+    response.status_code = 200
     return response
 
 
@@ -456,7 +717,11 @@ def decision(probability) -> bool:
     Return a Boolen that reprenet a fallen dice
     Parameters
     ----------
-    probability
+    probability : 'flaot'
         A Float that represent a changs that a dice will fall
+    Returns
+    -------
+    random : 'bool'
+        True = Dice fallen, False = Dice not fallen
     """
     return random() < probability

@@ -28,23 +28,23 @@ Move an Game ?? move : Hans bzw ID???
 ```json
 "Stack" : 10,
 "State" : "String",
-"First_Halfe" : true,
+"First_Half" : true,
 "Move" : "Userid",
 "First" : "Userid",
 "Admin" : "Userid",
 "Users": [{
-	"id" : 11,
+	"Id" : 11,
 	"Name"  : "Hans",
 	"Chips" : 2,
-	"passive" : false,
-	"visible" : false
+	"Passive" : false,
+	"Visible" : false
 	},
 	{
-	"id" : 11,
+	"Id" : 11,
 	"Name"  : "Hans",
 	"Chips" : 2,
-	"passive" : false,
-	"visible" : false
+	"Passive" : false,
+	"Visible" : false
 	}
 ]
 ```
