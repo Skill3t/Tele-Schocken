@@ -1,15 +1,3 @@
-"""
-endpoint.py
-====================================
-
-.. code-block:: none
-
-    JSON REST API
-    * GET   /api/game/<gid>                     Return the State of the Game (Polling)
-    * POST  /api/game                           Add a new Game.
-    * POST  /api/game/<gid>/user/               Add a new User to a Game.
-    * GET   /api/game/<gid>/user/<uid>/dice     Roll a given number of dice
-"""
 from app.api import bp
 from app import db
 
@@ -25,7 +13,13 @@ from app.api.errors import bad_request
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
 def get_game(gid):
-    """Return a hole game as json
+    """**GET   /api/game/<gid>**
+
+    Return a hole game as json
+
+    :reqheader Accept: application/json
+    :statuscode 200: Game Data
+    :statuscode 404: Game id not in Database
 
     Parameters
     ----------
@@ -34,7 +28,6 @@ def get_game(gid):
 
     Examples
     --------
-
     .. sourcecode:: http
 
          HTTP/1.1 200 OK
@@ -622,35 +615,30 @@ def transfer_chips(gid):
     stack : 'int', optional
     target : 'int'
 
-    Examples
-    --------
-
-    .. code-block:: json
-
-        {
-            "count" : 1,
-            "source": 12,
-            "stack": true,
-            "target": 13
-        }
 
     Examples
     --------
     **Example 1**
     Transfere 5 Chip from User A (User ID 12) to User with UserB (User ID 13)
-    {
-    "count" : 5,
-    "source": 12,
-    "target": 13
-    }
+
+    .. code-block:: json
+
+        {
+            "count" : 5,
+            "source": 12,
+            "target": 13
+        }
 
     **Example 2**
     Transfere 3 Chip from Stack to User with User ID 13
-    {
-    "count" : 3,
-    "stack": true,
-    "target": 13
-    }
+
+    .. code-block:: json
+
+        {
+            "count" : 3,
+            "stack": true,
+            "target": 13
+        }
 
     Returns
     -------
