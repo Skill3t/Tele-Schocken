@@ -1,4 +1,8 @@
-# from app import app, create_app, db
+"""
+teleschocken.py
+====================================
+The core module of teleschocken project
+"""
 from app import app, db
 
 from app.models import User, Game
