@@ -26,15 +26,11 @@ def get_refreshed_game(gid):
     while counter < 20:
         counter = counter + 1
         db.session.commit()
-        # db.session.expire_all()
         game2 = Game.query.filter_by(UUID=gid).first()
-        # db.session.expire(game2)
-        # db.session.refresh(game2)
         new_game = game2.to_dict()
         modified = not sorted(old_game.items()) == sorted(new_game.items())
         print('new_game:   {}'.format(new_game))
         print('old_game:   {}'.format(old_game))
-        # modified = db.session.is_modified(game, include_collections=True)
         print('modified:    {}'.format(modified))
         time.sleep(0.5)
         if modified:
