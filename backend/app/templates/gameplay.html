@@ -28,11 +28,7 @@
     <h2>Spieler</h2>
   </div>
 </div>
-
-
-
-
-<div class="row col-md-10 col-md-offset-1" data-example-id="striped-table">
+<div class="row col-md-9 col-md-offset-1" data-example-id="striped-table">
     <table class="table table-striped table-hover" >
       <thead>
         <tr>
@@ -46,21 +42,25 @@
       </thead>
       <tbody>
         {% for user in game.users %}
-        <tr>
+        <tr id="row{{user.id}}">
           <th class="counterCell" scope="row"></th>
             <td>
               {{user.name}}
             </td>
-            <td>
+            <td id="chips{{user.id}}">
               {{user.chips}}
             </td>
-            <td>
+            <td id="dice1{{user.id}}">
               {{user.dice1}}
+              <div class="dice dot">
+              </div>
             </td>
-            <td>
+            <td id="dice2{{user.id}}">
               {{user.dice2}}
+              <div class="dice-first-face dice-column">
+              </div>
             </td>
-            <td>
+            <td id="dice3{{user.id}}">
               {{user.dice3}}
             </td>
         </tr>
@@ -68,7 +68,6 @@
         </tbody>
     </table>
 </div>
-
 <div class="row col-md-offset-1">
   <div class="col-md-4">
     <h2>Spielen</h2>
@@ -101,15 +100,18 @@
   </div>
   <div class="col-md-1">
     <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
-    <p id="dice1_v">Würfel 1:</p>
+    <div id="dice1_v" class="dice">
+    </div>
   </div>
   <div class="col-md-1">
     <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
-    <p id="dice2_v">Würfel 2:</p>
+    <div id="dice2_v">
+    </div>
   </div>
   <div class="col-md-1">
     <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
-    <p id="dice3_v">Würfel 3:</p>
+    <div id="dice3_v">
+    </div>
   </div>
 </div>
 
@@ -183,9 +185,13 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnaps runde!');
           }else{
-            dice1_v.innerHTML = 'Würfel 1:' + res.dice1
-            dice2_v.innerHTML = 'Würfel 2:' + res.dice2
-            dice3_v.innerHTML = 'Würfel 3:' + res.dice3
+
+            dice1_v.className = dicehelper(res.dice1)
+            dice2_v.className = dicehelper(res.dice2)
+            dice3_v.className = dicehelper(res.dice3)
+            //dice1_v.innerHTML = 'Würfel 1:' + res.dice1
+            //dice2_v.innerHTML = 'Würfel 2:' + res.dice2
+            //dice3_v.innerHTML = 'Würfel 3:' + res.dice3
           }
         }else{
           alert(''+res.Message);
@@ -193,6 +199,24 @@
       }
     }
     xhttp.send(JSON.stringify({dice1:dice1_cb, dice2:dice2_cb, dice3:dice3_cb}));
+  }
+
+  function dicehelper(eyes){
+    if (eyes == 1){
+      return 'dice-first-face'
+    }else if (eyes == 2) {
+      return 'dice-second-face'
+    }else if (eyes == 3) {
+      return 'dice-third-face'
+    }else if (eyes == 4) {
+      return 'ddice-fourth-face'
+    }else if (eyes == 5) {
+      return 'dice-fifth-face'
+    }else if (eyes == 6) {
+      return 'dice-sixth-face'
+    }else{
+      return ''
+    }
   }
 
   function finish(){
@@ -351,16 +375,30 @@
       xhttp.onreadystatechange = function() {
         if (xhttp.readyState == XMLHttpRequest.DONE) {
           var res=JSON.parse(xhttp.responseText);
-          var sate = res.State
-          if (sate == 'started'){
-            //alert('Spiel vom admin gestartet eine moment noch');
-            window.location.href = "/game/"+gameid;
+          if (xhttp.status == 200){
+            for (num in res.User) {
+              var juser = res.User[num];
+              var str = 'chips'+juser['Id']
+              var chips = document.getElementById('chips'+juser['Id']);
+              chips.innerHTML = juser['Chips'];
+              if (juser.Dices){
+                var jdice1 = juser.Dices[0];
+                var jdice2 = juser.Dices[1];
+                var jdice3 = juser.Dices[2];
+                var dice1 = document.getElementById('dice1'+juser['Id']);
+                dice1.innerHTML = jdice1['Dice1'];
+                var dice2 = document.getElementById('dice2'+juser['Id']);
+                dice2.innerHTML = jdice2['Dice2'];
+                var dice3 = document.getElementById('dice3'+juser['Id']);
+                dice3.innerHTML = jdice3['Dice3'];
+              }
+            }
           }
         }
       }
       xhttp.send(JSON.stringify({}));
 
-    }, 5000);
+    }, 3000);
   }
 
   startup()

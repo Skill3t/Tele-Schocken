@@ -743,8 +743,8 @@ def transfer_chips(gid):
         user.dice3 = None
         user.number_dice = 0
     db.session.add(game)
-    db.session.commit(Message='sucess')
-    response = jsonify()
+    db.session.commit()
+    response = jsonify(Message='sucess')
     response.status_code = 200
     return response
 
