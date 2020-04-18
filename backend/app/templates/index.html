@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <div class="header-img"></div>
+</main>
+
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h1>Welcome to Tele-Schocken</h1>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-9">
+    <h1>Spiel erzeugen</h1>
+    <label for="adminname">Name</label>
+    <input  type="text" id="adminname" value="">
+    <button onclick="createGame()">Erzeugen</button>
+  </div>
+</div>
+
+
+<div class="row col-md-offset-1">
+  <div class="col-md-9">
+    <h1>Spiel beitreten</h1>
+    <label for="UUID">Spiel ID</label>
+    <input  type="text" id="UUID" value="">
+    <label for="Name">Name</label>
+    <input  type="text" id="Name" value="">
+    <button onclick="joinGame()">Beitreten</button>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+
+  function createGame(){
+    var admin = document.getElementById('adminname');
+    var adminname = admin.value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 201){
+          alert('Fehler beim erzeugen: '+res.Message);
+          location=location;
+        }else{
+          localStorage.setItem('name', adminname);
+          localStorage.setItem('id', res.Admin_Id);
+          // Simulate a mouse click:
+          window.location.href = "/game/"+res.UUID;
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({name:adminname}));
+  }
+  function joinGame(){
+    var user = document.getElementById('Name');
+    var game = document.getElementById('UUID');
+    var uuid = game.value;
+    uuid = uuid.replace(/\s/g, '');
+    var usernname = user.value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+uuid+"/user");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200){
+          alert('Fehler beim erzeugen: '+res.Message);
+          location=location;
+        }else{
+          localStorage.setItem('name', usernname);
+          for (num in res.User) {
+            var juser = res.User[num];
+            var name = juser['Name'];
+            if (name == usernname){
+              localStorage.setItem('id', juser['Id']);
+            }
+          }
+          var id = localStorage.getItem('id');
+          alert('Beigetreten')
+          window.location.href = "/game/"+uuid;
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({name:usernname}));
+  }
+
+
+</script>
+{% endblock %}

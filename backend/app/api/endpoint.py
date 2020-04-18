@@ -5,10 +5,45 @@ from flask import jsonify
 from flask import request
 from app.models import User, Game, Status2
 from random import seed, randint, random
-
+import time
 
 from app.api.errors import bad_request
 
+
+# testforpolling
+@bp.route('/game/<gid>/poll', methods=['GET'])
+def get_refreshed_game(gid):
+    game = Game.query.filter_by(UUID=gid).first()
+    old_game = game.to_dict()
+    # db.session.expire_all()
+    if game is None:
+        response = jsonify(Message='Game id not in Database')
+        response.status_code = 404
+        return response
+    # Check if the Game os not modified
+    modified = False
+    counter = 0
+    while counter < 20:
+        counter = counter + 1
+        db.session.commit()
+        # db.session.expire_all()
+        game2 = Game.query.filter_by(UUID=gid).first()
+        # db.session.expire(game2)
+        # db.session.refresh(game2)
+        new_game = game2.to_dict()
+        modified = not sorted(old_game.items()) == sorted(new_game.items())
+        print('new_game:   {}'.format(new_game))
+        print('old_game:   {}'.format(old_game))
+        # modified = db.session.is_modified(game, include_collections=True)
+        print('modified:    {}'.format(modified))
+        time.sleep(0.5)
+        if modified:
+            response = jsonify(game.to_dict())
+            response.status_code = 200
+            return response
+    response = jsonify(Message='Game data not chaned')
+    response.status_code = 200
+    return response
 
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
@@ -343,7 +378,7 @@ def pull_up_dice_cup(gid, uid):
         return response
     data = request.get_json() or {}
     if 'value' in data:
-        user.visible = data['dice1']
+        user.visible = data['value']
         db.session.add(user)
         db.session.commit()
         response = jsonify(Message='suscess')

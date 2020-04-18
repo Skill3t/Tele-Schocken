@@ -13,6 +13,8 @@ migrate = Migrate(app, db)
 from app.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 
+from app import routes, models, errors
+bootstrap = Bootstrap(app)
 
 def create_app():
     app = Flask(__name__, static_folder='static')
@@ -21,4 +23,6 @@ def create_app():
     migrate = Migrate(app, db)
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
+    from app import routes, models, errors
+    bootstrap = Bootstrap(app)
     return app

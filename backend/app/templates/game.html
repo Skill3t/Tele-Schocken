@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <div class="header-img"></div>
+</main>
+
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h1>Spiel kann vom Admin gestartet werde</h1>
+</div>
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h3 id="admin">Admin: </h3>
+</div>
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h3 id="user">Sie sind: </h3>
+</div>
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h3>verteile diese ID an alle Mitspieler</h3>
+     <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+</div>
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <h2 id="UUID">{{game.UUID}}</h2>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-9">
+    <h3>Aktualisieren</h3>
+    <button onclick="refreshGame()">Refresh</button>
+  </div>
+</div>
+
+<div class="row col-md-10 col-md-offset-1" data-example-id="striped-table">
+    <table class="table table-striped table-hover" >
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in game.users %}
+        <tr>
+          <th class="counterCell" scope="row"></th>
+            <td>
+              {{user.name}}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-9">
+    <h3>Spiel starten (Es kann kein Spieler mehr hinzu kommen)</h3>
+    <button id='startgame_id'onclick="startGame()" disabled>Starten</button>
+  </div>
+</div>
+<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+  function refreshGame(){
+    location=location;
+  }
+  function startGame(){
+    var name = localStorage.getItem('name');
+
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/start");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        alert(''+res.Message);
+      }
+    }
+    xhttp.send(JSON.stringify({}));
+  }
+
+  function startup(){
+    var id = localStorage.getItem('id');
+    var admin_el = document.getElementById('admin_id');
+    var admin_id = admin_el.innerHTML;
+    var setdamin = document.getElementById('admin');
+    setdamin.innerHTML = 'Admin ist '+admin_id
+    var user = document.getElementById('user');
+    user.innerHTML = 'Sie sind '+id
+    if (id == admin_id){
+      var button = document.getElementById('startgame_id');
+      button.disabled = false;
+    }
+  }
+  startup();
+
+
+</script>
+{% endblock %}

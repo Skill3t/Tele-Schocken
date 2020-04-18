@@ -1,0 +1,54 @@
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #96969b;
+}
+table {
+    counter-reset: tableCount;
+    table-layout: auto;
+    width: 100%;
+}
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
+
+
+.header-img {
+  width: 100%;
+  height: 300px;
+  background: url('/static/dice2.png');
+  background-size: cover;
+}
+
+#marked {
+  color: red;
+  font-weight: bold;
+}
+.w {
+  width: 550px;
+}
+
+.s {
+  width: 100px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 50px;
+}
+#myInput {
+  background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+@media print {
+    .pagebreak { page-break-before: always; } /* page-break-after works, as well */
+}

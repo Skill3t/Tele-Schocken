@@ -7,13 +7,6 @@ from app import app, db
 
 from app.models import User, Game
 
-'''
-ADD USER
-flask shell
-u = User()
-db.session.add(u)
-db.session.commit()
-'''
 
 '''
 DB Update
