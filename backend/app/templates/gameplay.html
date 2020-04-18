@@ -52,13 +52,9 @@
             </td>
             <td id="dice1{{user.id}}">
               {{user.dice1}}
-              <div class="dice dot">
-              </div>
             </td>
             <td id="dice2{{user.id}}">
               {{user.dice2}}
-              <div class="dice-first-face dice-column">
-              </div>
             </td>
             <td id="dice3{{user.id}}">
               {{user.dice3}}
@@ -100,7 +96,7 @@
   </div>
   <div class="col-md-1">
     <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
-    <div id="dice1_v" class="dice">
+    <div id="dice1_v">
     </div>
   </div>
   <div class="col-md-1">
@@ -186,9 +182,21 @@
             alert('Würfel vom Tisch gefallen Schnaps runde!');
           }else{
 
-            dice1_v.className = dicehelper(res.dice1)
-            dice2_v.className = dicehelper(res.dice2)
-            dice3_v.className = dicehelper(res.dice3)
+            //dice1_v = dicehelper2(res.dice1)
+            //dice2_v = dicehelper2(res.dice2)
+            //dice3_v = dicehelper2(res.dice3)
+            dice1_v.innerHTML = '';
+            dice2_v.innerHTML = '';
+            dice3_v.innerHTML = '';
+
+            dice1_v.appendChild(dicehelper2(res.dice1));
+            dice2_v.appendChild(dicehelper2(res.dice2));
+            dice3_v.appendChild(dicehelper2(res.dice3));
+
+
+
+
+            // dice3_v.className = dicehelper2(res.dice3)
             //dice1_v.innerHTML = 'Würfel 1:' + res.dice1
             //dice2_v.innerHTML = 'Würfel 2:' + res.dice2
             //dice3_v.innerHTML = 'Würfel 3:' + res.dice3
@@ -216,6 +224,126 @@
       return 'dice-sixth-face'
     }else{
       return ''
+    }
+  }
+
+  function dicehelper2(eyes){
+    switch (eyes) {
+      case 1: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-first-face'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        div.appendChild(span);
+        return div
+      }
+      case 2: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-second-face'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        var span2 = document.createElement('span');
+        span2.className = 'dot'
+        div.appendChild(span);
+        div.appendChild(span2);
+        return div
+      }
+      case 3: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-third-face'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        var span2 = document.createElement('span');
+        span2.className = 'dot'
+        var span3 = document.createElement('span');
+        span3.className = 'dot'
+        div.appendChild(span);
+        div.appendChild(span2);
+        div.appendChild(span3);
+        return div
+      }
+      case 4: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-fourth-face'
+        var divc1 = document.createElement('div');
+        divc1.className = 'dice-column'
+        var divc2 = document.createElement('div');
+        divc2.className = 'dice-column'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        var span2 = document.createElement('span');
+        span2.className = 'dot'
+        var span3 = document.createElement('span');
+        span3.className = 'dot'
+        var span4 = document.createElement('span');
+        span4.className = 'dot'
+        divc1.appendChild(span);
+        divc1.appendChild(span2);
+        divc2.appendChild(span3);
+        divc2.appendChild(span4);
+        div.appendChild(divc1);
+        div.appendChild(divc2);
+        return div
+      }
+      case 5: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-fifth-face'
+        var divc1 = document.createElement('div');
+        divc1.className = 'dice-column'
+        var divc2 = document.createElement('div');
+        divc2.className = 'dice-column'
+        var divc3 = document.createElement('div');
+        divc3.className = 'dice-column'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        var span2 = document.createElement('span');
+        span2.className = 'dot'
+        var span3 = document.createElement('span');
+        span3.className = 'dot'
+        var span4 = document.createElement('span');
+        span4.className = 'dot'
+        var span5 = document.createElement('span');
+        span5.className = 'dot'
+        divc1.appendChild(span);
+        divc1.appendChild(span2);
+        divc2.appendChild(span3);
+        divc3.appendChild(span4);
+        divc3.appendChild(span5);
+        div.appendChild(divc1);
+        div.appendChild(divc2);
+        div.appendChild(divc3);
+        return div
+      }
+      case 6: {
+        var div = document.createElement('div');
+        div.className = 'dice dice-fourth-face'
+        var divc1 = document.createElement('div');
+        divc1.className = 'dice-column'
+        var divc2 = document.createElement('div');
+        divc2.className = 'dice-column'
+        var span = document.createElement('span');
+        span.className = 'dot'
+        var span2 = document.createElement('span');
+        span2.className = 'dot'
+        var span3 = document.createElement('span');
+        span3.className = 'dot'
+        var span4 = document.createElement('span');
+        span4.className = 'dot'
+        var span5 = document.createElement('span');
+        span5.className = 'dot'
+        var span6 = document.createElement('span');
+        span6.className = 'dot'
+        divc1.appendChild(span);
+        divc1.appendChild(span2);
+        divc1.appendChild(span3);
+        divc2.appendChild(span4);
+        divc2.appendChild(span5);
+        divc2.appendChild(span6);
+
+        div.appendChild(divc1);
+        div.appendChild(divc2);
+        return div
+      }
     }
   }
 
@@ -284,9 +412,14 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnaps runde!');
           }else{
-            dice1_v.innerHTML = 'Würfel 1:' + res.dice1
-            dice2_v.innerHTML = 'Würfel 2:' + res.dice2
-            dice3_v.innerHTML = 'Würfel 3:' + res.dice3
+            dice1_v.innerHTML = '';
+            dice2_v.innerHTML = '';
+            dice3_v.innerHTML = '';
+
+            dice1_v.appendChild(dicehelper2(res.dice1));
+            dice2_v.appendChild(dicehelper2(res.dice2));
+            dice3_v.appendChild(dicehelper2(res.dice3));
+
           }
         }else{
           alert(''+res.Message);
@@ -385,12 +518,21 @@
                 var jdice1 = juser.Dices[0];
                 var jdice2 = juser.Dices[1];
                 var jdice3 = juser.Dices[2];
-                var dice1 = document.getElementById('dice1'+juser['Id']);
-                dice1.innerHTML = jdice1['Dice1'];
-                var dice2 = document.getElementById('dice2'+juser['Id']);
-                dice2.innerHTML = jdice2['Dice2'];
-                var dice3 = document.getElementById('dice3'+juser['Id']);
-                dice3.innerHTML = jdice3['Dice3'];
+                var dice1_v = document.getElementById('dice1'+juser['Id']);
+                //dice1.innerHTML = jdice1['Dice1'];
+                var dice2_v = document.getElementById('dice2'+juser['Id']);
+                //dice2.innerHTML = jdice2['Dice2'];
+                var dice3_v = document.getElementById('dice3'+juser['Id']);
+                //dice3.innerHTML = jdice3['Dice3'];
+
+                dice1_v.innerHTML = '';
+                dice2_v.innerHTML = '';
+                dice3_v.innerHTML = '';
+
+                dice1_v.appendChild(dicehelper2(jdice1['Dice1']));
+                dice2_v.appendChild(dicehelper2(jdice2['Dice2']));
+                dice3_v.appendChild(dicehelper2(jdice3['Dice3']));
+
               }
             }
           }
