@@ -8,17 +8,14 @@
 <div class="row col-md-offset-1 col-md-6" style="height:90px;">
     <h1>Spiel kann vom Admin gestartet werde</h1>
 </div>
-<div class="row col-md-offset-1 col-md-6" style="height:90px;">
-    <h3 id="admin">Admin: </h3>
+<div class="row col-md-offset-1 col-md-6">
+    <h3 id="admin"></h3>
 </div>
-<div class="row col-md-offset-1 col-md-6" style="height:90px;">
-    <h3 id="user">Sie sind: </h3>
-</div>
-<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+<div class="row col-md-offset-1 col-md-6" >
     <h3>verteile diese ID an alle Mitspieler</h3>
      <p id="admin_id" hidden>{{game.admin_user_id}}</p>
 </div>
-<div class="row col-md-offset-1 col-md-6" style="height:90px;">
+<div class="row col-md-offset-1 col-md-6">
     <h2 id="UUID">{{game.UUID}}</h2>
 </div>
 
@@ -89,14 +86,37 @@
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
     var setdamin = document.getElementById('admin');
-    setdamin.innerHTML = 'Admin ist '+admin_id
-    var user = document.getElementById('user');
-    user.innerHTML = 'Sie sind '+id
+
     if (id == admin_id){
       var button = document.getElementById('startgame_id');
       button.disabled = false;
+      setdamin.innerHTML = 'Sie sind Admin Spiel Bitte Starten wenn alle Spieler in der Liste stehen'
+    }else{
+      setdamin.innerHTML = 'Sie sind Spieler warten Sie bis der Admin das Spiel gestartet hat'
     }
+    window.setInterval(function(){
+      /// call your function here
+      ///game/<gid>'
+      var game = document.getElementById('UUID');
+      var gameid = game.innerHTML;
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "/api/game/"+gameid);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          var res=JSON.parse(xhttp.responseText);
+          var sate = res.State
+          if (sate == 'started'){
+            //alert('Spiel vom admin gestartet eine moment noch');
+            window.location.href = "/game/"+gameid;
+          }
+        }
+      }
+      xhttp.send(JSON.stringify({}));
+
+    }, 5000);
   }
+
   startup();
 
 

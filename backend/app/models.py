@@ -9,10 +9,11 @@ import enum
 import uuid
 
 
-class Status2(enum.Enum):
+class Status(enum.Enum):
     WAITING = "waiting"
     STARTED = "started"
-    FINISCH = "finish"
+    ROUNDFINISCH = "roundfinish"
+    GAMEFINISCH = "gamefinish"
 
 
 class Game(db.Model):
@@ -21,7 +22,7 @@ class Game(db.Model):
     users = db.relationship('User')
 
     firsthalf = db.Column(db.Boolean(), default=False)
-    status2 = db.Column(db.Enum(Status2))
+    status = db.Column(db.Enum(Status))
     stack = db.Column(db.Integer)
     changs_of_fallling_dice = db.Column(db.Float)
 
@@ -38,7 +39,7 @@ class Game(db.Model):
             arrayuser.append(user.to_dict())
         data = {
             'Stack': self.stack,
-            'State': self.status2.value,
+            'State': self.status.value,
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'First': self.first_user_id,
@@ -52,10 +53,16 @@ class Game(db.Model):
         Init a Game with 13 chips on the Stack an a changs of 1 % that a dice cann fall frome the table (Liquer round)
         """
         self.stack = 13
-        self.status2 = Status2.WAITING
+        self.status = Status.WAITING
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.01
+
+    def moveName(self, id):
+        if id is not None:
+            user = User.query.filter_by(id=id).first()
+            return user.name
+        return ''
 
 
 class User(db.Model):

@@ -50,7 +50,7 @@
           localStorage.setItem('name', adminname);
           localStorage.setItem('id', res.Admin_Id);
           // Simulate a mouse click:
-          window.location.href = "/game/"+res.UUID;
+          window.location.href = "/game_waiting/"+res.UUID;
         }
       }
     }
@@ -82,7 +82,7 @@
           }
           var id = localStorage.getItem('id');
           alert('Beigetreten')
-          window.location.href = "/game/"+uuid;
+          window.location.href = "/game_waiting/"+uuid;
         }
       }
     }

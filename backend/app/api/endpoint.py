@@ -3,8 +3,8 @@ from app import db
 
 from flask import jsonify
 from flask import request
-from app.models import User, Game, Status2
-from random import seed, randint, random
+from app.models import User, Game, Status
+from random import seed, randint, random, randrange
 import time
 
 from app.api.errors import bad_request
@@ -268,7 +268,7 @@ def set_game_user(gid):
         response = jsonify()
         response.status_code = 404
         return response
-    if game.status2 != Status2.WAITING:
+    if game.status != Status.WAITING:
         response = jsonify(Message='Game already Startet create new Game')
         response.status_code = 400
         return response
@@ -322,7 +322,9 @@ def start_game(gid):
         response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
-    game.status2 = Status2.STARTED
+    game.status = Status.STARTED
+    game.first_user_id = game.users[randrange(len(game.users))].id
+    game.move_user_id = game.first_user_id
     db.session.add(game)
     db.session.commit()
     response = jsonify(Message='suscess')
@@ -359,7 +361,7 @@ def pull_up_dice_cup(gid, uid):
         HTTP/1.1 400
         Content-Type: text/json
             {
-                "Message": "Request must include value",
+                "Message": "Request must include visible",
             }
 
     .. sourcecode:: http
@@ -377,15 +379,15 @@ def pull_up_dice_cup(gid, uid):
         response.status_code = 404
         return response
     data = request.get_json() or {}
-    if 'value' in data:
-        user.visible = data['value']
+    if 'visible' in data:
+        user.visible = data['visible']
         db.session.add(user)
         db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 201
         return response
     else:
-        response = jsonify(Message="Request must include value")
+        response = jsonify(Message="Request must include visible")
         response.status_code = 400
         return response
 
@@ -393,20 +395,7 @@ def pull_up_dice_cup(gid, uid):
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
-    """The Admin can use This rout to Start the game and set the STATUS started
-
-    Parameters
-    ----------
-    gid : 'int'
-        A Game UUID
-    uid : 'int'
-        A User ID
-    Returns
-    -------
-    status : 'int'
-        HTTP Statuscode 404, 200
-    Message : 'str'
-        Error Message of the Request
+    """
     """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
@@ -415,19 +404,27 @@ def finish_throwing(gid, uid):
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify()
+        response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
-    # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
-    aktualuserid = [i for i, x in enumerate(game.users) if x == user]
-    if len(game.users) > aktualuserid[0]+1:
-        game.move_user_id = game.users[aktualuserid[0]+1].id
+    waitinguser = User.query.get_or_404(game.move_user_id)
+    if waitinguser.id == user.id:
+        # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
+        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+        if len(game.users) > aktualuserid[0]+1:
+            game.move_user_id = game.users[aktualuserid[0]+1].id
+        else:
+            game.move_user_id = game.users[0].id
+        db.session.add(game)
+        db.session.commit()
+        response = jsonify(Message='suscess')
+        response.status_code = 200
     else:
-        game.move_user_id = game.users[0].id
-    db.session.add(game)
-    db.session.commit()
-    response = jsonify(Message='suscess')
-    response.status_code = 200
+        response = jsonify(Message='Its not your turn')
+        response.status_code = 400
+        return response
+    response = jsonify(Message='Error')
+    response.status_code = 400
     return response
 
 
@@ -442,11 +439,11 @@ def roll_dice(gid, uid):
         A Game UUID
     uid : 'int'
         A User ID
-    dice1 : 'int', optional
+    dice1 : 'bool', optional
         Roll dice 1 again
-    dice2 : 'int', optional
+    dice2 : 'bool', optional
         Roll dice 2 again
-    dice3 : 'int', optional
+    dice3 : 'bool', optional
         Roll dice 3 again
 
     Examples
@@ -486,7 +483,7 @@ def roll_dice(gid, uid):
             }
     """
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    user = User.query.filter_by(id=uid).first()
     if game is None:
         response = jsonify()
         response.status_code = 404
@@ -498,35 +495,42 @@ def roll_dice(gid, uid):
     data = request.get_json() or {}
     # Cloud be improved to game.first_user_id first user.number_dice
     first_user = User.query.get_or_404(game.first_user_id)
-    if first_user.number_dice == 0 or user.number_dice < first_user.number_dice:
-        if user.number_dice >= 3:
-            response = jsonify(Message='User hase alread dice 3 times')
-            response.status_code = 404
+    waitinguser = User.query.get_or_404(game.move_user_id)
+    if waitinguser.id == user.id:
+
+        if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
+            if user.number_dice >= 3:
+                response = jsonify(Message='User hase alread dice 3 times')
+                response.status_code = 404
+                return response
+            user.number_dice = user.number_dice + 1
+            if user.number_dice == 3:
+                # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
+                aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+                if len(game.users) > aktualuserid[0]+1:
+                    game.move_user_id = game.users[aktualuserid[0]+1].id
+                else:
+                    game.move_user_id = game.users[0].id
+            if 'dice1' in data:
+                if data['dice1']:
+                    user.dice1 = randint(1, 6)
+            if 'dice2' in data:
+                if data['dice2']:
+                    user.dice2 = randint(1, 6)
+            if 'dice3' in data:
+                if data['dice3']:
+                    user.dice3 = randint(1, 6)
+            if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
+                if game.firsthalf:
+                    game.status = Status.FINISCH
+                else:
+                    game.firsthalf = True
+                db.session.add(game)
+                db.session.commit()
+        else:
+            response = jsonify(Message='Its not your turn')
+            response.status_code = 400
             return response
-        user.number_dice = user.number_dice + 1
-        if user.number_dice == 3:
-            # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
-            aktualuserid = [i for i, x in enumerate(game.users) if x == user]
-            if len(game.users) > aktualuserid[0]+1:
-                game.move_user_id = game.users[aktualuserid[0]+1].id
-            else:
-                game.move_user_id = game.users[0].id
-        if 'dice1' in data:
-            if data['dice1']:
-                user.dice1 = randint(1, 6)
-        if 'dice2' in data:
-            if data['dice2']:
-                user.dice2 = randint(1, 6)
-        if 'dice3' in data:
-            if data['dice3']:
-                user.dice3 = randint(1, 6)
-        if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
-            if game.firsthalf:
-                game.status2 = Status2.FINISCH
-            else:
-                game.firsthalf = True
-            db.session.add(game)
-            db.session.commit()
         fallen = decision(game.changs_of_fallling_dice)
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
         response.status_code = 201
@@ -594,36 +598,48 @@ def turn_dice(gid, uid):
         response.status_code = 404
         return response
     data = request.get_json() or {}
-    if 'count' in data:
-        if data['count'] == 1:
-            if user.dice1 == 6 and user.dice2 == 6:
-                user.dice1 = 1
-                user.dice2 = None
-            elif user.dice2 == 6 and user.dice3 == 6:
-                user.dice2 = 1
-                user.dice3 = None
-            elif user.dice1 == 6 and user.dice3 == 6:
-                user.dice1 = 1
-                user.dice3 = None
+    first_user = User.query.get_or_404(game.first_user_id)
+    waitinguser = User.query.get_or_404(game.move_user_id)
+    if waitinguser.id == user.id:
+        if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.number_dice < 3:
+            if 'count' in data:
+                if int(data['count']) == 1:
+                    if user.dice1 == 6 and user.dice2 == 6:
+                        user.dice1 = 1
+                        user.dice2 = None
+                    elif user.dice2 == 6 and user.dice3 == 6:
+                        user.dice2 = 1
+                        user.dice3 = None
+                    elif user.dice1 == 6 and user.dice3 == 6:
+                        user.dice1 = 1
+                        user.dice3 = None
+                    else:
+                        response = jsonify(Message='Could not finde tow dices with value 6')
+                        response.status_code = 400
+                        return response
+                elif int(data['count']) == 2:
+                    if user.dice1 == 6 and user.dice2 == 6 and user.dice3 == 6:
+                        user.dice1 = 1
+                        user.dice2 = 1
+                        user.dice3 = None
+                    else:
+                        response = jsonify(Message='Could not finde three dices with value 6')
+                        response.status_code = 400
+                        return response
+                else:
+                    response = jsonify(Message='count value not 1 or 2')
+                    response.status_code = 400
+                    return response
             else:
-                response = jsonify(Message='Could not finde tow dices with value 6')
-                response.status_code = 400
-                return response
-        elif data['count'] == 2:
-            if user.dice1 == 6 and user.dice2 == 6 and user.dice3 == 6:
-                user.dice1 = 1
-                user.dice2 = 1
-                user.dice3 = None
-            else:
-                response = jsonify(Message='Could not finde three dices with value 6')
+                response = jsonify(Message='count not in data')
                 response.status_code = 400
                 return response
         else:
-            response = jsonify(Message='count value not 1 or 2')
+            response = jsonify(Message='less then 1 throw left')
             response.status_code = 400
             return response
     else:
-        response = jsonify(Message='count not in data')
+        response = jsonify(Message='Its not your turn')
         response.status_code = 400
         return response
     response = jsonify(dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
@@ -643,8 +659,6 @@ def transfer_chips(gid):
     ----------
     gid : 'int'
         A Game UUID
-    uid : 'int'
-        A User ID
     count : 'int'
     source : 'int', optional
     stack : 'int', optional
@@ -692,13 +706,13 @@ def transfer_chips(gid):
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     data = request.get_json() or {}
     # requierd attribute not included
     if 'count' not in data or 'target' not in data:
-        response = jsonify()
+        response = jsonify(Message='request must include count and target')
         response.status_code = 400
         return response
     # transfer from user a to B
@@ -729,7 +743,7 @@ def transfer_chips(gid):
         user.dice3 = None
         user.number_dice = 0
     db.session.add(game)
-    db.session.commit()
+    db.session.commit(Message='sucess')
     response = jsonify()
     response.status_code = 200
     return response

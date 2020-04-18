@@ -3,7 +3,7 @@ from werkzeug.urls import url_parse
 
 from app import app, db
 from app.forms import CreateGameFrom
-from app.models import User, Game, Status2
+from app.models import User, Game, Status
 from app.api.errors import bad_request
 
 from datetime import datetime, timedelta
@@ -23,9 +23,17 @@ def index():
     return render_template('index.html', title='Home', form=form)
 
 
-@app.route('/game/<gid>', methods=['GET', 'POST'])
+@app.route('/game_waiting/<gid>', methods=['GET'])
 def game(gid):
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         return render_template('404.html')
     return render_template('game.html', title='Edit Profile', game=game)
+
+
+@app.route('/game/<gid>', methods=['GET'])
+def game_play(gid):
+    game = Game.query.filter_by(UUID=gid).first()
+    if game is None:
+        return render_template('404.html')
+    return render_template('gameplay.html', title='Edit Profile', game=game)

@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+    <div class="header-img"></div>
+</main>
+<div class="row col-md-offset-1">
+  <div class="col-md-4">
+    <h2>Stapel</h2>
+  </div>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-3">
+    <h3>Chips: {{game.stack}}</h3>
+  </div>
+  <div class="col-md-3">
+      <p>erste Hälfte: {{game.firsthalf}}</p>
+  </div>
+  <div class="col-md-3">
+      <p>Warten auf: {{game.moveName(game.move_user_id)}}</p>
+      <p id="UUID" hidden>{{game.UUID}}</p>
+      <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+  </div>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-4">
+    <h2>Spieler</h2>
+  </div>
+</div>
+
+
+
+
+<div class="row col-md-10 col-md-offset-1" data-example-id="striped-table">
+    <table class="table table-striped table-hover" >
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Chips</th>
+          <th>Würfel1</th>
+          <th>Würfel2</th>
+          <th>Würfel3</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in game.users %}
+        <tr>
+          <th class="counterCell" scope="row"></th>
+            <td>
+              {{user.name}}
+            </td>
+            <td>
+              {{user.chips}}
+            </td>
+            <td>
+              {{user.dice1}}
+            </td>
+            <td>
+              {{user.dice2}}
+            </td>
+            <td>
+              {{user.dice3}}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-4">
+    <h2>Spielen</h2>
+  </div>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-1">
+    <button id='startgame_id'onclick="dice()">Würfeln</button>
+  </div>
+  <div class="col-md-1">
+    <button id='finishgame_id'onclick="finish()">Ende</button>
+  </div>
+  <div class="col-md-1">
+    <button id='startgame_id' onclick="pullup()">Aufdecken</button>
+  </div>
+  <div class="col-md-1">
+    <label for="pullup_cb">Aufdecken:</label>
+
+    <input type="checkbox" id="pullup_cb" name="dice1" value="False" checked>
+  </div>
+
+  <div class="col-md-1">
+    <button id='turndice_id' onclick="turn()">6er drehen</button>
+  </div>
+  <div class="col-md-1">
+    <select id="turncount" name="count">
+      <option value="1">2 x 6er -> 1x1er</option>
+      <option value="2">3 x 6er -> 2x1er</option>
+    </select>
+  </div>
+  <div class="col-md-1">
+    <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
+    <p id="dice1_v">Würfel 1:</p>
+  </div>
+  <div class="col-md-1">
+    <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
+    <p id="dice2_v">Würfel 2:</p>
+  </div>
+  <div class="col-md-1">
+    <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
+    <p id="dice3_v">Würfel 3:</p>
+  </div>
+</div>
+
+<div id="admin_interface">
+  <div class="row col-md-offset-1">
+    <div class="col-md-4">
+      <h2>Admin</h2>
+    </div>
+  </div>
+  <div class="row col-md-offset-1">
+    <div class="col-md-2">
+      <label for="stack_count_id">Anzahl:</label>
+      <input type="number" id="stack_count_id" name="stack_count_id"
+         min="1" max="6">
+    </div>
+    <div class="col-md-1">
+      <label for="stack_cb">Von Stapel:</label>
+      <input type="checkbox" id="stack_cb" name="stack" value="False" checked>
+    </div>
+    <div class="col-md-2">
+      <label for="transfer_source">Von:</label>
+      <select id="transfer_source" name="count">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="transfer_target">An:</label>
+      <select id="transfer_target" name="count">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="col-md-1">
+      <button id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row col-md-offset-1 col-md-6" style="height:150px;">
+
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+  function refreshGame(){
+    location=location;
+  }
+  function dice(){
+    var dice1_cb = document.getElementById('dice1_cb').checked;
+    var dice2_cb = document.getElementById('dice2_cb').checked;
+    var dice3_cb = document.getElementById('dice3_cb').checked;
+
+    var dice1_v = document.getElementById('dice1_v');
+    var dice2_v = document.getElementById('dice2_v');
+    var dice3_v = document.getElementById('dice3_v');
+    ///game/<gid>/user/<uid>/dice
+
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var id = localStorage.getItem('id');
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/dice");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status == 201){
+          if (res.fallen){
+            alert('Würfel vom Tisch gefallen Schnaps runde!');
+          }else{
+            dice1_v.innerHTML = 'Würfel 1:' + res.dice1
+            dice2_v.innerHTML = 'Würfel 2:' + res.dice2
+            dice3_v.innerHTML = 'Würfel 3:' + res.dice3
+          }
+        }else{
+          alert(''+res.Message);
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({dice1:dice1_cb, dice2:dice2_cb, dice3:dice3_cb}));
+  }
+
+  function finish(){
+    var id = localStorage.getItem('id');
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/finisch");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200){
+          alert(''+res.Message);
+
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({}));
+  }
+
+  function pullup(){
+    var id = localStorage.getItem('id');
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var pullup_cb = document.getElementById('pullup_cb').checked;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 201){
+          alert(''+res.Message);
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({visible:pullup_cb}));
+  }
+  function turn(){
+    ///game/<gid>/user/<uid>/diceturn
+    var dice1_cb = document.getElementById('dice1_cb').checked;
+    var dice2_cb = document.getElementById('dice2_cb').checked;
+    var dice3_cb = document.getElementById('dice3_cb').checked;
+
+    var dice1_v = document.getElementById('dice1_v');
+    var dice2_v = document.getElementById('dice2_v');
+    var dice3_v = document.getElementById('dice3_v');
+    ///game/<gid>/user/<uid>/dice
+
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var id = localStorage.getItem('id');
+    var turncount = document.getElementById('turncount');
+    var count = turncount.options[turncount.selectedIndex].value;
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/diceturn");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status == 201){
+          if (res.fallen){
+            alert('Würfel vom Tisch gefallen Schnaps runde!');
+          }else{
+            dice1_v.innerHTML = 'Würfel 1:' + res.dice1
+            dice2_v.innerHTML = 'Würfel 2:' + res.dice2
+            dice3_v.innerHTML = 'Würfel 3:' + res.dice3
+          }
+        }else{
+          alert(''+res.Message);
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({count:count}));
+  }
+
+  function transfer_chips(){
+    // /game/<gid>/user/chips
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var xhttp = new XMLHttpRequest();
+
+    var count = document.getElementById('stack_count_id').value;
+    var stack = document.getElementById('stack_cb').checked;
+    var transfer_source = document.getElementById('transfer_source');
+    var source = transfer_source.options[transfer_source.selectedIndex].value;
+    var transfer_target = document.getElementById('transfer_target');
+    var target = transfer_target.options[transfer_target.selectedIndex].value;
+
+    xhttp.open("POST", "/api/game/"+gameid+"/user/chips");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        alert(''+res.Message);
+        if (xhttp.status != 200){
+          alert(''+res.Message);
+        }
+      }
+    }
+    if (stack){
+      xhttp.send(JSON.stringify({count:parseInt(count), stack:stack, target:parseInt(target)}));
+    }else{
+      xhttp.send(JSON.stringify({count:parseInt(count), source:parseInt(source), target:parseInt(target)}));
+    }
+
+  }
+
+  function startup(){
+    var id = localStorage.getItem('id');
+    var admin_el = document.getElementById('admin_id');
+    var admin_id = admin_el.innerHTML;
+    if (id == admin_id){
+      var x = document.getElementById("admin_interface");
+      //Disable admin interface for none admins
+      x.style.display = "none";
+    }
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "/api/game/"+gameid);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status == 200){
+          var selecttionsource = document.getElementById('transfer_source');
+          var selecttiontarget = document.getElementById('transfer_target');
+          for (num in res.User) {
+            var juser = res.User[num];
+            var opt = document.createElement('option');
+            opt.value = juser['Id'];
+            opt.innerHTML = juser['Name'];
+            var opt2 = document.createElement('option');
+            opt2.value = juser['Id'];
+            opt2.innerHTML = juser['Name'];
+            selecttionsource.appendChild(opt);
+            selecttiontarget.appendChild(opt2);
+          }
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({}));
+
+    window.setInterval(function(){
+      /// call your function here
+      ///game/<gid>'
+      var game = document.getElementById('UUID');
+      var gameid = game.innerHTML;
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "/api/game/"+gameid);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          var res=JSON.parse(xhttp.responseText);
+          var sate = res.State
+          if (sate == 'started'){
+            //alert('Spiel vom admin gestartet eine moment noch');
+            window.location.href = "/game/"+gameid;
+          }
+        }
+      }
+      xhttp.send(JSON.stringify({}));
+
+    }, 5000);
+  }
+
+  startup()
+</script>
+{% endblock %}
