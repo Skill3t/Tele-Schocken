@@ -473,7 +473,7 @@
 
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
-    if (id == admin_id){
+    if (id != admin_id){
       var x = document.getElementById("admin_interface");
       //Disable admin interface for none admins
       x.style.display = "none";
