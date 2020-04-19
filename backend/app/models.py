@@ -70,26 +70,55 @@ class User(db.Model):
     name = db.Column(db.String(200), index=True, unique=True)
     chips = db.Column(db.Integer)
     passive = db.Column(db.Boolean(), default=False)
-    visible = db.Column(db.Boolean(), default=False)
+    # visible = db.Column(db.Boolean(), default=False)
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
     dice1 = db.Column(db.Integer)
+    dice1_visible = db.Column(db.Boolean(), default=False)
     dice2 = db.Column(db.Integer)
+    dice2_visible = db.Column(db.Boolean(), default=False)
     dice3 = db.Column(db.Integer)
+    dice3_visible = db.Column(db.Boolean(), default=False)
     number_dice = db.Column(db.Integer)  # Max Value = 3
+    firsthalf = db.Column(db.Boolean(), default=False)
 
     def to_dict(self):
+        dice = []
+        if self.dice1_visible:
+            dice1 = {'Dice1': self.dice1}
+            dice.append(dice1)
+        if self.dice2_visible:
+            dice2 = {'Dice2': self.dice2}
+            dice.append(dice2)
+        if self.dice3_visible:
+            dice3 = {'Dice3': self.dice3}
+            dice.append(dice3)
+        '''
         dice = [
             {'Dice1': self.dice1},
             {'Dice2': self.dice2},
             {'Dice3': self.dice3},
         ]
+        '''
+        data = {
+            'Id': self.id,
+            'Name': self.name,
+            'Chips': self.chips,
+            'Passive': self.passive,
+            'First_Half': self.firsthalf,
+            # 'Visible': self.visible,
+            'Number_Dice': self.number_dice,
+            'Dices': dice
+        }
+        '''
         if self.visible:
             data = {
                 'Id': self.id,
                 'Name': self.name,
                 'Chips': self.chips,
                 'Passive': self.passive,
-                'Visible': self.visible,
+                'First_Half': self.firsthalf,
+                # 'Visible': self.visible,
+                'Number_Dice': self.number_dice,
                 'Dices': dice
             }
         else:
@@ -98,12 +127,19 @@ class User(db.Model):
                 'Name': self.name,
                 'Chips': self.chips,
                 'Passive': self.passive,
-                'Visible': self.visible
+                'First_Half': self.firsthalf,
+                'Number_Dice': self.number_dice,
+                # 'Visible': self.visible
             }
+        '''
         return data
 
     def __init__(self):
         self.chips = 0
-        self.visible = False
+        # self.visible = False
+        self.dice1_visible = False
+        self.dice2_visible = False
+        self.dice3_visible = False
         self.passive = False
         self.number_dice = 0
+        self.firsthalf = False

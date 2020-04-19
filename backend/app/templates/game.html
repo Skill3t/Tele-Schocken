@@ -75,7 +75,9 @@
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         var res=JSON.parse(xhttp.responseText);
-        alert(''+res.Message);
+        if (xhttp.status != 201){
+          alert(''+res.Message);
+        }
       }
     }
     xhttp.send(JSON.stringify({}));

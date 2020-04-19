@@ -10,14 +10,17 @@
   </div>
 </div>
 <div class="row col-md-offset-1">
-  <div class="col-md-3">
-    <h3>Chips: {{game.stack}}</h3>
+  <div class="col-md-1">
+    <h3 id="StackChips_id">Chips: {{game.stack}}</h3>
   </div>
-  <div class="col-md-3">
-      <p>erste Hälfte: {{game.firsthalf}}</p>
+  <div class="col-md-2">
+      <h3 id="StackFirst_id" class="fas fa-gem"> Erste Hälfte</h3>
   </div>
-  <div class="col-md-3">
-      <p>Warten auf: {{game.moveName(game.move_user_id)}}</p>
+  <div class="col-md-2">
+    <h3 id="throw_id">Anzahl würfe:</h3>
+  </div>
+  <div class="col-md-2">
+      <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
       <p id="UUID" hidden>{{game.UUID}}</p>
       <p id="admin_id" hidden>{{game.admin_user_id}}</p>
   </div>
@@ -35,9 +38,11 @@
           <th>#</th>
           <th>Name</th>
           <th>Chips</th>
+          <th>Erste Hälfte</th>
           <th>Würfel1</th>
           <th>Würfel2</th>
           <th>Würfel3</th>
+          <th>Würfe</th>
         </tr>
       </thead>
       <tbody>
@@ -50,14 +55,17 @@
             <td id="chips{{user.id}}">
               {{user.chips}}
             </td>
+            <td>
+              <i id="first{{user.id}}" class="fas fa-gem"></i>
+            </td>
             <td id="dice1{{user.id}}">
-              {{user.dice1}}
             </td>
             <td id="dice2{{user.id}}">
-              {{user.dice2}}
             </td>
             <td id="dice3{{user.id}}">
-              {{user.dice3}}
+            </td>
+            <td id="Number_Dice{{user.id}}">
+              {{user.number_dice}}
             </td>
         </tr>
         {% endfor %}
@@ -66,7 +74,7 @@
 </div>
 <div class="row col-md-offset-1">
   <div class="col-md-4">
-    <h2>Spielen</h2>
+    <h2 id="ownuser">Spielen User:</h2>
   </div>
 </div>
 <div class="row col-md-offset-1">
@@ -81,7 +89,6 @@
   </div>
   <div class="col-md-1">
     <label for="pullup_cb">Aufdecken:</label>
-
     <input type="checkbox" id="pullup_cb" name="dice1" value="False" checked>
   </div>
 
@@ -118,10 +125,10 @@
     </div>
   </div>
   <div class="row col-md-offset-1">
-    <div class="col-md-2">
+    <div class="col-md-1">
       <label for="stack_count_id">Anzahl:</label>
       <input type="number" id="stack_count_id" name="stack_count_id"
-         min="1" max="6">
+         min="0" max="13">
     </div>
     <div class="col-md-1">
       <label for="stack_cb">Von Stapel:</label>
@@ -142,9 +149,12 @@
     <div class="col-md-1">
       <button id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
     </div>
+    <div class="col-md-1">
+        <button id='delete_game_id' onclick="delete_game()">Spiel beenden</button>
+    </div>
   </div>
-
 </div>
+
 
 
 <div class="row col-md-offset-1 col-md-6" style="height:150px;">
@@ -181,10 +191,6 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnaps runde!');
           }else{
-
-            //dice1_v = dicehelper2(res.dice1)
-            //dice2_v = dicehelper2(res.dice2)
-            //dice3_v = dicehelper2(res.dice3)
             dice1_v.innerHTML = '';
             dice2_v.innerHTML = '';
             dice3_v.innerHTML = '';
@@ -192,14 +198,6 @@
             dice1_v.appendChild(dicehelper2(res.dice1));
             dice2_v.appendChild(dicehelper2(res.dice2));
             dice3_v.appendChild(dicehelper2(res.dice3));
-
-
-
-
-            // dice3_v.className = dicehelper2(res.dice3)
-            //dice1_v.innerHTML = 'Würfel 1:' + res.dice1
-            //dice2_v.innerHTML = 'Würfel 2:' + res.dice2
-            //dice3_v.innerHTML = 'Würfel 3:' + res.dice3
           }
         }else{
           alert(''+res.Message);
@@ -344,9 +342,15 @@
         div.appendChild(divc2);
         return div
       }
+      default:{
+        var div = document.createElement('div');
+        return div
+      }
     }
   }
-
+  function delete_game(){
+    alert('Not implementet jet');
+  }
   function finish(){
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
@@ -463,6 +467,10 @@
 
   function startup(){
     var id = localStorage.getItem('id');
+    var user = document.getElementById('ownuser');
+    //var test = localStorage.getItem('name');
+    user.innerHTML = "Spielen User: "+localStorage.getItem('name');
+
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
     if (id == admin_id){
@@ -509,30 +517,68 @@
         if (xhttp.readyState == XMLHttpRequest.DONE) {
           var res=JSON.parse(xhttp.responseText);
           if (xhttp.status == 200){
+            var waiting_user_id = res.Move
+            var waitinguserstorage = document.getElementById('waiting_id');
+            //set game first half
+            var stackfirsthalf = res['First_Half']
+            var stackfirsthalfstorage = document.getElementById('StackFirst_id');
+            if (stackfirsthalf){
+              stackfirsthalfstorage.style.visibility = "visible";
+            }else{
+              stackfirsthalfstorage.style.visibility = "hidden";
+            }
+            //set stack Chips
+            var stackchips = document.getElementById('StackChips_id');
+            stackchips.innerHTML = 'Chips: '+ res.Stack
+            var firstuser_id = res['First']
+
             for (num in res.User) {
               var juser = res.User[num];
               var str = 'chips'+juser['Id']
               var chips = document.getElementById('chips'+juser['Id']);
               chips.innerHTML = juser['Chips'];
-              if (juser.Dices){
-                var jdice1 = juser.Dices[0];
-                var jdice2 = juser.Dices[1];
-                var jdice3 = juser.Dices[2];
-                var dice1_v = document.getElementById('dice1'+juser['Id']);
-                //dice1.innerHTML = jdice1['Dice1'];
-                var dice2_v = document.getElementById('dice2'+juser['Id']);
-                //dice2.innerHTML = jdice2['Dice2'];
-                var dice3_v = document.getElementById('dice3'+juser['Id']);
-                //dice3.innerHTML = jdice3['Dice3'];
+              //set anzahl würfe
+              if (juser['Id'] == firstuser_id){
+                var anzahlel = document.getElementById('throw_id');
+                anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+              }
+              var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
+              anzahluserel.innerHTML = juser['Number_Dice'];
 
+              // set Waiting user Name
+              if (juser['Id'] == waiting_user_id){
+                waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
+              }
+              // set user first First_Half
+              var userfirsthalf = juser['First_Half']
+              var userfirsthalfel = document.getElementById('first'+juser['Id']);
+              if (userfirsthalf){
+                userfirsthalfel.style.visibility = "visible";
+              }else{
+                userfirsthalfel.style.visibility = "hidden";
+              }
+              // set dices
+              var dice1_v = document.getElementById('dice1'+juser['Id']);
+              var dice2_v = document.getElementById('dice2'+juser['Id']);
+              var dice3_v = document.getElementById('dice3'+juser['Id']);
+              if (juser.Dices){
                 dice1_v.innerHTML = '';
                 dice2_v.innerHTML = '';
                 dice3_v.innerHTML = '';
+                for (num in juser.Dices) {
+                  var jdice = juser.Dices[num];
+                //var jdice1 = juser.Dices['0'];
+                //var jdice2 = juser.Dices['1'];
+                //var jdice3 = juser.Dices['2'];
 
-                dice1_v.appendChild(dicehelper2(jdice1['Dice1']));
-                dice2_v.appendChild(dicehelper2(jdice2['Dice2']));
-                dice3_v.appendChild(dicehelper2(jdice3['Dice3']));
-
+                  dice1_v.appendChild(dicehelper2(jdice['Dice1']));
+                  dice2_v.appendChild(dicehelper2(jdice['Dice2']));
+                  dice3_v.appendChild(dicehelper2(jdice['Dice3']));
+                }
+              }else{
+                dice1_v.innerHTML = '';
+                dice2_v.innerHTML = '';
+                dice3_v.innerHTML = '';
               }
             }
           }

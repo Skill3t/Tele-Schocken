@@ -376,7 +376,10 @@ def pull_up_dice_cup(gid, uid):
         return response
     data = request.get_json() or {}
     if 'visible' in data:
-        user.visible = data['visible']
+        # user.visible = data['visible']
+        user.dice1_visible = data['visible']
+        user.dice2_visible = data['visible']
+        user.dice3_visible = data['visible']
         db.session.add(user)
         db.session.commit()
         response = jsonify(Message='suscess')
@@ -404,9 +407,11 @@ def finish_throwing(gid, uid):
         response.status_code = 404
         return response
     waitinguser = User.query.get_or_404(game.move_user_id)
+    print('waitinguser:{}   user:{}'.format(waitinguser, user))
     if waitinguser.id == user.id:
         # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
         aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+        print('Test')
         if len(game.users) > aktualuserid[0]+1:
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
@@ -415,10 +420,12 @@ def finish_throwing(gid, uid):
         db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 200
+        return response
     else:
         response = jsonify(Message='Its not your turn')
         response.status_code = 400
         return response
+    print('Testende')
     response = jsonify(Message='Error')
     response.status_code = 400
     return response
@@ -492,8 +499,12 @@ def roll_dice(gid, uid):
     # Cloud be improved to game.first_user_id first user.number_dice
     first_user = User.query.get_or_404(game.first_user_id)
     waitinguser = User.query.get_or_404(game.move_user_id)
-    if waitinguser.id == user.id:
-
+    if waitinguser.id == user.id or user.passive:
+        if game.status == Status.GAMEFINISCH:
+            game.status = Status.STARTED
+            response = jsonify(Message='New Game Startet')
+        if user.passive:
+            user.passive = False
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
             if user.number_dice >= 3:
                 response = jsonify(Message='User hase alread dice 3 times')
@@ -510,12 +521,25 @@ def roll_dice(gid, uid):
             if 'dice1' in data:
                 if data['dice1']:
                     user.dice1 = randint(1, 6)
+                else:
+                    user.dice1_visible = True
+            else:
+                user.dice1_visible = True
             if 'dice2' in data:
                 if data['dice2']:
                     user.dice2 = randint(1, 6)
+                else:
+                    user.dice2_visible = True
+            else:
+                user.dice2_visible = True
+
             if 'dice3' in data:
                 if data['dice3']:
                     user.dice3 = randint(1, 6)
+                else:
+                    user.dice3_visible = True
+            else:
+                user.dice3_visible = True
             if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
                 if game.firsthalf:
                     game.status = Status.FINISCH
@@ -534,7 +558,7 @@ def roll_dice(gid, uid):
         db.session.commit()
         return response
     else:
-        response = jsonify(Message='User not correct initialted')
+        response = jsonify(Message='Its not your turn')
         response.status_code = 400
     return response
 
@@ -700,6 +724,7 @@ def transfer_chips(gid):
                 "Message": "Request must include value",
             }
     """
+    response = jsonify(Message='sucess')
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')
@@ -719,10 +744,16 @@ def transfer_chips(gid):
             userA.chips = userA.chips - data['count']
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
+            game.move_user_id = userB.id
+
             db.session.add(game)
             db.session.add(userA)
             db.session.add(userB)
             db.session.commit()
+        else:
+            response = jsonify(Message='source has not enough chips his Stack. try again')
+            response.status_code = 400
+            return response
     # transfer from stack to user B
     if 'count' in data and 'stack' in data and 'target' in data:
         userB = User.query.get_or_404(data['target'])
@@ -730,17 +761,45 @@ def transfer_chips(gid):
             game.stack = game.stack - data['count']
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
+            game.move_user_id = userB.id
             db.session.add(game)
             db.session.add(userB)
             db.session.commit()
+        else:
+            response = jsonify(Message='Not enough chips on the Stack. try again')
+            response.status_code = 400
+            return response
+
+    # Game GAMEFINISCH or ROUNDFINISCH
+    userB = User.query.get_or_404(data['target'])
+    if userB.chips == 13 and game.firsthalf is True:
+        userB.firsthalf = True
+        game.firsthalf = False
+        game.status = Status.ROUNDFINISCH
+        game.stack = 13
+        response = jsonify(Message='Player {} lose the first half'.format(userB.name))
+    elif userB.chips == 13 and game.firsthalf is False:
+        game.status = Status.GAMEFINISCH
+        game.firsthalf = True
+        userB.firsthalf = False
+        game.stack = 13
+        game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.01
+        response = jsonify(Message='Player {} lose the Game'.format(userB.name))
     for user in game.users:
+        if game.status == Status.ROUNDFINISCH:
+            user.chips = 0
+        if game.status == Status.GAMEFINISCH:
+            user.chips = 0
         user.dice1 = None
         user.dice2 = None
         user.dice3 = None
         user.number_dice = 0
+        # user.visible = False
+        user.dice1_visible = False
+        user.dice2_visible = False
+        user.dice3_visible = False
     db.session.add(game)
     db.session.commit()
-    response = jsonify(Message='sucess')
     response.status_code = 200
     return response
 
