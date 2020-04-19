@@ -503,6 +503,9 @@ def roll_dice(gid, uid):
         if game.status == Status.GAMEFINISCH:
             game.status = Status.STARTED
             response = jsonify(Message='New Game Startet')
+        if game.status == Status.ROUNDFINISCH:
+            game.status = Status.STARTED
+            response = jsonify(Message='New Game Startet')
         if user.passive:
             user.passive = False
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
