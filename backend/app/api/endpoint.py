@@ -732,8 +732,8 @@ def transfer_chips(gid):
         return response
     data = request.get_json() or {}
     # requierd attribute not included
-    if 'count' not in data or 'target' not in data:
-        response = jsonify(Message='request must include count and target')
+    if 'target' not in data:
+        response = jsonify(Message='request must include target')
         response.status_code = 400
         return response
     # transfer from user a to B
