@@ -769,6 +769,21 @@ def transfer_chips(gid):
             response = jsonify(Message='Not enough chips on the Stack. try again')
             response.status_code = 400
             return response
+    # transfer all to B Schockaus
+    if 'schockaus' in data and 'target' in data:
+        userB = User.query.get_or_404(data['target'])
+        if data['schockaus']:
+            game.stack = 0
+            userB.chips = 13
+            game.first_user_id = userB.id
+            game.move_user_id = userB.id
+            db.session.add(game)
+            db.session.add(userB)
+            db.session.commit()
+        else:
+            response = jsonify(Message='wrong transfere check transfere and try again')
+            response.status_code = 400
+            return response
 
     # Game GAMEFINISCH or ROUNDFINISCH
     userB = User.query.get_or_404(data['target'])
