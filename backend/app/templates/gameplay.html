@@ -208,6 +208,14 @@
     var gameid = game.innerHTML;
     var id = localStorage.getItem('id');
 
+    var dicenumber = document.getElementById('Number_Dice'+id).innerHTML;
+    dicenumber = parseInt(dicenumber);
+    if (dicenumber == 0){
+      if (!dice1_cb || !dice2_cb || !dice3_cb){
+        alert('please but all dice in the cub');
+        return
+      }
+    }
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/dice");
     xhttp.setRequestHeader("Content-Type", "application/json");
