@@ -28,6 +28,70 @@
 
 <div class="row col-md-offset-1">
   <div class="col-md-4">
+    <h2 id="ownuser">Spielen User:</h2>
+  </div>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-1">
+    <button id='startgame_id'onclick="dice()">Würfeln</button>
+  </div>
+  <div class="col-md-1">
+    <button id='finishgame_id'onclick="finish()">Ende</button>
+  </div>
+  <div class="col-md-1">
+    <button id='startgame_id' onclick="pullup()">Aufdecken</button>
+  </div>
+  <div class="col-md-1">
+    <label for="pullup_cb">Aufdecken:</label>
+    <input type="checkbox" id="pullup_cb" name="dice1" value="False" checked>
+  </div>
+
+  <div class="col-md-1">
+    <button id='turndice_id' onclick="turn()">6er drehen</button>
+  </div>
+  <div class="col-md-1">
+    <select id="turncount" name="count">
+      <option value="1">2 x 6er -> 1x1er</option>
+      <option value="2">3 x 6er -> 2x1er</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <div class="row col-md-offset-1">
+      <div class="col-md-9 text-center">
+        <p>Würfel wählen</p>
+      </div>
+    </div>
+    <div class="row col-md-offset-1">
+      <div class="col-md-3 text-center">
+        <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
+      </div>
+      <div class="col-md-3 text-center">
+        <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
+      </div>
+      <div class="col-md-3 text-center">
+        <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
+      </div>
+    </div>
+    <div class="row col-md-offset-1">
+      <div class="col-md-3">
+        <div class="text-center" id="dice1_v">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="text-center" id="dice2_v">
+        </div>
+      </div>
+      <div class="col-md-3 text-center">
+        <div class="text-center" id="dice3_v">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="row col-md-offset-1">
+  <div class="col-md-4">
     <h2>Spieler</h2>
   </div>
 </div>
@@ -72,51 +136,6 @@
         </tbody>
     </table>
 </div>
-<div class="row col-md-offset-1">
-  <div class="col-md-4">
-    <h2 id="ownuser">Spielen User:</h2>
-  </div>
-</div>
-<div class="row col-md-offset-1">
-  <div class="col-md-1">
-    <button id='startgame_id'onclick="dice()">Würfeln</button>
-  </div>
-  <div class="col-md-1">
-    <button id='finishgame_id'onclick="finish()">Ende</button>
-  </div>
-  <div class="col-md-1">
-    <button id='startgame_id' onclick="pullup()">Aufdecken</button>
-  </div>
-  <div class="col-md-1">
-    <label for="pullup_cb">Aufdecken:</label>
-    <input type="checkbox" id="pullup_cb" name="dice1" value="False" checked>
-  </div>
-
-  <div class="col-md-1">
-    <button id='turndice_id' onclick="turn()">6er drehen</button>
-  </div>
-  <div class="col-md-1">
-    <select id="turncount" name="count">
-      <option value="1">2 x 6er -> 1x1er</option>
-      <option value="2">3 x 6er -> 2x1er</option>
-    </select>
-  </div>
-  <div class="col-md-1">
-    <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
-    <div id="dice1_v">
-    </div>
-  </div>
-  <div class="col-md-1">
-    <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
-    <div id="dice2_v">
-    </div>
-  </div>
-  <div class="col-md-1">
-    <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
-    <div id="dice3_v">
-    </div>
-  </div>
-</div>
 
 <div id="admin_interface">
   <div class="row col-md-offset-1">
@@ -160,6 +179,10 @@
 <div class="row col-md-offset-1 col-md-6" style="height:150px;">
 
 </div>
+{% block footer %}
+{{ super() }}
+{% endblock %}
+
 {% endblock %}
 {% block scripts %}
 {{ super() }}

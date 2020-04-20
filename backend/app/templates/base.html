@@ -16,9 +16,33 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 {% endblock %}
 
+
+
 {% block scripts %}
 <script type=text/javascript src="{{
   url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
 <script type=text/javascript src="{{
   url_for('static', filename='bootstrap.min.js') }}"></script>
+{% endblock %}
+
+{% block footer %}
+<div class="row" style="height:250px;">
+</div>
+<div class="row">
+  <hr>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-3">
+    <p>Github: <a href="https://github.com/Skill3t/Tele-Schocken">
+    Tele-Schocken</a></p>
+  </div>
+  <div class="col-md-3">
+    <a href="{{ url_for('static',filename='datenschutz.html') }}"">
+    Impressum</a>
+  </div>
+  <div class="col-md-3">
+    <a href= "{{ url_for('static',filename='datenschutz.html') }}"">
+    Datenschutz</a>
+  </div>
+</div>
 {% endblock %}
