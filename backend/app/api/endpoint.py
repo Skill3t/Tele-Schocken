@@ -547,13 +547,6 @@ def roll_dice(gid, uid):
                     user.dice3_visible = True
             else:
                 user.dice3_visible = True
-            if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
-                if game.firsthalf:
-                    game.status = Status.FINISCH
-                else:
-                    game.firsthalf = True
-                db.session.add(game)
-                db.session.commit()
         else:
             response = jsonify(Message='Its not your turn')
             response.status_code = 400
