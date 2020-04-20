@@ -406,6 +406,10 @@ def finish_throwing(gid, uid):
         response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
+    if user.dice1 is None or user.dice2 is None or user.dice3 is None:
+        response = jsonify(Message='Dice again after turning 6er')
+        response.status_code = 400
+        return response
     waitinguser = User.query.get_or_404(game.move_user_id)
     print('waitinguser:{}   user:{}'.format(waitinguser, user))
     if waitinguser.id == user.id:
