@@ -805,6 +805,7 @@ def transfer_chips(gid):
             user.chips = 0
         if game.status == Status.GAMEFINISCH:
             user.chips = 0
+            user.firsthalf = False
         user.dice1 = None
         user.dice2 = None
         user.dice3 = None
