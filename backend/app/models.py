@@ -56,7 +56,7 @@ class Game(db.Model):
         self.status = Status.WAITING
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
-        self.changs_of_fallling_dice = 0.01
+        self.changs_of_fallling_dice = 0.005
 
     def moveName(self, id):
         if id is not None:
