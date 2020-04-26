@@ -216,29 +216,6 @@
     var dice2_v = document.getElementById('dice2_v');
     var dice3_v = document.getElementById('dice3_v');
 
-    var audio = new Audio("{{ url_for("static", filename = "wuerfeln.mp3")}}");
-    audio.play();
-    var x = ''
-    setTimeout(function(){ x="4 seconds" }, 3000);
-    if (dice1_cb){
-      dice1_v.className = "spin animated"
-      dice1_v.style.animation = 'none';
-      dice1_v.offsetHeight; /* trigger reflow */
-      dice1_v.style.animation = null;
-    }
-    if (dice2_cb){
-      dice2_v.className = "spin animated"
-      dice2_v.style.animation = 'none';
-      dice2_v.offsetHeight; /* trigger reflow */
-      dice2_v.style.animation = null;
-    }
-    if (dice3_cb){
-      dice3_v.className = "spin animated"
-      dice3_v.style.animation = 'none';
-      dice3_v.offsetHeight; /* trigger reflow */
-      dice3_v.style.animation = null;
-    }
-
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     var id = localStorage.getItem('id');
@@ -250,6 +227,28 @@
         alert('please put all dice in the cub');
         return
       }
+    }else{
+      var audio = new Audio("{{ url_for("static", filename = "wuerfeln.mp3")}}");
+      audio.play();
+      if (dice1_cb){
+        dice1_v.className = "spin animated"
+        dice1_v.style.animation = 'none';
+        dice1_v.offsetHeight; /* trigger reflow */
+        dice1_v.style.animation = null;
+      }
+      if (dice2_cb){
+        dice2_v.className = "spin animated"
+        dice2_v.style.animation = 'none';
+        dice2_v.offsetHeight; /* trigger reflow */
+        dice2_v.style.animation = null;
+      }
+      if (dice3_cb){
+        dice3_v.className = "spin animated"
+        dice3_v.style.animation = 'none';
+        dice3_v.offsetHeight; /* trigger reflow */
+        dice3_v.style.animation = null;
+      }
+
     }
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/dice");
