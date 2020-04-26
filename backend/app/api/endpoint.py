@@ -29,9 +29,6 @@ def get_refreshed_game(gid):
         game2 = Game.query.filter_by(UUID=gid).first()
         new_game = game2.to_dict()
         modified = not sorted(old_game.items()) == sorted(new_game.items())
-        print('new_game:   {}'.format(new_game))
-        print('old_game:   {}'.format(old_game))
-        print('modified:    {}'.format(modified))
         time.sleep(0.5)
         if modified:
             response = jsonify(game.to_dict())
