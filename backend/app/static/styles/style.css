@@ -12,8 +12,13 @@ table {
 }
 
 
-.buttongreen {background-color: #4CAF50;} /* Green */
-.buttongray {background-color: #e7e7e7; color: black;} /* Gray */
+.buttongreen {
+  background-color: #4CAF50;
+} /* Green */
+
+.buttongray {
+  background-color: #e7e7e7; color: black;
+} /* Gray */
 
 
 .header-img {
