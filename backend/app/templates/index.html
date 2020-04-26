@@ -1,79 +1,106 @@
 {% extends "base.html" %}
+
 {% block content %}
-<main>
-    <div class="header-img"></div>
-</main>
-
-<div class="row col-md-offset-1" style="height:90px;">
-    <h1>Welcome to Tele-Schocken</h1>
-</div>
-
-<div class="row col-md-offset-1" style="height:90px;">
-    <div class="col-md-5">
-      <div class="row">
-        <div class="col-md-9">
-          <h2>Spiel erzeugen</h2>
-          <label for="adminname">Name</label>
-          <input  type="text" id="adminname" value="">
-          <button onclick="createGame()">Erzeugen</button>
-        </div>
+{{ super() }}
+<div class=”main-container”>
+  <section class="section_100">
+    <main>
+        <div class="header-img"></div>
+    </main>
+    <div class="row col-md-offset-1">
+      <div class="col-md-4">
+        <h1>Welcome to Tele-Schocken</h1>
       </div>
-      <div class="row">
-        <div class="col-md-10">
+    </div>
+
+    <div class="row col-md-offset-1" style="height:5px;">
+        <div class="col-md-5">
           <div class="row">
-            <h2>Spiel beitreten</h2>
+            <div class="col-md-9">
+              <h2>Spiel erzeugen</h2>
+              <label for="adminname">Name</label>
+              <input  type="text" id="adminname" value="">
+              <button onclick="createGame()">Erzeugen</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-11">
+              <div class="row">
+                <div class="col-md-6">
+                  <h2>Spiel beitreten</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <label for="UUID">Spiel ID</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <input  type="text" id="UUID" value="">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label for="Name">Name</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <input  type="text" id="Name" value="">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="row" style="height:25px;">
+                  </div>
+                  <div class="row" >
+                    <div class="col-md-9">
+                      <button onclick="joinGame()">Beitreten</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Erläuterung:</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <ul>
+                <li>Der Spieler, der das Spiel erzeugt ist auch die Bank und muss alle Chipts verteilen</li>
+                <li>Wenn ein Zug vor dem dritten Würfeln beendet werden soll, bitte "Ende" klicken</li>
+                <li>Zu jeden Zeitpunkt kann auf bzw zu gedeckt werden.</li>
+                <li>Rausgestellte Würfel sind aufgedeckt</li>
+                <li>Der Spieler der bei einer Runde bereits gewonnen hat (0 Chps), muss jedes Mal auf "Ende" klicken wenn er dran wäre (ermöglicht wieder Einwerfen)</li>
+                <li>Der Code ist frei verfügbar. Wenn euch das Spiel gefällt liked es auf Github. Wenn ihr Anregungen habt oder Fehler findet meldet dies auch via Github</li>
+              </ul>
+            </div>
           </div>
           <div class="row">
             <div class="col-md-4">
-              <div class="row">
-                <label for="UUID">Spiel ID</label>
-              </div>
-              <div class="row">
-                <input  type="text" id="UUID" value="">
-              </div>
+              <h4><a href="https://github.com/Skill3t/Tele-Schocken">
+              Github</a></h4>
             </div>
+          </div>
+          <div class="row">
             <div class="col-md-4">
-              <div class="row">
-                <label for="Name">Name</label>
-              </div>
-              <div class="row">
-                <input  type="text" id="Name" value="">
-              </div>
-            </div>
-            <div class="col-mb-1">
-              <div class="row" style="height:25px;">
-              </div>
-              <div class="row" >
-                <button onclick="joinGame()">Beitreten</button>
-              </div>
+              <h4><a href="https://www.abenteuerfreundschaft.de/schocken-wuerfel-trinkspiel/">
+              Regeln</a></h4>
             </div>
           </div>
         </div>
-      </div>
     </div>
-    <div class="col-md-4">
-      <div class="row">
-        <h3>Erläuterung:</h3>
-      </div>
-      <div class="row">
-        <ul>
-          <li>Der Spieler, der das Spiel erzeugt ist auch die Bank und muss alle Chipts verteilen</li>
-          <li>Wenn ein Zug vor dem dritten Würfeln beendet werden soll, bitte "Ende" klicken</li>
-          <li>Zu jeden Zeitpunkt kann auf bzw zu gedeckt werden.</li>
-          <li>Rausgestellte Würfel sind aufgedeckt</li>
-          <li>Der Spieler der bei einer Runde bereits gewonnen hat (0 Chps), muss jedes Mal auf "Ende" klicken wenn er dran wäre (ermöglicht wieder Einwerfen)</li>
-          <li>Der Code ist frei verfügbar. Wenn euch das Spiel gefällt liked es auf Github. Wenn ihr Anregungen habt oder Fehler findet meldet dies auch via Github</li>
-        </ul>
-      </div>
-      <div class="row">
-        <h4><a href="https://github.com/Skill3t/Tele-Schocken">
-        Github</a></h4>
-      </div>
-      <div class="row">
-        <h4><a href="https://www.abenteuerfreundschaft.de/schocken-wuerfel-trinkspiel/">
-        Regeln</a></h4>
-      </div>
-    </div>
+  </section>
 </div>
 
 
@@ -83,7 +110,12 @@
 {% block footer %}
 {{ super() }}
 {% endblock %}
+
 {% endblock %}
+
+
+
+
 {% block scripts %}
 {{ super() }}
 <script>

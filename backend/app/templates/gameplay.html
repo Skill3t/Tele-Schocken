@@ -58,7 +58,7 @@
   <div class="col-md-3">
     <div class="row col-md-offset-1">
       <div class="col-md-9 text-center">
-        <p>Würfel wählen</p>
+        <p>Würfel für Becher wählen</p>
       </div>
     </div>
     <div class="row col-md-offset-1">
@@ -183,10 +183,11 @@
 <div class="row col-md-offset-1 col-md-6" style="height:150px;">
 
 </div>
+
+
+{% endblock %}
 {% block footer %}
 {{ super() }}
-{% endblock %}
-
 {% endblock %}
 {% block scripts %}
 {{ super() }}
@@ -224,7 +225,7 @@
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 201){
           if (res.fallen){
-            alert('Würfel vom Tisch gefallen Schnaps runde!');
+            alert('Würfel vom Tisch gefallen Schnapsrunde!');
           }else{
             dice1_v.innerHTML = '';
             dice2_v.innerHTML = '';
@@ -508,7 +509,7 @@
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');
-    user.innerHTML = "Spielen User: "+localStorage.getItem('name');
+    user.innerHTML = "Spieler: "+localStorage.getItem('name');
 
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
@@ -558,6 +559,7 @@
           if (xhttp.status == 200){
             var waiting_user_id = res.Move
             var waitinguserstorage = document.getElementById('waiting_id');
+            var throwbutton = document.getElementById('startgame_id');
             //set game first half
             var stackfirsthalf = res['First_Half']
             var stackfirsthalfstorage = document.getElementById('StackFirst_id');
@@ -588,6 +590,15 @@
               if (juser['Id'] == waiting_user_id){
                 waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
               }
+
+              // set button color
+              var id = localStorage.getItem('id');
+              if (id == waiting_user_id){
+                throwbutton.className  = 'button buttongreen'
+              }else{
+                throwbutton.className  = 'button buttongray'
+              }
+
               // set user first First_Half
               var userfirsthalf = juser['First_Half']
               var userfirsthalfel = document.getElementById('first'+juser['Id']);
