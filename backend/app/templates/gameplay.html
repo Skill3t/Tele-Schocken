@@ -4,6 +4,7 @@
 <main>
     <div class="header-img"></div>
 </main>
+
 <div class="row col-md-offset-1">
   <div class="col-md-4">
     <h2>Stapel</h2>
@@ -184,18 +185,22 @@
 
 </div>
 
-
-{% endblock %}
 {% block footer %}
 {{ super() }}
+{% endblock %}
 {% endblock %}
 {% block scripts %}
 {{ super() }}
 <script>
+
+
+
   function refreshGame(){
     location=location;
   }
   function dice(){
+
+
     var dice1_cb = document.getElementById('dice1_cb');
     dice1_cb.disabled = false;
     var dice2_cb = document.getElementById('dice2_cb');
@@ -210,7 +215,29 @@
     var dice1_v = document.getElementById('dice1_v');
     var dice2_v = document.getElementById('dice2_v');
     var dice3_v = document.getElementById('dice3_v');
-    ///game/<gid>/user/<uid>/dice
+
+    var audio = new Audio("{{ url_for("static", filename = "würfeln.mp3")}}");
+    audio.play();
+    var x = ''
+    setTimeout(function(){ x="4 seconds" }, 3000);
+    if (dice1_cb){
+      dice1_v.className = "spin animated"
+      dice1_v.style.animation = 'none';
+      dice1_v.offsetHeight; /* trigger reflow */
+      dice1_v.style.animation = null;
+    }
+    if (dice2_cb){
+      dice2_v.className = "spin animated"
+      dice2_v.style.animation = 'none';
+      dice2_v.offsetHeight; /* trigger reflow */
+      dice2_v.style.animation = null;
+    }
+    if (dice3_cb){
+      dice3_v.className = "spin animated"
+      dice3_v.style.animation = 'none';
+      dice3_v.offsetHeight; /* trigger reflow */
+      dice3_v.style.animation = null;
+    }
 
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
@@ -237,7 +264,6 @@
             dice1_v.innerHTML = '';
             dice2_v.innerHTML = '';
             dice3_v.innerHTML = '';
-
             dice1_v.appendChild(dicehelper2(res.dice1));
             dice2_v.appendChild(dicehelper2(res.dice2));
             dice3_v.appendChild(dicehelper2(res.dice3));
@@ -432,6 +458,7 @@
     }
     xhttp.send(JSON.stringify({visible:pullup_cb}));
   }
+
   function turn(){
     ///game/<gid>/user/<uid>/diceturn
     var dice1_cb = document.getElementById('dice1_cb');
@@ -516,8 +543,7 @@
     }
     if (stack){
       xhttp.send(JSON.stringify({count:parseInt(count), stack:stack, target:parseInt(target)}));
-    }
-    if (aus){
+    }else if (aus) {
       xhttp.send(JSON.stringify({schockaus:aus, target:parseInt(target)}));
     }else{
       xhttp.send(JSON.stringify({count:parseInt(count), source:parseInt(source), target:parseInt(target)}));

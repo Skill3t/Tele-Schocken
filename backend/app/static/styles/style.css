@@ -21,6 +21,25 @@ table {
 } /* Gray */
 
 
+.spin {
+}
+@-webkit-keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(2520deg);
+    }
+}
+.spin.animated {
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 3400ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease;
+}
+
+
+
 .header-img {
   width: 100%;
   height: 300px;
