@@ -22,6 +22,8 @@ class Game(db.Model):
     users = db.relationship('User')
 
     firsthalf = db.Column(db.Boolean(), default=False)
+    secondhalf = db.Column(db.Boolean(), default=False)
+    message = db.Column(db.String(300))
     status = db.Column(db.Enum(Status))
     stack = db.Column(db.Integer)
     changs_of_fallling_dice = db.Column(db.Float)
