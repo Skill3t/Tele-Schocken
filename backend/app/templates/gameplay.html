@@ -196,6 +196,13 @@
     location=location;
   }
   function dice(){
+    var dice1_cb = document.getElementById('dice1_cb');
+    dice1_cb.disabled = false;
+    var dice2_cb = document.getElementById('dice2_cb');
+    dice2_cb.disabled = false;
+    var dice3_cb = document.getElementById('dice3_cb');
+    dice3_cb.disabled = false;
+
     var dice1_cb = document.getElementById('dice1_cb').checked;
     var dice2_cb = document.getElementById('dice2_cb').checked;
     var dice3_cb = document.getElementById('dice3_cb').checked;
@@ -213,7 +220,7 @@
     dicenumber = parseInt(dicenumber);
     if (dicenumber == 0){
       if (!dice1_cb || !dice2_cb || !dice3_cb){
-        alert('please but all dice in the cub');
+        alert('please put all dice in the cub');
         return
       }
     }
@@ -427,9 +434,9 @@
   }
   function turn(){
     ///game/<gid>/user/<uid>/diceturn
-    var dice1_cb = document.getElementById('dice1_cb').checked;
-    var dice2_cb = document.getElementById('dice2_cb').checked;
-    var dice3_cb = document.getElementById('dice3_cb').checked;
+    var dice1_cb = document.getElementById('dice1_cb');
+    var dice2_cb = document.getElementById('dice2_cb');
+    var dice3_cb = document.getElementById('dice3_cb');
 
     var dice1_v = document.getElementById('dice1_v');
     var dice2_v = document.getElementById('dice2_v');
@@ -449,18 +456,31 @@
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 201){
-          if (res.fallen){
-            alert('Würfel vom Tisch gefallen Schnaps runde!');
-          }else{
             dice1_v.innerHTML = '';
             dice2_v.innerHTML = '';
             dice3_v.innerHTML = '';
+            if (res.dice1){
+              dice1_v.appendChild(dicehelper2(res.dice1));
+            }else{
+              dice1_cb.checked = true;
+              dice1_cb.disabled = true;
+            }
+            if (res.dice2){
+              dice2_v.appendChild(dicehelper2(res.dice2));
+            }else{
+                dice2_cb.checked = true;
+                dice2_cb.disabled = true;
+            }
+            if (res.dice3){
+              dice3_v.appendChild(dicehelper2(res.dice3));
+            }else{
+                dice3_cb.checked = true;
+                dice3_cb.disabled = true;
+            }
+            //dice1_v.appendChild(dicehelper2(res.dice1));
+            //dice2_v.appendChild(dicehelper2(res.dice2));
+            //dice3_v.appendChild(dicehelper2(res.dice3));
 
-            dice1_v.appendChild(dicehelper2(res.dice1));
-            dice2_v.appendChild(dicehelper2(res.dice2));
-            dice3_v.appendChild(dicehelper2(res.dice3));
-
-          }
         }else{
           alert(''+res.Message);
         }

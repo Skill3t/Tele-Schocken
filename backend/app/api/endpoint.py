@@ -504,9 +504,6 @@ def roll_dice(gid, uid):
         if game.status == Status.GAMEFINISCH:
             game.status = Status.STARTED
             response = jsonify(Message='New Game Startet')
-        if game.status == Status.ROUNDFINISCH:
-            game.status = Status.STARTED
-            response = jsonify(Message='New Game Startet')
         if user.passive:
             user.passive = False
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
@@ -515,7 +512,7 @@ def roll_dice(gid, uid):
                 response.status_code = 404
                 return response
             user.number_dice = user.number_dice + 1
-            if user.number_dice == 3:
+            if user.number_dice == first_user.number_dice and user.id != first_user.id or user.number_dice == 3:
                 # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
                 aktualuserid = [i for i, x in enumerate(game.users) if x == user]
                 if len(game.users) > aktualuserid[0]+1:
@@ -549,6 +546,8 @@ def roll_dice(gid, uid):
             response.status_code = 400
             return response
         fallen = decision(game.changs_of_fallling_dice)
+        if fallen:
+            user.number_dice = user.number_dice - 1
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
         response.status_code = 201
         db.session.add(user)
@@ -781,7 +780,8 @@ def transfer_chips(gid):
             response = jsonify(Message='wrong transfere check transfere and try again')
             response.status_code = 400
             return response
-
+    if game.status == Status.ROUNDFINISCH:
+        game.status = Status.STARTED
     # Game GAMEFINISCH or ROUNDFINISCH
     userB = User.query.get_or_404(data['target'])
     if userB.chips == 13 and game.firsthalf is True:
