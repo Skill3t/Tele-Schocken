@@ -6,11 +6,11 @@
 </main>
 
 <div class="row col-md-offset-1">
-  <div class="col-md-4">
+  <div class="col-md-1">
     <h2>Stapel</h2>
   </div>
-  <div class="col-md-4">
-    <p id="Message">Nachricht:</p>
+  <div class="col-md-8">
+    <h2 id="Message"></h2>
   </div>
 </div>
 <div class="row col-md-offset-1">
@@ -179,6 +179,9 @@
     <div class="col-md-1">
         <button id='delete_game_id' onclick="delete_game()">Spiel beenden</button>
     </div>
+    <div class="col-md-1">
+        <button onclick="delete_message()">Nachricht löschen</button>
+    </div>
   </div>
 </div>
 
@@ -251,7 +254,6 @@
         dice3_v.offsetHeight; /* trigger reflow */
         dice3_v.style.animation = null;
       }
-
     }
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/dice");
@@ -276,6 +278,23 @@
       }
     }
     xhttp.send(JSON.stringify({dice1:dice1_cb, dice2:dice2_cb, dice3:dice3_cb}));
+  }
+
+  function delete_message(){
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/message");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 201){
+          alert('Fehler');
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({}));
   }
 
   function dicehelper(eyes){
@@ -621,8 +640,13 @@
             stackchips.innerHTML = 'Chips: '+ res.Stack
             var firstuser_id = res['First']
 
+            // set Game Message
             var el_message = document.getElementById('Message');
-            el_message.innerHTML = 'Nachricht: '+ res.Message
+            if (res.Message){
+              el_message.innerHTML = 'Nachricht: '+ res.Message
+            }else{
+              el_message.innerHTML = ''
+            }
 
             for (num in res.User) {
               var juser = res.User[num];

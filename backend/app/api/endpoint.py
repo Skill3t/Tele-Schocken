@@ -280,6 +280,20 @@ def set_game_user(gid):
     db.session.commit()
     return jsonify(game.to_dict())
 
+# Delete Message
+@bp.route('/game/<gid>/message', methods=['POST'])
+def delete_message(gid):
+    game = Game.query.filter_by(UUID=gid).first()
+    if game is None:
+        response = jsonify(Message='Game not found')
+        response.status_code = 404
+        return response
+    game.message = None
+    db.session.add(game)
+    db.session.commit()
+    response = jsonify(Message='suscess')
+    response.status_code = 201
+    return response
 
 # Start the Game
 @bp.route('/game/<gid>/start', methods=['POST'])
@@ -744,7 +758,7 @@ def transfer_chips(gid):
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
             game.move_user_id = userB.id
-            game.message = "{} Chips von: {} an: {} verteilt!".format(data['count'], userA.name, userB.name)
+            game.message = "{} Chip(s) von: {} an: {} verteilt!".format(data['count'], userA.name, userB.name)
 
             db.session.add(game)
             db.session.add(userA)
@@ -762,7 +776,7 @@ def transfer_chips(gid):
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
             game.move_user_id = userB.id
-            game.message = "{} Chips vom Stapel an: {} verteilt!".format(data['count'], userB.name)
+            game.message = "{} Chip(s) vom Stapel an: {} verteilt!".format(data['count'], userB.name)
 
             db.session.add(game)
             db.session.add(userB)
