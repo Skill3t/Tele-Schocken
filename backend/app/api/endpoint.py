@@ -548,6 +548,9 @@ def roll_dice(gid, uid):
         fallen = decision(game.changs_of_fallling_dice)
         if fallen:
             user.number_dice = user.number_dice - 1
+            game.message = "{} ist ein Würfel vom Tisch gefallen!".format(user.name)
+            db.session.add(game)
+            db.session.commit()
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
         response.status_code = 201
         db.session.add(user)
@@ -741,6 +744,7 @@ def transfer_chips(gid):
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
             game.move_user_id = userB.id
+            game.message = "{} Chips von: {} an: {} verteilt!".format(data['count'], userA.name, userB.name)
 
             db.session.add(game)
             db.session.add(userA)
@@ -758,6 +762,8 @@ def transfer_chips(gid):
             userB.chips = userB.chips + data['count']
             game.first_user_id = userB.id
             game.move_user_id = userB.id
+            game.message = "{} Chips vom Stapel an: {} verteilt!".format(data['count'], userB.name)
+
             db.session.add(game)
             db.session.add(userB)
             db.session.commit()
@@ -773,6 +779,8 @@ def transfer_chips(gid):
             userB.chips = 13
             game.first_user_id = userB.id
             game.move_user_id = userB.id
+            game.message = "Schockaus alle Chips an: {} verteilt!".format(userB.name)
+
             db.session.add(game)
             db.session.add(userB)
             db.session.commit()

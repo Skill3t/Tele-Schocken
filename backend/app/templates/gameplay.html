@@ -9,6 +9,9 @@
   <div class="col-md-4">
     <h2>Stapel</h2>
   </div>
+  <div class="col-md-4">
+    <p id="Message">Nachricht:</p>
+  </div>
 </div>
 <div class="row col-md-offset-1">
   <div class="col-md-1">
@@ -156,7 +159,7 @@
     </div>
     <div class="col-md-1">
       <label for="schockaus_cb">Schockaus</label>
-      <input type="checkbox" id="schockaus_cb" name="schockaus" value="False" checked>
+      <input type="checkbox" id="schockaus_cb" name="schockaus" value="False">
     </div>
     <div class="col-md-1">
       <label for="transfer_source">Von:</label>
@@ -617,6 +620,9 @@
             var stackchips = document.getElementById('StackChips_id');
             stackchips.innerHTML = 'Chips: '+ res.Stack
             var firstuser_id = res['First']
+
+            var el_message = document.getElementById('Message');
+            el_message.innerHTML = 'Nachricht: '+ res.Message
 
             for (num in res.User) {
               var juser = res.User[num];

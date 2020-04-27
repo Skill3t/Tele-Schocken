@@ -44,6 +44,7 @@ class Game(db.Model):
             'State': self.status.value,
             'First_Half': self.firsthalf,
             'Move': self.move_user_id,
+            'Message': self.message,
             'First': self.first_user_id,
             'Admin': self.admin_user_id,
             'User': arrayuser,
