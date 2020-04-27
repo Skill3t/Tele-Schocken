@@ -7,7 +7,7 @@
 {% endblock %}
 {% block navbar %}
     <div class="row col-md-offset-1">
-      <div class="col-md-4">
+      <div class="col-md-12">
         <h3>Tele-Schocken Beta</h3>
       </div>
     </div>
@@ -29,18 +29,20 @@
 
 <footer>
   <div class="row">
-    <hr>
+    <div class="col-md-12">
+      <hr>
+    </div>
   </div>
   <div class="row col-md-offset-1">
-    <div class="col-md-3">
+    <div class="col-md-4">
       <p>Github: <a href="https://github.com/Skill3t/Tele-Schocken">
       Tele-Schocken</a></p>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
       <a href="{{ url_for('static',filename='impressum.html') }}"">
       Impressum</a>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
       <a href= "{{ url_for('static',filename='datenschutz.html') }}"">
       Datenschutz</a>
     </div>
