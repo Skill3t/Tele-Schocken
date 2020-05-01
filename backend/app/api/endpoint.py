@@ -6,6 +6,8 @@ from flask import request
 from app.models import User, Game, Status
 from random import seed, randint, random, randrange
 import time
+from datetime import datetime
+
 
 from app.api.errors import bad_request
 
@@ -514,6 +516,7 @@ def roll_dice(gid, uid):
     # Cloud be improved to game.first_user_id first user.number_dice
     first_user = User.query.get_or_404(game.first_user_id)
     waitinguser = User.query.get_or_404(game.move_user_id)
+    game.refreshed = datetime.now()
     if waitinguser.id == user.id or user.passive:
         if game.status == Status.GAMEFINISCH:
             game.status = Status.STARTED
@@ -542,7 +545,8 @@ def roll_dice(gid, uid):
                 user.dice1_visible = True
             if 'dice2' in data:
                 if data['dice2']:
-                    user.dice2 = randint(1, 6)
+                    # user.dice2 = randint(1, 6)
+                    user.dice2 = 6
                 else:
                     user.dice2_visible = True
             else:
@@ -550,7 +554,8 @@ def roll_dice(gid, uid):
 
             if 'dice3' in data:
                 if data['dice3']:
-                    user.dice3 = randint(1, 6)
+                    # user.dice3 = randint(1, 6)
+                    user.dice3 = 6
                 else:
                     user.dice3_visible = True
             else:

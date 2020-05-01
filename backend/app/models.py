@@ -7,6 +7,7 @@ A Game Class represent a hole Schocken game
 from app import db
 import enum
 import uuid
+from datetime import datetime
 
 
 class Status(enum.Enum):
@@ -20,6 +21,8 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UUID = db.Column(db.String(200), index=True, unique=True)
     users = db.relationship('User')
+    started = db.Column(db.DateTime())
+    refreshed = db.Column(db.DateTime())
 
     firsthalf = db.Column(db.Boolean(), default=False)
     secondhalf = db.Column(db.Boolean(), default=False)
@@ -60,6 +63,7 @@ class Game(db.Model):
         self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.005
+        self.started = datetime.now()
 
     def moveName(self, id):
         if id is not None:
