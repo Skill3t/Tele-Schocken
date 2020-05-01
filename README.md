@@ -6,7 +6,8 @@
 
 ## Graphics
 
-Thx to Johannes
+* Thx to Johannes for the .svg
+* Thx to Andre for the css dice
 
 ## Doku
 
