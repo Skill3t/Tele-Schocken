@@ -17,12 +17,21 @@ class Status(enum.Enum):
     GAMEFINISCH = "gamefinish"
 
 
+class Statistic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usercount = db.Column(db.Integer)
+    halfcount = db.Column(db.Integer)
+    started = db.Column(db.DateTime())
+    refreshed = db.Column(db.DateTime())
+
+
 class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UUID = db.Column(db.String(200), index=True, unique=True)
     users = db.relationship('User')
     started = db.Column(db.DateTime())
     refreshed = db.Column(db.DateTime())
+    halfcount = db.Column(db.Integer)
 
     firsthalf = db.Column(db.Boolean(), default=False)
     secondhalf = db.Column(db.Boolean(), default=False)
@@ -64,6 +73,7 @@ class Game(db.Model):
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.005
         self.started = datetime.now()
+        self.refreshed = datetime.now()
 
     def moveName(self, id):
         if id is not None:

@@ -1,10 +1,12 @@
 # Tele-Schocken
 
-## Gamplay
+## Gameplay
 
 [tele-schocken.de](tele-schocken.de)
 
 ## Graphics
+
+Thx to Johannes
 
 ## Doku
 
