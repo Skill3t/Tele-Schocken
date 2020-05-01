@@ -545,8 +545,7 @@ def roll_dice(gid, uid):
                 user.dice1_visible = True
             if 'dice2' in data:
                 if data['dice2']:
-                    # user.dice2 = randint(1, 6)
-                    user.dice2 = 6
+                    user.dice2 = randint(1, 6)
                 else:
                     user.dice2_visible = True
             else:
@@ -554,8 +553,7 @@ def roll_dice(gid, uid):
 
             if 'dice3' in data:
                 if data['dice3']:
-                    # user.dice3 = randint(1, 6)
-                    user.dice3 = 6
+                    user.dice3 = randint(1, 6)
                 else:
                     user.dice3_visible = True
             else:
