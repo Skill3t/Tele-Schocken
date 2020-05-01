@@ -14,6 +14,9 @@ table {
 
 .buttongreen {
   background-color: #4CAF50;
+  font-size: 24px;
+  padding: 26px 16px;
+  border-radius: 10%;
 } /* Green */
 
 .buttongray {
