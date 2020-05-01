@@ -74,6 +74,7 @@ class Game(db.Model):
         self.changs_of_fallling_dice = 0.005
         self.started = datetime.now()
         self.refreshed = datetime.now()
+        self.halfcount = 0
 
     def moveName(self, id):
         if id is not None:

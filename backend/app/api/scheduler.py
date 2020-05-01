@@ -2,7 +2,7 @@ import atexit
 from app import app, db
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from app.models import User, Game, Statistic
+from app.models import Game, Statistic
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 

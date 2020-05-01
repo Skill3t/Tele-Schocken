@@ -814,6 +814,7 @@ def transfer_chips(gid):
         game.firsthalf = False
         game.status = Status.ROUNDFINISCH
         game.stack = 13
+        game.halfcount = game.halfcount + 1
         response = jsonify(Message='Player {} lose the first half'.format(userB.name))
     elif userB.chips == 13 and game.firsthalf is False:
         game.status = Status.GAMEFINISCH
@@ -821,6 +822,7 @@ def transfer_chips(gid):
         userB.firsthalf = False
         game.stack = 13
         game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.001
+        game.halfcount = game.halfcount + 1
         response = jsonify(Message='Player {} lose the Game'.format(userB.name))
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
