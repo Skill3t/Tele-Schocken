@@ -2,7 +2,7 @@
 
 ## Gameplay
 
-[tele-schocken.de](tele-schocken.de)
+[tele-schocken.de](http://tele-schocken.de)
 
 ## Graphics
 
