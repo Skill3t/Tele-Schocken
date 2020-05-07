@@ -144,12 +144,7 @@
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
     var setdamin = document.getElementById('admin');
-    if (id){
-      var name = document.getElementById('Name');
-      name.disabled = true;
-      var btn = document.getElementById('jointbtn');
-      btn.disabled = true;
-    }
+
     if (id == admin_id){
       var button = document.getElementById('startgame_id');
       button.disabled = false;
@@ -169,6 +164,17 @@
         if (xhttp.readyState == XMLHttpRequest.DONE) {
           var res=JSON.parse(xhttp.responseText);
           var sate = res.State
+
+          for (num in res.User) {
+            var juser = res.User[num];
+            if (juser['Id'] == id){
+              var name = document.getElementById('Name');
+              name.disabled = true;
+              var btn = document.getElementById('jointbtn');
+              btn.disabled = true;
+            }
+          }
+
           if (sate == 'started'){
             //alert('Spiel vom admin gestartet eine moment noch');
             window.location.href = "/game/"+gameid;
@@ -177,7 +183,7 @@
       }
       xhttp.send(JSON.stringify({}));
 
-    }, 3000);
+    }, 1000);
   }
 
   startup();

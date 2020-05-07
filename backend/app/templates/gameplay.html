@@ -169,20 +169,12 @@
          min="0" max="13" style='width:100%'>
     </div>
     <div class="col-md-2">
-      <label for="stack_cb">Von Stapel:</label>
-      <input type="checkbox" id="stack_cb" name="stack" value="False" checked>
-    </div>
-    <div class="col-md-1">
-      <label for="schockaus_cb">Schockaus</label>
-      <input type="checkbox" id="schockaus_cb" name="schockaus" value="False">
-    </div>
-    <div class="col-md-2">
       <label for="transfer_source">Von:</label>
       <select id="transfer_source" name="count">
         <option value=""></option>
       </select>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
       <label for="transfer_target">An:</label>
       <select id="transfer_target" name="count">
         <option value=""></option>
@@ -591,8 +583,8 @@
     var xhttp = new XMLHttpRequest();
 
     var count = document.getElementById('stack_count_id').value;
-    var stack = document.getElementById('stack_cb').checked;
-    var aus = document.getElementById('schockaus_cb').checked;
+    // var stack = document.getElementById('stack_cb').checked;
+    // var aus = document.getElementById('schockaus_cb').checked;
     var transfer_source = document.getElementById('transfer_source');
     var source = transfer_source.options[transfer_source.selectedIndex].value;
     var transfer_target = document.getElementById('transfer_target');
@@ -609,10 +601,10 @@
         }
       }
     }
-    if (stack){
-      xhttp.send(JSON.stringify({count:parseInt(count), stack:stack, target:parseInt(target)}));
-    }else if (aus) {
-      xhttp.send(JSON.stringify({schockaus:aus, target:parseInt(target)}));
+    if (source ==  'stack'){
+      xhttp.send(JSON.stringify({count:parseInt(count), stack:true, target:parseInt(target)}));
+    }else if (source ==  'schockaus') {
+      xhttp.send(JSON.stringify({schockaus:true, target:parseInt(target)}));
     }else{
       xhttp.send(JSON.stringify({count:parseInt(count), source:parseInt(source), target:parseInt(target)}));
     }
@@ -642,16 +634,25 @@
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 200){
           var selecttionsource = document.getElementById('transfer_source');
+          var schockaus = document.createElement('option');
+          schockaus.value = 'schockaus';
+          schockaus.innerHTML = 'Schock aus';
+          selecttionsource.appendChild(schockaus);
+          var stack = document.createElement('option');
+          stack.value = 'stack';
+          stack.innerHTML = 'Stapel';
+          selecttionsource.appendChild(stack);
+
           var selecttiontarget = document.getElementById('transfer_target');
           for (num in res.User) {
             var juser = res.User[num];
             var opt = document.createElement('option');
             opt.value = juser['Id'];
             opt.innerHTML = juser['Name'];
+            selecttionsource.appendChild(opt);
             var opt2 = document.createElement('option');
             opt2.value = juser['Id'];
             opt2.innerHTML = juser['Name'];
-            selecttionsource.appendChild(opt);
             selecttiontarget.appendChild(opt2);
           }
         }
