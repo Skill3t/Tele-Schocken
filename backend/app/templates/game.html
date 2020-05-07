@@ -12,11 +12,31 @@
     <h3 id="admin"></h3>
 </div>
 <div class="row col-md-offset-1 col-md-6" >
-    <h3>verteile diese ID an alle Mitspieler</h3>
-     <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+    <h3>Verteile diesen Link an alle Mitspieler</h3>
+    <h2 id="link">http://tele-schocken.de/game_waiting/{{game.UUID}}</h2>
+</div>
+<div class="row col-md-offset-1 col-md-6" >
+    <h3>Alternativ verteile diese ID an alle Mitspieler</h3>
+    <p id="admin_id" hidden>{{game.admin_user_id}}</p>
 </div>
 <div class="row col-md-offset-1 col-md-6">
     <h2 id="UUID">{{game.UUID}}</h2>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-12">
+    <h3>Zum Beitreten Spielname angeben</h3>
+  </div>
+</div>
+<div class="row col-md-offset-1">
+  <div class="col-md-1">
+    <label for="Name">Name</label>
+  </div>
+  <div class="col-md-2">
+    <input type="text" id="Name" value="">
+  </div>
+  <div class="col-md-1">
+    <button id="jointbtn" onclick="joinGame()">Beitreten</button>
+  </div>
 </div>
 
 <div class="row col-md-offset-1">
@@ -65,6 +85,38 @@
 {% block scripts %}
 {{ super() }}
 <script>
+  function joinGame(){
+    var user = document.getElementById('Name');
+    var game = document.getElementById('UUID');
+    var uuid = game.innerHTML;
+    uuid = uuid.replace(/\s/g, '');
+    var usernname = user.value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+uuid+"/user");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200){
+          alert('Fehler beim erzeugen: '+res.Message);
+          location=location;
+        }else{
+          localStorage.setItem('name', usernname);
+          for (num in res.User) {
+            var juser = res.User[num];
+            var name = juser['Name'];
+            if (name == usernname){
+              localStorage.setItem('id', juser['Id']);
+            }
+          }
+          var id = localStorage.getItem('id');
+          window.location.href = "/game_waiting/"+uuid;
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({name:usernname}));
+  }
+
   function refreshGame(){
     location=location;
   }
@@ -92,7 +144,12 @@
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
     var setdamin = document.getElementById('admin');
-
+    if (id){
+      var name = document.getElementById('Name');
+      name.disabled = true;
+      var btn = document.getElementById('jointbtn');
+      btn.disabled = true;
+    }
     if (id == admin_id){
       var button = document.getElementById('startgame_id');
       button.disabled = false;
