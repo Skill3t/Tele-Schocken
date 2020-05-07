@@ -752,7 +752,7 @@ def transfer_chips(gid):
         response = jsonify(Message='request must include target')
         response.status_code = 400
         return response
-    # transfer from user a to B
+    # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
         userA = User.query.get_or_404(data['source'])
         userB = User.query.get_or_404(data['target'])
@@ -768,7 +768,7 @@ def transfer_chips(gid):
             db.session.add(userB)
             db.session.commit()
         else:
-            response = jsonify(Message='source has not enough chips his Stack. try again')
+            response = jsonify(Message='source has not enough chips on his stack. try again')
             response.status_code = 400
             return response
     # transfer from stack to user B
@@ -785,7 +785,7 @@ def transfer_chips(gid):
             db.session.add(userB)
             db.session.commit()
         else:
-            response = jsonify(Message='Not enough chips on the Stack. try again')
+            response = jsonify(Message='Not enough chips on the stack. try again')
             response.status_code = 400
             return response
     # transfer all to B Schockaus
