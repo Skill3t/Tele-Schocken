@@ -36,7 +36,7 @@ def get_refreshed_game(gid):
             response = jsonify(game.to_dict())
             response.status_code = 200
             return response
-    response = jsonify(Message='Game data not chaned')
+    response = jsonify(Message='Game data not changed')
     response.status_code = 200
     return response
 
@@ -429,7 +429,7 @@ def finish_throwing(gid, uid):
         # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
         aktualuserid = [i for i, x in enumerate(game.users) if x == user]
         print('Test')
-        if len(game.users) > aktualuserid[0]+1:
+        if len(game.users) == aktualuserid[0]:
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
             game.move_user_id = game.users[0].id
@@ -565,7 +565,7 @@ def roll_dice(gid, uid):
         fallen = decision(game.changs_of_fallling_dice)
         if fallen:
             user.number_dice = user.number_dice - 1
-            game.message = "{} ist ein Würfel vom Tisch gefallen!".format(user.name)
+            game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
             db.session.add(game)
             db.session.commit()
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
