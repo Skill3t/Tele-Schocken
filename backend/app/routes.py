@@ -3,7 +3,7 @@ from werkzeug.urls import url_parse
 
 from app import app, db
 from app.forms import CreateGameFrom
-from app.models import User, Game, Status
+from app.models import Game
 from app.api.errors import bad_request
 
 from datetime import datetime, timedelta
