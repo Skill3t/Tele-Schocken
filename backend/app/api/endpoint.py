@@ -7,7 +7,7 @@ from app.models import User, Game, Status
 from random import seed, randint, random, randrange
 import time
 from datetime import datetime
-
+from jinja2 import utils
 
 from app.api.errors import bad_request
 
@@ -166,24 +166,27 @@ def create_Game():
     """
     seed(1)
     data = request.get_json() or {}
+    response = jsonify()
     if 'name' not in data:
         return bad_request('must include name field')
-    game = Game()
-    inuse = User.query.filter_by(name=data['name']).first()
-    if inuse is not None:
-        response = jsonify(Message='username in use!')
-        response.status_code = 400
-        return response
-    user = User()
-    user.name = data['name']
-    game.users.append(user)
-    db.session.add(game)
-    db.session.commit()
-    game.admin_user_id = user.id
-    db.session.add(game)
-    db.session.commit()
-    response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID, Admin_Id=user.id)
-    response.status_code = 201
+    else:
+        escapedusername = str(utils.escape(data['name']))
+        game = Game()
+        inuse = User.query.filter_by(name=escapedusername).first()
+        if inuse is not None:
+            response = jsonify(Message='username in use!')
+            response.status_code = 400
+            return response
+        user = User()
+        user.name = escapedusername
+        game.users.append(user)
+        db.session.add(game)
+        db.session.commit()
+        game.admin_user_id = user.id
+        db.session.add(game)
+        db.session.commit()
+        response = jsonify(Link='tele-schocken.de/{}'.format(game.UUID), UUID=game.UUID, Admin_Id=user.id)
+        response.status_code = 201
     return response
 
 
@@ -270,13 +273,14 @@ def set_game_user(gid):
     data = request.get_json() or {}
     if 'name' not in data:
         return bad_request('must include name field')
-    inuse = User.query.filter_by(name=data['name']).first()
+    escapedusername = str(utils.escape(data['name']))
+    inuse = User.query.filter_by(name=escapedusername).first()
     if inuse is not None:
         response = jsonify(Message='username in use!')
         response.status_code = 400
         return response
     user = User()
-    user.name = data['name']
+    user.name = escapedusername
     game.users.append(user)
     db.session.add(game)
     db.session.commit()
@@ -390,9 +394,11 @@ def pull_up_dice_cup(gid, uid):
     data = request.get_json() or {}
     if 'visible' in data:
         # user.visible = data['visible']
-        user.dice1_visible = data['visible']
-        user.dice2_visible = data['visible']
-        user.dice3_visible = data['visible']
+        escapedvisible = str(utils.escape(data['visible']))
+        val = escapedvisible.lower() in ['true', '1']
+        user.dice1_visible = val
+        user.dice2_visible = val
+        user.dice3_visible = val
         db.session.add(user)
         db.session.commit()
         response = jsonify(Message='suscess')
@@ -424,11 +430,9 @@ def finish_throwing(gid, uid):
         response.status_code = 400
         return response
     waitinguser = User.query.get_or_404(game.move_user_id)
-    print('waitinguser:{}   user:{}'.format(waitinguser, user))
     if waitinguser.id == user.id:
         # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
         aktualuserid = [i for i, x in enumerate(game.users) if x == user]
-        print('Test')
         if len(game.users) > aktualuserid[0]+1:
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
@@ -442,7 +446,6 @@ def finish_throwing(gid, uid):
         response = jsonify(Message='Its not your turn')
         response.status_code = 400
         return response
-    print('Testende')
     response = jsonify(Message='Error')
     response.status_code = 400
     return response
@@ -537,23 +540,26 @@ def roll_dice(gid, uid):
                 else:
                     game.move_user_id = game.users[0].id
             if 'dice1' in data:
-                if data['dice1']:
-                    user.dice1 = randint(1, 6)
+                escapeddice1 = str(utils.escape(data['dice1']))
+                if escapeddice1.lower() in ['true', '1']:
+                    user.dice1 = randint(5, 6)
                 else:
                     user.dice1_visible = True
             else:
                 user.dice1_visible = True
             if 'dice2' in data:
-                if data['dice2']:
-                    user.dice2 = randint(1, 6)
+                escapeddice2 = str(utils.escape(data['dice2']))
+                if escapeddice2.lower() in ['true', '1']:
+                    user.dice2 = randint(5, 6)
                 else:
                     user.dice2_visible = True
             else:
                 user.dice2_visible = True
 
             if 'dice3' in data:
-                if data['dice3']:
-                    user.dice3 = randint(1, 6)
+                escapeddice3 = str(utils.escape(data['dice3']))
+                if escapeddice3.lower() in ['true', '1']:
+                    user.dice3 = randint(5, 6)
                 else:
                     user.dice3_visible = True
             else:
@@ -639,7 +645,8 @@ def turn_dice(gid, uid):
     if waitinguser.id == user.id:
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.number_dice < 3:
             if 'count' in data:
-                if int(data['count']) == 1:
+                escapedcount = str(utils.escape(data['count']))
+                if int(escapedcount) == 1:
                     if user.dice1 == 6 and user.dice2 == 6:
                         user.dice1 = 1
                         user.dice2 = None
@@ -653,7 +660,7 @@ def turn_dice(gid, uid):
                         response = jsonify(Message='Could not finde tow dices with value 6')
                         response.status_code = 400
                         return response
-                elif int(data['count']) == 2:
+                elif int(escapedcount) == 2:
                     if user.dice1 == 6 and user.dice2 == 6 and user.dice3 == 6:
                         user.dice1 = 1
                         user.dice2 = 1
@@ -754,14 +761,18 @@ def transfer_chips(gid):
         return response
     # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
-        userA = User.query.get_or_404(data['source'])
-        userB = User.query.get_or_404(data['target'])
-        if userA.chips >= data['count']:
-            userA.chips = userA.chips - data['count']
-            userB.chips = userB.chips + data['count']
+        escapedsource = str(utils.escape(data['source']))
+        userA = User.query.get_or_404(escapedsource)
+        escapedtarget = str(utils.escape(data['target']))
+        userB = User.query.get_or_404(escapedtarget)
+        escapedcount = int(utils.escape(data['count']))
+
+        if userA.chips >= escapedcount:
+            userA.chips = userA.chips - escapedcount
+            userB.chips = userB.chips + escapedcount
             game.first_user_id = userB.id
             game.move_user_id = userB.id
-            game.message = "{} Chip(s) von: {} an: {} verteilt!".format(data['count'], userA.name, userB.name)
+            game.message = "{} Chip(s) von: {} an: {} verteilt!".format(escapedcount, userA.name, userB.name)
 
             db.session.add(game)
             db.session.add(userA)
@@ -773,13 +784,15 @@ def transfer_chips(gid):
             return response
     # transfer from stack to user B
     if 'count' in data and 'stack' in data and 'target' in data:
-        userB = User.query.get_or_404(data['target'])
-        if game.stack >= data['count']:
-            game.stack = game.stack - data['count']
-            userB.chips = userB.chips + data['count']
+        escapedtarget = str(utils.escape(data['target']))
+        userB = User.query.get_or_404(escapedtarget)
+        escapedcount = int(utils.escape(data['count']))
+        if game.stack >= escapedcount:
+            game.stack = game.stack - escapedcount
+            userB.chips = userB.chips + escapedcount
             game.first_user_id = userB.id
             game.move_user_id = userB.id
-            game.message = "{} Chip(s) vom Stapel an: {} verteilt!".format(data['count'], userB.name)
+            game.message = "{} Chip(s) vom Stapel an: {} verteilt!".format(escapedcount, userB.name)
 
             db.session.add(game)
             db.session.add(userB)
@@ -790,8 +803,10 @@ def transfer_chips(gid):
             return response
     # transfer all to B Schockaus
     if 'schockaus' in data and 'target' in data:
-        userB = User.query.get_or_404(data['target'])
-        if data['schockaus']:
+        escapedtarget = str(utils.escape(data['target']))
+        userB = User.query.get_or_404(escapedtarget)
+        escapedschockaus = utils.escape(data['schockaus'])
+        if escapedschockaus:
             game.stack = 0
             userB.chips = 13
             game.first_user_id = userB.id
@@ -808,7 +823,8 @@ def transfer_chips(gid):
     if game.status == Status.ROUNDFINISCH:
         game.status = Status.STARTED
     # Game GAMEFINISCH or ROUNDFINISCH
-    userB = User.query.get_or_404(data['target'])
+    escapedtarget = str(utils.escape(data['target']))
+    userB = User.query.get_or_404(escapedtarget)
     if userB.chips == 13 and game.firsthalf is True:
         userB.firsthalf = True
         game.firsthalf = False
