@@ -542,7 +542,7 @@ def roll_dice(gid, uid):
             if 'dice1' in data:
                 escapeddice1 = str(utils.escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
-                    user.dice1 = randint(5, 6)
+                    user.dice1 = randint(1, 6)
                 else:
                     user.dice1_visible = True
             else:
@@ -550,7 +550,7 @@ def roll_dice(gid, uid):
             if 'dice2' in data:
                 escapeddice2 = str(utils.escape(data['dice2']))
                 if escapeddice2.lower() in ['true', '1']:
-                    user.dice2 = randint(5, 6)
+                    user.dice2 = randint(1, 6)
                 else:
                     user.dice2_visible = True
             else:
@@ -559,7 +559,7 @@ def roll_dice(gid, uid):
             if 'dice3' in data:
                 escapeddice3 = str(utils.escape(data['dice3']))
                 if escapeddice3.lower() in ['true', '1']:
-                    user.dice3 = randint(5, 6)
+                    user.dice3 = randint(1, 6)
                 else:
                     user.dice3_visible = True
             else:
