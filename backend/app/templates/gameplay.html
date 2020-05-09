@@ -719,6 +719,11 @@
               if (juser['Id'] == firstuser_id){
                 var anzahlel = document.getElementById('throw_id');
                 anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+                var row = document.getElementById('row'+juser['Id']);
+                row.style.backgroundColor = "lightblue";
+              }else{
+                var row = document.getElementById('row'+juser['Id']);
+                row.style.backgroundColor = "#11ffee00";
               }
               var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
               anzahluserel.innerHTML = juser['Number_Dice'];
@@ -754,10 +759,6 @@
                 dice3_v.innerHTML = '';
                 for (num in juser.Dices) {
                   var jdice = juser.Dices[num];
-                //var jdice1 = juser.Dices['0'];
-                //var jdice2 = juser.Dices['1'];
-                //var jdice3 = juser.Dices['2'];
-
                   dice1_v.appendChild(dicehelper2(jdice['Dice1']));
                   dice2_v.appendChild(dicehelper2(jdice['Dice2']));
                   dice3_v.appendChild(dicehelper2(jdice['Dice3']));

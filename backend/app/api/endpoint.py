@@ -401,6 +401,14 @@ def pull_up_dice_cup(gid, uid):
         user.dice3_visible = val
         db.session.add(user)
         db.session.commit()
+        allvisible = True
+        for user in game.users:
+            if not (user.dice1_visible and user.dice2_visible and user.dice3_visible):
+                allvisible = False
+        if allvisible:
+            game.message = "Warten auf Vergabe der Chips!"
+            db.session.add(game)
+            db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 201
         return response
@@ -437,6 +445,9 @@ def finish_throwing(gid, uid):
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
             game.move_user_id = game.users[0].id
+        next_user = User.query.get_or_404(game.move_user_id)
+        if next_user.number_dice != 0:
+            game.message = "Aufdecken!"
         db.session.add(game)
         db.session.commit()
         response = jsonify(Message='suscess')
@@ -539,6 +550,12 @@ def roll_dice(gid, uid):
                     game.move_user_id = game.users[aktualuserid[0]+1].id
                 else:
                     game.move_user_id = game.users[0].id
+                next_user = User.query.get_or_404(game.move_user_id)
+                # Back to first user
+                if next_user.number_dice != 0:
+                    game.message = "Aufdecken!"
+                    db.session.add(game)
+                    db.session.commit()
             if 'dice1' in data:
                 escapeddice1 = str(utils.escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
