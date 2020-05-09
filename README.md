@@ -4,6 +4,10 @@
 
 [tele-schocken.de](http://tele-schocken.de)
 
+## Dev
+
+* Thx to [stematon](https://github.com/stematon)
+
 ## Graphics
 
 * Thx to Johannes for the .svg
