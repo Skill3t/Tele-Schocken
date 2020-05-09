@@ -6,7 +6,8 @@
 
 ## Dev
 
-* Thx to [stematon](https://github.com/stematon)
+* Thx to [stematon](https://github.com/stematon) for [typo](https://github.com/Skill3t/Tele-Schocken/pull/3/)
+* Thx to [diskbraker8](https://github.com/diskbraker8) for part of [Frontend](https://github.com/Skill3t/Tele-Schocken/pull/1)
 
 ## Graphics
 
