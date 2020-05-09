@@ -17,10 +17,10 @@
 </div>
 <div class="row col-md-offset-1 col-md-6" >
     <h3>Alternativ verteile diese ID an alle Mitspieler</h3>
-    <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+    <p id="admin_id" hidden>{{ game.admin_user_id }}</p>
 </div>
 <div class="row col-md-offset-1 col-md-6">
-    <h2 id="UUID">{{game.UUID}}</h2>
+    <h2 id="UUID">{{ game.UUID }}</h2>
 </div>
 <div class="row col-md-offset-1">
   <div class="col-md-12">
@@ -59,7 +59,7 @@
         <tr>
           <th class="counterCell" scope="row"></th>
             <td>
-              {{user.name}}
+              {{ user.name }}
             </td>
         </tr>
         {% endfor %}
@@ -89,7 +89,9 @@
     var user = document.getElementById('Name');
     var game = document.getElementById('UUID');
     var uuid = game.innerHTML;
-    uuid = uuid.replace(/\s/g, '');
+    // uuid = uuid.replace(/\s/g, '');
+    // uuid = uuid.replace(/['"]+/g, '');
+    uuid = uuid.replace(/^"(.+)"$/,'$1');
     var usernname = user.value;
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+uuid+"/user");
@@ -125,6 +127,7 @@
 
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/^"(.+)"$/,'$1');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/start");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -154,9 +157,9 @@
     }
     window.setInterval(function(){
       /// call your function here
-      ///game/<gid>'
       var game = document.getElementById('UUID');
       var gameid = game.innerHTML;
+      gameid = gameid.replace(/^"(.+)"$/,'$1');
       var xhttp = new XMLHttpRequest();
       xhttp.open("GET", "/api/game/"+gameid);
       xhttp.setRequestHeader("Content-Type", "application/json");

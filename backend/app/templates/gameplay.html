@@ -234,6 +234,7 @@
 
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var id = localStorage.getItem('id');
 
     var dicenumber = document.getElementById('Number_Dice'+id).innerHTML;
@@ -298,6 +299,7 @@
   function delete_message(){
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/message");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -460,6 +462,7 @@
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/finisch");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -479,7 +482,7 @@
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
-
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -498,7 +501,7 @@
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
-
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -525,6 +528,7 @@
 
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var id = localStorage.getItem('id');
 
 
@@ -580,6 +584,7 @@
     // /game/<gid>/user/chips
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
 
     var count = document.getElementById('stack_count_id').value;
@@ -594,9 +599,10 @@
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        alert(''+res.Message);
         if (xhttp.status != 200){
+          alert('Fehler: '+xhttp.status);
+        }else{
+          var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);
         }
       }
@@ -626,6 +632,7 @@
     }
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "/api/game/"+gameid);
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -665,6 +672,7 @@
       ///game/<gid>'
       var game = document.getElementById('UUID');
       var gameid = game.innerHTML;
+      gameid = gameid.replace(/['"]+/g, '');
       var xhttp = new XMLHttpRequest();
       xhttp.open("GET", "/api/game/"+gameid);
       xhttp.setRequestHeader("Content-Type", "application/json");
