@@ -36,7 +36,7 @@ def get_refreshed_game(gid):
             response = jsonify(game.to_dict())
             response.status_code = 200
             return response
-    response = jsonify(Message='Game data not chaned')
+    response = jsonify(Message='Game data not changed')
     response.status_code = 200
     return response
 
@@ -267,7 +267,7 @@ def set_game_user(gid):
         response.status_code = 404
         return response
     if game.status != Status.WAITING:
-        response = jsonify(Message='Game already Startet create new Game')
+        response = jsonify(Message='Game already started create new Game')
         response.status_code = 400
         return response
     data = request.get_json() or {}
@@ -571,7 +571,7 @@ def roll_dice(gid, uid):
         fallen = decision(game.changs_of_fallling_dice)
         if fallen:
             user.number_dice = user.number_dice - 1
-            game.message = "{} ist ein Würfel vom Tisch gefallen!".format(user.name)
+            game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
             db.session.add(game)
             db.session.commit()
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
