@@ -1,4 +1,5 @@
 # Tele-Schocken
+In some regions also known as **Jule**, **Mörkeln**, **Knobeln**, **Maxen** or **Meiern**.
 
 ## Gameplay 🎲
 [tele-schocken.de](http://tele-schocken.de)
@@ -6,6 +7,7 @@
 ## Gamerules 👩‍🏫
 * [Rules](https://www.spielwiki.de/Schocken)
 * [Alternative](https://www.spielregeln.de/schocken.html)
+* [Alternative2](https://de.wikipedia.org/wiki/Schocken)
 
 ## Overview ⚙️
 Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
