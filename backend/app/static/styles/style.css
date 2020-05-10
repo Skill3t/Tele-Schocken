@@ -109,14 +109,10 @@ table {
 }
 
 
-
-
 .header-img {
-  width: 100%;
-  height: 300px;
-  background: url('/static/dice2.png');
   background-size: cover;
 }
+
 
 #marked {
   color: red;
