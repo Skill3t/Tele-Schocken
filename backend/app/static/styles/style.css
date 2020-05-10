@@ -14,13 +14,13 @@ table {
 
 .buttongreen {
   background-color: #4CAF50;
-  font-size: 24px;
-  padding: 26px 16px;
-  border-radius: 10%;
+  border-radius: 10px;
 } /* Green */
 
 .buttongray {
-  background-color: #e7e7e7; color: black;
+  background-color: #ffffff;
+  opacity: .4;
+  border-radius: 10px;
 } /* Gray */
 
 
@@ -99,13 +99,12 @@ table {
  position: absolute;
  top: 0%;
  left: 0%;
-
  background-color: #ffffff;
  opacity: .4;
  width: 100%;
  height: 100%;
  border: none;
- border-radius: 5px;
+ border-radius: 10px;
 }
 
 

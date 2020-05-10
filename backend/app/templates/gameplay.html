@@ -34,11 +34,16 @@
   </div>
 </div>
 <div class="row ">
-  <div class="col-md-1 col-md-offset-1">
-    <button id='startgame_id'onclick="dice()">Würfeln</button>
-  </div>
-  <div class="col-md-1">
-    <button id='finishgame_id'onclick="finish()">Ende</button>
+  <div class="col-md-3 col-md-offset-1">
+    <div class="col-md-4">
+      <div class="containerturner" id='startgame_id'>
+       <img src="{{ url_for('static', filename = 'throw_the_dice.svg')}}" alt="throw the dice">
+       <button onclick="dice()" class="btn"></button>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <button id='finishgame_id'onclick="finish()">Ende</button>
+    </div>
   </div>
   <div class="col-md-3">
     <div class="col-md-6">
@@ -734,9 +739,9 @@
               // set button color
               var id = localStorage.getItem('id');
               if (id == waiting_user_id){
-                throwbutton.className  = 'buttongreen'
+                throwbutton.className  = 'buttongreen containerturner';
               }else{
-                throwbutton.className  = 'buttongray'
+                throwbutton.className  = 'buttongray containerturner';
               }
 
               // set user first First_Half
