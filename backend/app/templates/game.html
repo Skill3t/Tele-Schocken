@@ -2,49 +2,44 @@
 
 {% block content %}
 {{ super() }}
-
-<div class="row col-md-offset-1 col-md-6" style="height:90px;">
-    <h1>Spiel kann vom Admin gestartet werden</h1>
+<div id="joincontainer">
+  <div class="row col-md-offset-1">
+    <div class="col-md-12">
+      <h2>Zum Beitreten Spielname angeben.</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-1 col-md-offset-1">
+      <label for="Name">Spielername</label>
+    </div>
+    <div class="col-md-2">
+      <input type="text" id="Name" value="">
+    </div>
+    <div class="col-md-1">
+      <button class="btn btn-primary" id="jointbtn" onclick="joinGame()">Beitreten</button>
+    </div>
+  </div>
 </div>
-<div class="row col-md-offset-1 col-md-6">
+<div class="row col-md-offset-1 col-md-11">
     <h3 id="admin"></h3>
 </div>
-<div class="row col-md-offset-1 col-md-6" >
-    <h3>Verteile diesen Link an alle Mitspieler.</h3>
-    <h2 id="link">http://tele-schocken.de/game_waiting/{{game.UUID}}</h2>
-</div>
-<div class="row col-md-offset-1 col-md-6" >
-    <h3>Alternativ verteile diese ID an alle Mitspieler.</h3>
-    <p id="admin_id" hidden>{{ game.admin_user_id }}</p>
-</div>
-<div class="row col-md-offset-1 col-md-6">
-    <h2 id="UUID">{{ game.UUID }}</h2>
-</div>
-<div class="row col-md-offset-1">
-  <div class="col-md-12">
-    <h3>Zum Beitreten Spielname angeben.</h3>
-  </div>
-</div>
-<div class="row col-md-offset-1">
-  <div class="col-md-1">
-    <label for="Name">Name</label>
-  </div>
-  <div class="col-md-2">
-    <input type="text" id="Name" value="">
-  </div>
-  <div class="col-md-1">
-    <button id="jointbtn" onclick="joinGame()">Beitreten</button>
-  </div>
-</div>
+<br>
 
-<div class="row col-md-offset-1">
-  <div class="col-md-9">
-    <h3>Aktualisieren</h3>
-    <button onclick="refreshGame()">Refresh</button>
-  </div>
-</div>
 
-<div class="row col-md-10 col-md-offset-1" data-example-id="striped-table">
+
+<div class="row">
+
+  <div class="col-md-3 col-md-offset-1">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Spielerliste:</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <button onclick="refreshGame()">Refresh</button>
+      </div>
+    </div>
     <table class="table table-striped table-hover" >
       <thead>
         <tr>
@@ -63,14 +58,45 @@
         {% endfor %}
         </tbody>
     </table>
-</div>
-
-<div class="row col-md-offset-1">
-  <div class="col-md-9">
-    <h3>Spiel starten (Es kann kein Spieler mehr hinzu kommen)</h3>
-    <button id='startgame_id'onclick="startGame()" disabled>Starten</button>
+  </div>
+  <div class="col-md-7 col-md-offset-1">
+    <div class="row">
+      <div class="col-md-4">
+        <h3>Erläuterung:</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9">
+        <ul>
+          <li>Nicht mobil angepasst. Der größte Spielspaß besteht am Tablet oder PC / Laptop.</li>
+          <li>Der Spieler, der das Spiel erzeugt ist auch die Bank und muss alle Chips verteilen (Dies ermöglicht flexible Regeln)!</li>
+          <li>Wenn ein Zug vor dem dritten Würfeln beendet werden soll, bitte "Ende" klicken</li>
+          <li>Zu jeden Zeitpunkt kann auf bzw. zu gedeckt werden.</li>
+          <li>Rausgestellte Würfel sind aufgedeckt.</li>
+          <li>Die erste und zweite Hälfte wird nicht mehr ausgespielt. (Wartzezeit für die restlichen Spieler zu groß)</li>
+          <li>Der Spieler der bei einer Runde bereits gewonnen hat (0 Chips), muss jedes Mal auf "Ende" klicken wenn er dran wäre (ermöglicht wieder Einwerfen).</li>
+          <li>Der Code ist frei verfügbar. Wenn euch das Spiel gefällt liked es auf Github. Wenn ihr Anregungen habt oder Fehler findet meldet dies auch via Github.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
+
+<div class="row col-md-offset-1" id="admin_interface">
+  <div class="col-md-9">
+    <h3>Spiel starten (<b>Es kann kein Spieler mehr hinzu kommen</b>)</h3>
+    <button class="btn btn-primary" id='startgame_id'onclick="startGame()" disabled>Starten</button>
+  </div>
+</div>
+<div class="row col-md-offset-1 col-md-10" >
+    <h3>Verteile diesen Link an alle Mitspieler:</h3>
+    <h3 id="link">http://tele-schocken.de/game_waiting/{{game.UUID}}</h3>
+</div>
+<div class="row col-md-offset-1 col-md-10" >
+    <p id="admin_id" hidden>{{ game.admin_user_id }}</p>
+</div>
+
+
 <div class="row col-md-offset-1 col-md-6" style="height:90px;">
 
 </div>
@@ -145,13 +171,20 @@
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
     var setdamin = document.getElementById('admin');
+    if (id != admin_id){
+      var x = document.getElementById("admin_interface");
+      //Disable admin interface for none admins
+      x.style.display = "none";
+    }
 
     if (id == admin_id){
+      var joincontainer = document.getElementById('joincontainer');
+        joincontainer.style.display = "none";
       var button = document.getElementById('startgame_id');
       button.disabled = false;
-      setdamin.innerHTML = 'Sie sind Admin. Bitte starten wenn alle Spieler in der Liste stehen.'
+      setdamin.innerHTML = 'Du bist Admin. Bitte starten wenn alle Spieler in der Liste stehen.'
     }else{
-      setdamin.innerHTML = 'Sie sind Spieler. Bitte warten Sie bis der Admin das Spiel gestartet hat.'
+      setdamin.innerHTML = 'Bitte warte bis der Admin das Spiel startet.'
     }
     window.setInterval(function(){
       /// call your function here

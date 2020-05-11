@@ -37,24 +37,24 @@
   <div class="col-md-2 col-md-offset-1">
     <div class="col-md-8">
       <div class="containerturner" id='startgame_id'>
-       <img src="{{ url_for('static', filename = 'throw_the_dice.svg')}}" alt="throw the dice">
+       <img src="{{ url_for('static', filename = 'throw_the_dice.svg')}}" alt="throw the dice" title="Würfeln">
        <button onclick="dice()" class="btn"></button>
       </div>
     </div>
     <div class="col-md-2">
-      <button id='finishgame_id'onclick="finish()">Ende</button>
+      <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
     </div>
   </div>
   <div class="col-md-3">
     <div class="col-md-6">
       <div class="containercup">
-       <img src="{{ url_for('static', filename = 'pulldiceup.svg')}}" alt="pull dice cup up">
+       <img src="{{ url_for('static', filename = 'pulldiceup.svg')}}" alt="pull dice cup up" title="Aufdecken">
        <button onclick="pullup()" class="btn"></button>
       </div>
     </div>
     <div class="col-md-6">
       <div class="containercup">
-       <img src="{{ url_for('static', filename = 'pulldicedown.svg')}}" alt="pull dice cup down">
+       <img src="{{ url_for('static', filename = 'pulldicedown.svg')}}" alt="pull dice cup down" title="Zudecken">
        <button onclick="pulldown()" class="btn"></button>
       </div>
     </div>
@@ -94,13 +94,13 @@
   <div class="col-md-3">
     <div id='2_6er' class="col-md-6" hidden>
       <div class="containerturner">
-       <img src="{{ url_for('static', filename = '2_6er.svg')}}" alt="change two 6er against one 1er">
+       <img src="{{ url_for('static', filename = '2_6er.svg')}}" alt="change two 6er against one 1er" title="6er drehen">
        <button  onclick="turn1()" class="btn"></button>
       </div>
     </div>
     <div id='3_6er' class="col-md-6" hidden>
       <div class="containerturner">
-       <img src="{{ url_for('static', filename = '3_6er.svg')}}" alt="change three 6er against two 1er">
+       <img src="{{ url_for('static', filename = '3_6er.svg')}}" alt="change three 6er against two 1er" title="6er drehen">
        <button  onclick="turn2()" class="btn"></button>
       </div>
     </div>
@@ -184,7 +184,7 @@
       </select>
     </div>
     <div class="col-md-1">
-      <button id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
+      <button class="btn btn-primary" id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
     </div>
     <div class="col-md-1">
         <button id='delete_game_id' onclick="delete_game()">Spiel beenden</button>
