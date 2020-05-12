@@ -35,11 +35,6 @@
         <h2>Spielerliste:</h2>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-3">
-        <button onclick="refreshGame()">Refresh</button>
-      </div>
-    </div>
     <table class="table table-striped table-hover" >
       <thead>
         <tr>
@@ -47,9 +42,9 @@
           <th>Name</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="player_tbody">
         {% for user in game.users %}
-        <tr>
+        <tr >
           <th class="counterCell" scope="row"></th>
             <td>
               {{ user.name }}
@@ -73,7 +68,7 @@
           <li>Wenn ein Zug vor dem dritten Würfeln beendet werden soll, bitte "Ende" klicken</li>
           <li>Zu jeden Zeitpunkt kann auf bzw. zu gedeckt werden.</li>
           <li>Rausgestellte Würfel sind aufgedeckt.</li>
-          <li>Die erste und zweite Hälfte wird nicht mehr ausgespielt. (Wartzezeit für die restlichen Spieler zu groß)</li>
+          <li>Die erste und zweite Hälfte wird nicht mehr ausgespielt. (Wartezeit für die restlichen Spieler zu groß)</li>
           <li>Der Spieler der bei einer Runde bereits gewonnen hat (0 Chips), muss jedes Mal auf "Ende" klicken wenn er dran wäre (ermöglicht wieder Einwerfen).</li>
           <li>Der Code ist frei verfügbar. Wenn euch das Spiel gefällt liked es auf Github. Wenn ihr Anregungen habt oder Fehler findet meldet dies auch via Github.</li>
         </ul>
@@ -95,7 +90,9 @@
 <div class="row col-md-offset-1 col-md-10" >
     <p id="admin_id" hidden>{{ game.admin_user_id }}</p>
 </div>
-
+<div class="row col-md-offset-1 col-md-10" >
+    <p id="UUID" hidden>{{game.UUID}}</p>
+</div>
 
 <div class="row col-md-offset-1 col-md-6" style="height:90px;">
 
@@ -198,9 +195,22 @@
         if (xhttp.readyState == XMLHttpRequest.DONE) {
           var res=JSON.parse(xhttp.responseText);
           var sate = res.State
-
+          var table = document.getElementById('player_tbody');
+          table.innerHTML = '';
           for (num in res.User) {
             var juser = res.User[num];
+
+            // reload table data
+            var tr = document.createElement('tr');
+            var th = document.createElement('th');
+            th.className = 'counterCell';
+            th.scope = 'row';
+            var td = document.createElement('td');
+            td.innerHTML = juser['Name']
+            tr.appendChild(th);
+            tr.appendChild(td);
+            table.appendChild(tr);
+
             if (juser['Id'] == id){
               var name = document.getElementById('Name');
               name.disabled = true;
