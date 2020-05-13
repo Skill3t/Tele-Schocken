@@ -174,7 +174,12 @@
     <div class="col-md-2">
       <label for="transfer_source">Von:</label>
       <select id="transfer_source" name="count">
-        <option value=""></option>
+        <optgroup label="">
+          <option value="stack">Stapel</option>
+          <option value="schockaus">Schock aus</option>
+        </optgroup>
+        <optgroup id="transfer_source_user" label="Spieler">
+        </optgroup>
       </select>
     </div>
     <div class="col-md-2">
@@ -186,12 +191,8 @@
     <div class="col-md-1">
       <button class="btn btn-primary" id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
     </div>
-    <div class="col-md-1">
-        <button id='delete_game_id' onclick="delete_game()">Spiel beenden</button>
-    </div>
-    <div class="col-md-1">
-        <button onclick="delete_message()">Nachricht löschen</button>
-    </div>
+
+
   </div>
 </div>
 
@@ -643,15 +644,7 @@
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 200){
-          var selecttionsource = document.getElementById('transfer_source');
-          var schockaus = document.createElement('option');
-          schockaus.value = 'schockaus';
-          schockaus.innerHTML = 'Schock aus';
-          selecttionsource.appendChild(schockaus);
-          var stack = document.createElement('option');
-          stack.value = 'stack';
-          stack.innerHTML = 'Stapel';
-          selecttionsource.appendChild(stack);
+          var selecttionsource = document.getElementById('transfer_source_user');
 
           var selecttiontarget = document.getElementById('transfer_target');
           for (num in res.User) {
