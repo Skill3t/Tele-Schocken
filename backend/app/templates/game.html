@@ -9,14 +9,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-1 col-md-offset-1">
-      <label for="Name">Spielername</label>
-    </div>
-    <div class="col-md-2">
-      <input type="text" id="Name" value="">
-    </div>
-    <div class="col-md-1">
-      <button class="btn btn-primary" id="jointbtn" onclick="joinGame()">Beitreten</button>
+    <div class="col-md-3 col-md-offset-1" >
+      <div class="input-group mb-6">
+        <input id="Name" placeholder="Spielername" type="text" size="20" class="form-control" >
+        <div class="input-group-btn">
+          <button id="jointbtn" class="btn btn-primary btn-outline-secondary" type="button" onclick="joinGame()">Beitreten</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
