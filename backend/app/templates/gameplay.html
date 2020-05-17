@@ -4,27 +4,30 @@
 {{ super() }}
 
 <div class="row ">
-  <div class="col-md-2 col-md-offset-1">
+  <div class="col-xs-11 col-md-2 col-md-offset-1 col-xs-offset-1">
     <h2>Stapel</h2>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-11 col-md-9 col-xs-offset-1">
     <h2 class="message" id="Message"></h2>
   </div>
 </div>
-<div class="row ">
-  <div class="col-md-2 col-md-offset-1">
-    <h3 id="StackChips_id">Chips: {{game.stack}}</h3>
-  </div>
-  <div class="col-md-3">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-6 col-md-offset-1 col-md-2">
+      <h3 id="StackChips_id">Chips: {{game.stack}}</h3>
+    </div>
+    <div class="col-xs-6 col-md-3">
       <h3 id="StackFirst_id" class="fas fa-gem"> Erste Hälfte</h3>
-  </div>
-  <div class="col-md-3">
-    <h3 id="throw_id">Anzahl würfe:</h3>
-  </div>
-  <div class="col-md-3">
-      <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
-      <p id="UUID" hidden>{{game.UUID}}</p>
-      <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+    </div>
+    <div class="clearfix visible-xs-block visible-sm-block"></div>
+    <div class="col-xs-6 col-md-3">
+      <h3 id="throw_id">Anzahl würfe:</h3>
+    </div>
+    <div class="col-xs-6 col-md-3">
+        <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
+        <p id="UUID" hidden>{{game.UUID}}</p>
+        <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+    </div>
   </div>
 </div>
 
@@ -33,80 +36,85 @@
     <h2 id="ownuser">Spielen User:</h2>
   </div>
 </div>
-<div class="row ">
-  <div class="col-md-2 col-md-offset-1">
-    <div class="col-md-8">
-      <div class="containerturner" id='startgame_id'>
-       <img src="{{ url_for('static', filename = 'throw_the_dice.svg')}}" alt="throw the dice">
-       <button onclick="dice()" class="btn" title="Würfeln"></button>
-      </div>
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="col-md-6">
-      <div class="containercup">
-       <img src="{{ url_for('static', filename = 'pulldiceup.svg')}}" alt="pull dice cup up" >
-       <button onclick="pullup()" class="btn" title="Aufdecken"></button>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="containercup">
-       <img src="{{ url_for('static', filename = 'pulldicedown.svg')}}" alt="pull dice cup down" >
-       <button onclick="pulldown()" class="btn" title="Zudecken"></button>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="row col-md-offset-1">
-      <div class="col-md-9 text-center">
-        <p>Würfel für Becher wählen</p>
-      </div>
-    </div>
-    <div class="row col-md-offset-1">
-      <div class="col-md-3 text-center">
-        <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
-      </div>
-      <div class="col-md-3 text-center">
-        <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
-      </div>
-      <div class="col-md-3 text-center">
-        <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
-      </div>
-    </div>
-    <div class="row col-md-offset-1">
-      <div class="col-md-3">
-        <div class="text-center" id="dice1_v">
+<div class="container-fluid">
+  <div class="row ">
+    <div class="col-xs-6 col-md-2 col-md-offset-1">
+      <div class="col-xs-5 col-md-8 ">
+        <div class="containerturner" id='startgame_id'>
+         <img src="{{ url_for('static', filename = 'image/throw_the_dice.svg')}}" alt="throw the dice">
+         <button onclick="dice()" class="btn" title="Würfeln"></button>
         </div>
       </div>
-      <div class="col-md-3">
-        <div class="text-center" id="dice2_v">
+      <div class="col-xs-1 col-md-2">
+        <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
+      </div>
+    </div>
+    <div class="col-xs-6 col-md-3">
+      <div class="col-xs-6 col-md-6">
+        <div class="containercup">
+         <img src="{{ url_for('static', filename = 'image/pulldiceup.svg')}}" alt="pull dice cup up" >
+         <button onclick="pullup()" class="btn" title="Aufdecken"></button>
         </div>
       </div>
-      <div class="col-md-3 text-center">
-        <div class="text-center" id="dice3_v">
+      <div class="col-xs-6 col-md-6 ">
+        <div class="containercup">
+         <img src="{{ url_for('static', filename = 'image/pulldicedown.svg')}}" alt="pull dice cup down" >
+         <button onclick="pulldown()" class="btn" title="Zudecken"></button>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-3">
-    <div id='2_6er' class="col-md-6" hidden>
-      <div class="containerturner">
-       <img src="{{ url_for('static', filename = '2_6er.svg')}}" alt="change two 6er against one 1er" >
-       <button  onclick="turn1()" class="btn" title="6er drehen"></button>
-      </div>
-    </div>
-    <div id='3_6er' class="col-md-6" hidden>
-      <div class="containerturner">
-       <img src="{{ url_for('static', filename = '3_6er.svg')}}" alt="change three 6er against two 1er" >
-       <button  onclick="turn2()" class="btn" title="6er drehen"></button>
-      </div>
-    </div>
-  </div>
+    <div class="clearfix visible-xs-block visible-sm-block"></div>
 
+    <div class="col-md-3">
+      <div class="row col-md-offset-1">
+        <div class="col-xs-12 col-md-9 text-center">
+          <p>Würfel für Becher wählen</p>
+        </div>
+      </div>
+      <div class="row col-md-offset-1">
+        <div class="col-xs-4 col-md-3 text-center">
+          <input type="checkbox" id="dice1_cb" name="dice1" value="False" checked>
+        </div>
+        <div class="col-xs-4 text-center">
+          <input type="checkbox" id="dice2_cb" name="dice2" value="False" checked>
+        </div>
+        <div class="col-xs-4 text-center">
+          <input type="checkbox" id="dice3_cb" name="dice3" value="False" checked>
+        </div>
+      </div>
+      <div class="clearfix visible-xs-block visible-sm-block"></div>
+      <div class="row col-md-offset-1">
+        <div class="col-xs-4 col-md-3">
+          <div class="text-center" id="dice1_v">
+          </div>
+        </div>
+        <div class="col-xs-4 col-md-3">
+          <div class="text-center" id="dice2_v">
+          </div>
+        </div>
+        <div class="col-xs-4 col-md-3 text-center">
+          <div class="text-center" id="dice3_v">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix visible-xs-block visible-sm-block"></div>
+    <div class="col-md-3">
+      <div id='2_6er' class="col-md-6" hidden>
+        <div class="containerturner">
+         <img src="{{ url_for('static', filename = 'image/2_6er.svg')}}" alt="change two 6er against one 1er" >
+         <button  onclick="turn1()" class="btn" title="6er drehen"></button>
+        </div>
+      </div>
+      <div id='3_6er' class="col-md-6" hidden>
+        <div class="containerturner">
+         <img src="{{ url_for('static', filename = 'image/3_6er.svg')}}" alt="change three 6er against two 1er" >
+         <button  onclick="turn2()" class="btn" title="6er drehen"></button>
+        </div>
+      </div>
+    </div>
 
+  </div>
 </div>
 
 <div class="row ">
@@ -160,54 +168,53 @@
 </div>
 
 <div id="admin_interface">
+  <hr>
   <div class="row ">
-    <div class="col-md-4 col-md-offset-1">
+    <div class="col-xs-4 col-md-4 col-md-offset-1 col-xs-offset-1">
       <h2>Admin</h2>
     </div>
   </div>
-  <div class="row ">
-    <div class="col-md-2 col-md-offset-1">
-      <label for="stack_count_id">Anzahl:</label>
-      <input type="number" id="stack_count_id" name="stack_count_id"
-         min="0" max="13">
+  <div class="container">
+    <div class="row justify-content-md-center justify-content-sx-center">
+      <div class="col-xs-11 col-sm-3 col-md-3 col-md-offset-1 col-xs-offset-1">
+        <label for="stack_count_id">Anzahl:</label>
+        <input type="number" id="stack_count_id" name="stack_count_id"
+           min="0" max="13">
+      </div>
+      <div class="col-xs-5 col-sm-3 col-md-3">
+        <label for="transfer_source">Von:</label>
+        <select id="transfer_source" name="count">
+          <optgroup label="">
+            <option value="stack">Stapel</option>
+            <option value="schockaus">Schock aus</option>
+          </optgroup>
+          <optgroup id="transfer_source_user" label="Spieler">
+          </optgroup>
+        </select>
+      </div>
+      <div class="col-xs-4 col-sm-2 col-md-2">
+        <label for="transfer_target">An:</label>
+        <select id="transfer_target" name="count">
+          <option value=""></option>
+        </select>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-1">
+        <button class="btn btn-primary" id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
+      </div>
     </div>
-    <div class="col-md-2">
-      <label for="transfer_source">Von:</label>
-      <select id="transfer_source" name="count">
-        <optgroup label="">
-          <option value="stack">Stapel</option>
-          <option value="schockaus">Schock aus</option>
-        </optgroup>
-        <optgroup id="transfer_source_user" label="Spieler">
-        </optgroup>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <label for="transfer_target">An:</label>
-      <select id="transfer_target" name="count">
-        <option value=""></option>
-      </select>
-    </div>
-    <div class="col-md-1">
-      <button class="btn btn-primary" id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
-    </div>
-
-
   </div>
 </div>
 
 
-
 <div class="row col-md-offset-1 col-md-6" style="height:150px;">
-
 </div>
 
 {% block footer %}
-{{ super() }}
+  {{ super() }}
 {% endblock %}
 {% endblock %}
 {% block scripts %}
-{{ super() }}
+  {{ super() }}
 <script>
 
 
@@ -259,7 +266,7 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
           }else{
-            var audio = new Audio("{{ url_for("static", filename = "wuerfeln.mp3")}}");
+            var audio = new Audio("{{ url_for("static", filename = "audio/wuerfeln.mp3")}}");
             audio.play();
             if (dice1_cb){
               dice1_v.className = "spin animated"

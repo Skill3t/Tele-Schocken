@@ -20,7 +20,7 @@
 {% block content %}
 <main>
   <div class="header-img">
-    <img alt="Bone Dice 19th Century" title="Bone Dice 19th Century" style="width:100%; height:auto;" src="{{ url_for('static',filename='dice2.png') }}">
+    <img alt="Bone Dice 19th Century" title="Bone Dice 19th Century" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/dice2.png') }}">
   </div>
 </main>
 {% endblock %}
@@ -42,15 +42,15 @@
   </div>
   <div class="row col-md-offset-1">
     <div class="col-md-4">
-      <p>Github: <a href="https://github.com/Skill3t/Tele-Schocken">
+      <p>Github: <a target="_blank" href="https://github.com/Skill3t/Tele-Schocken">
       Tele-Schocken</a></p>
     </div>
     <div class="col-md-4">
-      <a href="{{ url_for('static',filename='impressum.html') }}"">
+      <a target="_blank" href="{{ url_for('static',filename='html/impressum.html') }}"">
       Impressum</a>
     </div>
     <div class="col-md-4">
-      <a href= "{{ url_for('static',filename='datenschutz.html') }}"">
+      <a target="_blank" href= "{{ url_for('static',filename='html/datenschutz.html') }}"">
       Datenschutz</a>
     </div>
   </div>

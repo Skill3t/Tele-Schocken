@@ -43,32 +43,7 @@
               <h3>Erläuterung:</h3>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-9">
-              <ul>
-                <li>Nicht mobil angepasst. Der größte Spielspaß besteht am Tablet oder PC / Laptop.</li>
-                <li>Der Spieler, der das Spiel erzeugt ist auch die Bank und muss alle Chips verteilen (Dies ermöglicht flexible Regeln)!</li>
-                <li>Wenn ein Zug vor dem dritten Würfeln beendet werden soll, bitte "Ende" klicken</li>
-                <li>Zu jeden Zeitpunkt kann auf bzw. zu gedeckt werden.</li>
-                <li>Rausgestellte Würfel sind aufgedeckt.</li>
-                <li>Die erste und zweite Hälfte wird nicht mehr ausgespielt. (Wartezeit für die restlichen Spieler zu groß)</li>
-                <li>Der Spieler der bei einer Runde bereits gewonnen hat (0 Chips), muss jedes Mal auf "Ende" klicken wenn er dran wäre (ermöglicht wieder Einwerfen).</li>
-                <li>Der Code ist frei verfügbar. Wenn euch das Spiel gefällt liked es auf Github. Wenn ihr Anregungen habt oder Fehler findet meldet dies auch via Github.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              <h4><a href="https://github.com/Skill3t/Tele-Schocken">
-              Github</a></h4>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              <h4><a href="https://www.abenteuerfreundschaft.de/schocken-wuerfel-trinkspiel/">
-              Regeln</a></h4>
-            </div>
-          </div>
+          {% include "rules.html" %}
         </div>
     </div>
     <br/>
@@ -82,7 +57,7 @@
       <div class="col-md-9 col-md-offset-1">
         <ul>
           <li>Wenn man an der Reihe ist zu würfeln wird der Würfelbutton grün hinterlegt</li>
-          <li>Der blau hinterlegte Spieler hat die Runde begonnen</li>
+          <li>Der blau hinterlegte Spieler hat die Runde begonnen (nicht im Edge oder Internetexplorer)</li>
           <li>Die Würfel, die raus gelegt werden müssen abgehakt werden</li>
           <li>Nur der Admin hat die Felder zum Verteilen der Chips</li>
           <li>Die Button zum 6er drehen erscheien nur wenn in einem Wurf mindestens 2 6er enthalten sind</li>
@@ -93,19 +68,19 @@
 
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='Gameplay01.png') }}">
+        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay01.png') }}">
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='Gameplay03.png') }}">
+        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/gameplay03.png') }}">
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='Gameplay02.png') }}">
+        <img alt="Gameplay" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay02.png') }}">
       </div>
     </div>
 
