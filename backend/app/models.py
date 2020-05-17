@@ -17,23 +17,24 @@ class Status(enum.Enum):
     GAMEFINISCH = "gamefinish"
 
 
-class Statistic(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    usercount = db.Column(db.Integer)
+class BaseGameData():
     halfcount = db.Column(db.Integer)
     started = db.Column(db.DateTime())
     refreshed = db.Column(db.DateTime())
+    schockoutcount = db.Column(db.Integer)
+    fallling_dice_count = db.Column(db.Integer)
 
 
-class Game(db.Model):
+class Statistic(BaseGameData, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    usercount = db.Column(db.Integer)
+
+
+class Game(BaseGameData, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UUID = db.Column(db.String(200), index=True, unique=True)
     users = db.relationship('User')
-    started = db.Column(db.DateTime())
-    refreshed = db.Column(db.DateTime())
-    halfcount = db.Column(db.Integer)
 
-    firsthalf = db.Column(db.Boolean(), default=False)
     secondhalf = db.Column(db.Boolean(), default=False)
     message = db.Column(db.String(300))
     status = db.Column(db.Enum(Status))
@@ -54,11 +55,11 @@ class Game(db.Model):
         data = {
             'Stack': self.stack,
             'State': self.status.value,
-            'First_Half': self.firsthalf,
             'Move': self.move_user_id,
             'Message': self.message,
             'First': self.first_user_id,
             'Admin': self.admin_user_id,
+            'Game_Half_Count': self.halfcount,
             'User': arrayuser,
         }
         return data
@@ -69,7 +70,6 @@ class Game(db.Model):
         """
         self.stack = 13
         self.status = Status.WAITING
-        self.firsthalf = True
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.005
         self.started = datetime.now()
@@ -97,7 +97,7 @@ class User(db.Model):
     dice3 = db.Column(db.Integer)
     dice3_visible = db.Column(db.Boolean(), default=False)
     number_dice = db.Column(db.Integer)  # Max Value = 3
-    firsthalf = db.Column(db.Boolean(), default=False)
+    halfcount = db.Column(db.Integer)
 
     def to_dict(self):
         dice = []
@@ -110,46 +110,16 @@ class User(db.Model):
         if self.dice3_visible:
             dice3 = {'Dice3': self.dice3}
             dice.append(dice3)
-        '''
-        dice = [
-            {'Dice1': self.dice1},
-            {'Dice2': self.dice2},
-            {'Dice3': self.dice3},
-        ]
-        '''
+
         data = {
             'Id': self.id,
             'Name': self.name,
             'Chips': self.chips,
             'Passive': self.passive,
-            'First_Half': self.firsthalf,
-            # 'Visible': self.visible,
+            'Halfcount': self.halfcount,
             'Number_Dice': self.number_dice,
             'Dices': dice
         }
-        '''
-        if self.visible:
-            data = {
-                'Id': self.id,
-                'Name': self.name,
-                'Chips': self.chips,
-                'Passive': self.passive,
-                'First_Half': self.firsthalf,
-                # 'Visible': self.visible,
-                'Number_Dice': self.number_dice,
-                'Dices': dice
-            }
-        else:
-            data = {
-                'Id': self.id,
-                'Name': self.name,
-                'Chips': self.chips,
-                'Passive': self.passive,
-                'First_Half': self.firsthalf,
-                'Number_Dice': self.number_dice,
-                # 'Visible': self.visible
-            }
-        '''
         return data
 
     def __init__(self):
@@ -160,4 +130,4 @@ class User(db.Model):
         self.dice3_visible = False
         self.passive = False
         self.number_dice = 0
-        self.firsthalf = False
+        self.halfcount = 0

@@ -589,6 +589,11 @@ def roll_dice(gid, uid):
         if fallen:
             user.number_dice = user.number_dice - 1
             game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
+            game.fallling_dice_count = game.fallling_dice_count + 1
+            db.session.add(game)
+            db.session.commit()
+        if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
+            game.schockoutcount = game.schockoutcount + 1
             db.session.add(game)
             db.session.commit()
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
@@ -842,27 +847,15 @@ def transfer_chips(gid):
     # Game GAMEFINISCH or ROUNDFINISCH
     escapedtarget = str(utils.escape(data['target']))
     userB = User.query.get_or_404(escapedtarget)
-    if userB.chips == 13 and game.firsthalf is True:
-        userB.firsthalf = True
-        game.firsthalf = False
+    if userB.chips == 13:
+        userB.halfcount = userB.halfcount + 1
         game.status = Status.ROUNDFINISCH
         game.stack = 13
         game.halfcount = game.halfcount + 1
-        response = jsonify(Message='Player {} lose the first half'.format(userB.name))
-    elif userB.chips == 13 and game.firsthalf is False:
-        game.status = Status.GAMEFINISCH
-        game.firsthalf = True
-        userB.firsthalf = False
-        game.stack = 13
-        game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.001
-        game.halfcount = game.halfcount + 1
-        response = jsonify(Message='Player {} lose the Game'.format(userB.name))
+        response = jsonify(Message='Player {} lose a half'.format(userB.name))
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
             user.chips = 0
-        if game.status == Status.GAMEFINISCH:
-            user.chips = 0
-            user.firsthalf = False
         user.dice1 = 0
         user.dice2 = 0
         user.dice3 = 0
