@@ -39,7 +39,7 @@
       <div class="col-xs-5 col-md-8 ">
         <div class="containerturner" id='startgame_id'>
          <img src="{{ url_for('static', filename = 'image/throw_the_dice.svg')}}" alt="throw the dice">
-         <button onclick="dice()" class="btn" title="Würfeln"></button>
+         <button id='btn_dice' onclick="dice()" class="btn" title="Würfeln"></button>
         </div>
       </div>
       <div class="col-xs-1 col-md-2">
@@ -220,6 +220,8 @@
     location=location;
   }
   function dice(){
+    document.getElementById("btn_dice").disabled = true;
+    setTimeout(function(){document.getElementById("btn_dice").disabled = false;},2500);
     var dice1_cb = document.getElementById('dice1_cb');
     dice1_cb.disabled = false;
     var dice2_cb = document.getElementById('dice2_cb');
