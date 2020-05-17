@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" xmlns:vectornator="http://vectornator.io" version="1.1" viewBox="0 0 1334 750">
+<metadata>
+<vectornator:setting key="DisplayWhiteBackground" value="0"/>
+<vectornator:setting key="RulersVisible" value="1"/>
+<vectornator:setting key="GridSpacing" value="36"/>
+<vectornator:setting key="Units" value="Pixels"/>
+<vectornator:setting key="New" value="0"/>
+<vectornator:setting key="DynamicGuides" value="0"/>
+<vectornator:setting key="SnapToPoints" value="0"/>
+<vectornator:setting key="SnapToGrid" value="0"/>
+<vectornator:setting key="SnapToGuides" value="1"/>
+<vectornator:setting key="SnapToEdges" value="0"/>
+</metadata>
+<defs>
+<linearGradient y1="-0.011912" id="LinearGradient" x1="0.50001" y2="1.0119" x2="0.50001" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.97084 0 0 1.95895 259.207 -1505.98)">
+<stop stop-color="#f9f8f8" offset="0"/>
+<stop stop-color="#ececec" offset="0.070067"/>
+<stop stop-color="#e8e7e7" offset="0.93328"/>
+<stop stop-color="#b4b3b4" offset="1"/>
+</linearGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.44823 0 0 0.500415 194.598 1070.09)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_2" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.250095 0 0 0.32143 484.731 1073.27)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<linearGradient y1="-0.011912" id="LinearGradient_2" x1="0.50001" y2="1.0119" x2="0.50001" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.97084 0 0 1.95895 338.129 -1408.79)">
+<stop stop-color="#f9f8f8" offset="0"/>
+<stop stop-color="#ececec" offset="0.070067"/>
+<stop stop-color="#e8e7e7" offset="0.93328"/>
+<stop stop-color="#b4b3b4" offset="1"/>
+</linearGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_3" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.44823 0 0 0.500415 277.52 1167.28)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_4" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.250095 0 0 0.32143 567.653 1170.47)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<linearGradient y1="-0.011912" id="LinearGradient_3" x1="0.50001" y2="1.0119" x2="0.50001" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.97084 0 0 1.95895 709.279 -1116.58)">
+<stop stop-color="#f9f8f8" offset="0"/>
+<stop stop-color="#ececec" offset="0.070067"/>
+<stop stop-color="#e8e7e7" offset="0.93328"/>
+<stop stop-color="#b4b3b4" offset="1"/>
+</linearGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_5" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.44823 0 0 0.500415 644.67 1459.49)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_6" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.250095 0 0 0.32143 934.803 1462.67)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<linearGradient y1="-0.011912" id="LinearGradient_4" x1="0.50001" y2="1.0119" x2="0.50001" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.97084 0 0 1.95895 433.887 -1310.51)">
+<stop stop-color="#f9f8f8" offset="0"/>
+<stop stop-color="#ececec" offset="0.070067"/>
+<stop stop-color="#e8e7e7" offset="0.93328"/>
+<stop stop-color="#b4b3b4" offset="1"/>
+</linearGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_7" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.44823 0 0 0.500415 369.279 1265.56)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_8" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.250095 0 0 0.32143 659.412 1268.75)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<linearGradient y1="-0.011912" id="LinearGradient_5" x1="0.50001" y2="1.0119" x2="0.50001" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.97084 0 0 1.95895 825.204 -1211.06)">
+<stop stop-color="#f9f8f8" offset="0"/>
+<stop stop-color="#ececec" offset="0.070067"/>
+<stop stop-color="#e8e7e7" offset="0.93328"/>
+<stop stop-color="#b4b3b4" offset="1"/>
+</linearGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_9" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.44823 0 0 0.500415 760.595 1365.01)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+<radialGradient cx="103.59" r="25.809" id="RadialGradient_10" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.250095 0 0 0.32143 1050.73 1368.2)" cy="94.288">
+<stop stop-color="#ffffff" offset="0"/>
+<stop stop-opacity="0" stop-color="#ffffff" offset="1"/>
+</radialGradient>
+</defs>
+<g id="Layer 1" vectornator:layerName="Layer 1">
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path stroke="#888a85" stroke-width="1.772" d="M327.622+112.72L437.427+112.72C447.534+112.72+455.728+120.864+455.728+130.91L455.728+240.053C455.728+250.099+447.534+258.243+437.427+258.243L327.622+258.243C317.515+258.243+309.321+250.099+309.321+240.053L309.321+130.91C309.321+120.864+317.515+112.72+327.622+112.72Z" fill="#888a85" stroke-linecap="butt" opacity="0.722" stroke-linejoin="miter"/>
+<path d="M322.202+109.782L432.007+109.782C442.114+109.782+450.308+117.926+450.308+127.972L450.308+237.114C450.308+247.16+442.114+255.304+432.007+255.304L322.202+255.304C312.095+255.304+303.901+247.16+303.901+237.114L303.901+127.972C303.901+117.926+312.095+109.782+322.202+109.782Z" opacity="1" fill="url(#LinearGradient)"/>
+</g>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M392.52+134.718C392.52+147.724+372.998+158.268+348.917+158.268C324.835+158.268+305.313+147.724+305.313+134.718C305.313+121.711+324.835+111.167+348.917+111.167C372.998+111.167+392.52+121.711+392.52+134.718Z" vectornator:shadowOffset="10" fill="url(#RadialGradient)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M447.167+235.336C447.167+245.76+439.054+254.21+429.047+254.21C419.039+254.21+410.927+245.759+410.927+235.336C410.927+224.912+419.039+216.462+429.047+216.462C439.054+216.462+447.167+224.912+447.167+235.336Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_2)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M348.291+182.532C348.291+190.246+342+196.498+334.24+196.498C326.479+196.498+320.189+190.246+320.189+182.532C320.189+174.819+326.479+168.566+334.24+168.566C342+168.566+348.291+174.819+348.291+182.532Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M434.514+182.532C434.514+190.246+428.223+196.498+420.463+196.498C412.702+196.498+406.412+190.246+406.412+182.532C406.412+174.819+412.702+168.566+420.463+168.566C428.223+168.566+434.514+174.819+434.514+182.532Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M347.798+135.517C347.798+143.23+341.507+149.483+333.747+149.483C325.987+149.483+319.696+143.23+319.696+135.517C319.696+127.803+325.987+121.55+333.747+121.55C341.507+121.55+347.798+127.803+347.798+135.517Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M434.514+135.517C434.514+143.23+428.223+149.483+420.463+149.483C412.702+149.483+406.412+143.23+406.412+135.517C406.412+127.803+412.702+121.55+420.463+121.55C428.223+121.55+434.514+127.803+434.514+135.517Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M348.291+226.119C348.291+233.832+342+240.085+334.24+240.085C326.479+240.085+320.189+233.832+320.189+226.119C320.189+218.405+326.479+212.152+334.24+212.152C342+212.152+348.291+218.405+348.291+226.119Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M434.514+225.629C434.514+233.342+428.223+239.595+420.463+239.595C412.702+239.595+406.412+233.342+406.412+225.629C406.412+217.916+412.702+211.663+420.463+211.663C428.223+211.663+434.514+217.916+434.514+225.629Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path d="M319.757+184.07C319.709+184.54+319.71+184.985+319.71+185.467C319.71+193.181+325.963+199.442+333.723+199.442C341.483+199.442+347.783+193.181+347.783+185.467C347.783+184.985+347.784+184.54+347.737+184.07C346.954+191.048+340.951+196.46+333.723+196.46C326.495+196.46+320.539+191.048+319.757+184.07L319.757+184.07L319.757+184.07Z" opacity="1" fill="#ffffff"/>
+<path d="M406.474+184.07C406.426+184.54+406.426+184.985+406.426+185.467C406.426+193.181+412.68+199.442+420.441+199.442C428.2+199.442+434.501+193.181+434.501+185.467C434.501+184.985+434.501+184.54+434.454+184.07C433.671+191.048+427.668+196.46+420.441+196.46C413.212+196.46+407.256+191.048+406.474+184.07Z" opacity="1" fill="#ffffff"/>
+<path d="M406.474+227.167C406.426+227.637+406.426+228.082+406.426+228.564C406.426+236.278+412.68+242.539+420.441+242.539C428.2+242.539+434.501+236.278+434.501+228.564C434.501+228.082+434.501+227.637+434.454+227.167C433.671+234.145+427.668+239.557+420.441+239.557C413.212+239.557+407.256+234.145+406.474+227.167Z" opacity="1" fill="#ffffff"/>
+<path d="M319.757+227.167C319.709+227.637+319.71+228.082+319.71+228.564C319.71+236.278+325.963+242.539+333.723+242.539C341.483+242.539+347.783+236.278+347.783+228.564C347.783+228.082+347.784+227.637+347.737+227.167C346.954+234.145+340.951+239.557+333.723+239.557C326.495+239.557+320.539+234.145+319.757+227.167L319.757+227.167L319.757+227.167Z" opacity="1" fill="#ffffff"/>
+<path d="M319.757+137.057C319.709+137.527+319.71+137.972+319.71+138.454C319.71+146.168+325.963+152.429+333.723+152.429C341.483+152.429+347.783+146.168+347.783+138.454C347.783+137.972+347.784+137.527+347.737+137.057C346.954+144.035+340.951+149.447+333.723+149.447C326.495+149.447+320.539+144.035+319.757+137.057L319.757+137.057L319.757+137.057Z" opacity="1" fill="#ffffff"/>
+<path d="M406.474+137.057C406.426+137.527+406.426+137.972+406.426+138.454C406.426+146.168+412.68+152.429+420.441+152.429C428.2+152.429+434.501+146.168+434.501+138.454C434.501+137.972+434.501+137.527+434.454+137.057C433.671+144.035+427.668+149.447+420.441+149.447C413.212+149.447+407.256+144.035+406.474+137.057Z" opacity="1" fill="#ffffff"/>
+</g>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path stroke="#888a85" stroke-width="1.772" d="M406.544+209.913L516.349+209.913C526.456+209.913+534.65+218.057+534.65+228.104L534.65+337.246C534.65+347.292+526.456+355.436+516.349+355.436L406.544+355.436C396.437+355.436+388.244+347.292+388.244+337.246L388.244+228.104C388.244+218.057+396.437+209.913+406.544+209.913Z" fill="#888a85" stroke-linecap="butt" opacity="0.722" stroke-linejoin="miter"/>
+<path d="M401.124+206.975L510.929+206.975C521.036+206.975+529.23+215.119+529.23+225.165L529.23+334.308C529.23+344.354+521.036+352.498+510.929+352.498L401.124+352.498C391.017+352.498+382.824+344.354+382.824+334.308L382.824+225.165C382.824+215.119+391.017+206.975+401.124+206.975Z" opacity="1" fill="url(#LinearGradient_2)"/>
+</g>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M475.442+231.911C475.442+244.917+455.92+255.462+431.839+255.462C407.757+255.462+388.235+244.917+388.235+231.911C388.235+218.905+407.758+208.36+431.839+208.36C455.921+208.36+475.442+218.905+475.442+231.911Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_3)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M530.089+332.529C530.089+342.953+521.976+351.403+511.969+351.403C501.961+351.403+493.849+342.953+493.849+332.529C493.849+322.106+501.961+313.655+511.969+313.655C521.976+313.655+530.089+322.106+530.089+332.529Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_4)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M431.213+279.726C431.213+287.439+424.922+293.692+417.162+293.692C409.402+293.692+403.111+287.439+403.111+279.726C403.111+272.012+409.402+265.759+417.162+265.759C424.922+265.759+431.213+272.012+431.213+279.726Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M517.436+279.726C517.436+287.439+511.145+293.692+503.385+293.692C495.625+293.692+489.334+287.439+489.334+279.726C489.334+272.012+495.625+265.759+503.385+265.759C511.145+265.759+517.436+272.012+517.436+279.726Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M430.72+232.71C430.72+240.424+424.429+246.677+416.669+246.677C408.909+246.677+402.618+240.424+402.618+232.71C402.618+224.997+408.909+218.744+416.669+218.744C424.429+218.744+430.72+224.997+430.72+232.71Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M517.436+232.71C517.436+240.424+511.145+246.677+503.385+246.677C495.625+246.677+489.334+240.424+489.334+232.71C489.334+224.997+495.625+218.744+503.385+218.744C511.145+218.744+517.436+224.997+517.436+232.71Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M431.213+323.312C431.213+331.026+424.922+337.279+417.162+337.279C409.402+337.279+403.111+331.026+403.111+323.312C403.111+315.599+409.402+309.346+417.162+309.346C424.922+309.346+431.213+315.599+431.213+323.312Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M517.436+322.823C517.436+330.536+511.145+336.789+503.385+336.789C495.625+336.789+489.334+330.536+489.334+322.823C489.334+315.109+495.625+308.856+503.385+308.856C511.145+308.856+517.436+315.109+517.436+322.823Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path d="M402.679+281.263C402.631+281.734+402.632+282.178+402.632+282.66C402.632+290.374+408.885+296.635+416.645+296.635C424.406+296.635+430.705+290.374+430.705+282.66C430.705+282.178+430.707+281.734+430.659+281.263C429.876+288.241+423.874+293.654+416.646+293.654C409.417+293.654+403.462+288.241+402.679+281.263L402.679+281.263L402.679+281.263Z" opacity="1" fill="#ffffff"/>
+<path d="M489.396+281.263C489.349+281.734+489.349+282.178+489.349+282.66C489.349+290.374+495.602+296.635+503.363+296.635C511.122+296.635+517.423+290.374+517.423+282.66C517.423+282.178+517.423+281.734+517.376+281.263C516.594+288.241+510.59+293.654+503.363+293.654C496.134+293.654+490.178+288.241+489.396+281.263Z" opacity="1" fill="#ffffff"/>
+<path d="M489.396+324.36C489.349+324.83+489.349+325.275+489.349+325.757C489.349+333.471+495.602+339.732+503.363+339.732C511.122+339.732+517.423+333.471+517.423+325.757C517.423+325.275+517.423+324.831+517.376+324.36C516.594+331.338+510.59+336.751+503.363+336.751C496.134+336.751+490.178+331.338+489.396+324.36Z" opacity="1" fill="#ffffff"/>
+<path d="M402.679+324.36C402.631+324.83+402.632+325.275+402.632+325.757C402.632+333.471+408.885+339.732+416.645+339.732C424.406+339.732+430.705+333.471+430.705+325.757C430.705+325.275+430.707+324.831+430.659+324.36C429.876+331.338+423.874+336.751+416.646+336.751C409.417+336.751+403.462+331.338+402.679+324.36L402.679+324.36L402.679+324.36Z" opacity="1" fill="#ffffff"/>
+<path d="M402.679+234.25C402.631+234.721+402.632+235.165+402.632+235.647C402.632+243.361+408.885+249.622+416.645+249.622C424.406+249.622+430.705+243.361+430.705+235.647C430.705+235.165+430.707+234.721+430.659+234.25C429.876+241.228+423.874+246.641+416.646+246.641C409.417+246.641+403.462+241.228+402.679+234.25L402.679+234.25L402.679+234.25Z" opacity="1" fill="#ffffff"/>
+<path d="M489.396+234.25C489.349+234.721+489.349+235.165+489.349+235.647C489.349+243.361+495.602+249.622+503.363+249.622C511.122+249.622+517.423+243.361+517.423+235.647C517.423+235.165+517.423+234.721+517.376+234.25C516.594+241.228+510.59+246.641+503.363+246.641C496.134+246.641+490.178+241.228+489.396+234.25Z" opacity="1" fill="#ffffff"/>
+</g>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path stroke="#888a85" stroke-width="1.772" d="M777.694+502.121L887.499+502.121C897.606+502.121+905.8+510.265+905.8+520.311L905.8+629.453C905.8+639.499+897.606+647.643+887.499+647.643L777.694+647.643C767.587+647.643+759.393+639.499+759.393+629.453L759.393+520.311C759.393+510.265+767.587+502.121+777.694+502.121Z" fill="#888a85" stroke-linecap="butt" opacity="0.722" stroke-linejoin="miter"/>
+<path d="M772.274+499.182L882.079+499.182C892.186+499.182+900.38+507.326+900.38+517.372L900.38+626.515C900.38+636.561+892.186+644.705+882.079+644.705L772.274+644.705C762.167+644.705+753.974+636.561+753.974+626.515L753.974+517.372C753.974+507.326+762.167+499.182+772.274+499.182Z" opacity="1" fill="url(#LinearGradient_3)"/>
+</g>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M842.592+524.118C842.592+537.125+823.07+547.669+798.989+547.669C774.907+547.669+755.385+537.125+755.385+524.118C755.385+511.112+774.907+500.568+798.989+500.568C823.07+500.568+842.592+511.112+842.592+524.118Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_5)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M897.239+624.736C897.239+635.16+889.126+643.61+879.119+643.61C869.111+643.61+860.999+635.16+860.999+624.736C860.999+614.313+869.111+605.862+879.119+605.862C889.126+605.862+897.239+614.313+897.239+624.736Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_6)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M841.442+573.328C841.442+581.041+835.151+587.294+827.391+587.294C819.631+587.294+813.34+581.041+813.34+573.328C813.34+565.614+819.631+559.361+827.391+559.361C835.151+559.361+841.442+565.614+841.442+573.328Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path d="M813.634+573.582C814.368+593.356+840.873+593.338+841.614+573.582C838.572+589.623+816.667+589.631+813.634+573.582Z" opacity="1" fill="#ffffff"/>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path stroke="#888a85" stroke-width="1.772" d="M502.303+308.195L612.108+308.195C622.215+308.195+630.408+316.339+630.408+326.385L630.408+435.527C630.408+445.573+622.215+453.717+612.108+453.717L502.303+453.717C492.196+453.717+484.002+445.573+484.002+435.527L484.002+326.385C484.002+316.339+492.196+308.195+502.303+308.195Z" fill="#888a85" stroke-linecap="butt" opacity="0.722" stroke-linejoin="miter"/>
+<path d="M496.883+305.256L606.688+305.256C616.795+305.256+624.988+313.4+624.988+323.446L624.988+432.589C624.988+442.635+616.795+450.779+606.688+450.779L496.883+450.779C486.776+450.779+478.582+442.635+478.582+432.589L478.582+323.446C478.582+313.4+486.776+305.256+496.883+305.256Z" opacity="1" fill="url(#LinearGradient_4)"/>
+</g>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M567.201+330.192C567.201+343.199+547.679+353.743+523.597+353.743C499.516+353.743+479.994+343.199+479.994+330.192C479.994+317.186+499.516+306.642+523.597+306.642C547.679+306.642+567.201+317.186+567.201+330.192Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_7)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M621.847+430.81C621.847+441.234+613.735+449.684+603.727+449.684C593.72+449.684+585.607+441.234+585.607+430.81C585.607+420.387+593.72+411.936+603.727+411.936C613.735+411.936+621.847+420.387+621.847+430.81Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_8)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M522.972+378.007C522.972+385.72+516.681+391.973+508.92+391.973C501.16+391.973+494.869+385.72+494.869+378.007C494.869+370.293+501.16+364.04+508.92+364.04C516.681+364.04+522.972+370.293+522.972+378.007Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M609.195+378.007C609.195+385.72+602.904+391.973+595.143+391.973C587.383+391.973+581.092+385.72+581.092+378.007C581.092+370.293+587.383+364.04+595.143+364.04C602.904+364.04+609.195+370.293+609.195+378.007Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M522.479+330.991C522.479+338.705+516.188+344.958+508.428+344.958C500.668+344.958+494.377+338.705+494.377+330.991C494.377+323.278+500.668+317.025+508.428+317.025C516.188+317.025+522.479+323.278+522.479+330.991Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M609.195+330.991C609.195+338.705+602.904+344.958+595.143+344.958C587.383+344.958+581.092+338.705+581.092+330.991C581.092+323.278+587.383+317.025+595.143+317.025C602.904+317.025+609.195+323.278+609.195+330.991Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M522.972+421.593C522.972+429.307+516.681+435.56+508.92+435.56C501.16+435.56+494.869+429.307+494.869+421.593C494.869+413.88+501.16+407.627+508.92+407.627C516.681+407.627+522.972+413.88+522.972+421.593Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M609.195+421.104C609.195+428.817+602.904+435.07+595.143+435.07C587.383+435.07+581.092+428.817+581.092+421.104C581.092+413.39+587.383+407.137+595.143+407.137C602.904+407.137+609.195+413.39+609.195+421.104Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path d="M494.438+379.544C494.39+380.015+494.391+380.459+494.391+380.941C494.391+388.655+500.644+394.916+508.404+394.916C516.164+394.916+522.464+388.655+522.464+380.941C522.464+380.459+522.465+380.015+522.417+379.544C521.635+386.522+515.632+391.935+508.404+391.935C501.176+391.935+495.22+386.522+494.438+379.544L494.437+379.544L494.438+379.544Z" opacity="1" fill="#ffffff"/>
+<path d="M581.154+379.544C581.107+380.015+581.107+380.459+581.107+380.941C581.107+388.655+587.361+394.916+595.122+394.916C602.881+394.916+609.182+388.655+609.182+380.941C609.182+380.459+609.182+380.015+609.134+379.544C608.352+386.522+602.349+391.935+595.122+391.935C587.893+391.935+581.937+386.522+581.154+379.544Z" opacity="1" fill="#ffffff"/>
+<path d="M581.154+422.641C581.107+423.112+581.107+423.556+581.107+424.038C581.107+431.752+587.361+438.013+595.122+438.013C602.881+438.013+609.182+431.752+609.182+424.038C609.182+423.556+609.182+423.112+609.134+422.641C608.352+429.619+602.349+435.032+595.122+435.032C587.893+435.032+581.937+429.619+581.154+422.641Z" opacity="1" fill="#ffffff"/>
+<path d="M494.438+422.641C494.39+423.112+494.391+423.556+494.391+424.038C494.391+431.752+500.644+438.013+508.404+438.013C516.164+438.013+522.464+431.752+522.464+424.038C522.464+423.556+522.465+423.112+522.417+422.641C521.635+429.619+515.632+435.032+508.404+435.032C501.176+435.032+495.22+429.619+494.438+422.641L494.437+422.641L494.438+422.641Z" opacity="1" fill="#ffffff"/>
+<path d="M494.438+332.532C494.39+333.002+494.391+333.446+494.391+333.928C494.391+341.643+500.644+347.903+508.404+347.903C516.164+347.903+522.464+341.643+522.464+333.928C522.464+333.446+522.465+333.002+522.417+332.532C521.635+339.509+515.632+344.922+508.404+344.922C501.176+344.922+495.22+339.509+494.438+332.532L494.437+332.532L494.438+332.532Z" opacity="1" fill="#ffffff"/>
+<path d="M581.154+332.532C581.107+333.002+581.107+333.446+581.107+333.928C581.107+341.643+587.361+347.903+595.122+347.903C602.881+347.903+609.182+341.643+609.182+333.928C609.182+333.446+609.182+333.002+609.134+332.532C608.352+339.509+602.349+344.922+595.122+344.922C587.893+344.922+581.937+339.509+581.154+332.532Z" opacity="1" fill="#ffffff"/>
+</g>
+<g vectornator:shadowOffset="10" vectornator:shadowOpacity="0.948979" vectornator:shadowAngle="1.5708" vectornator:shadowColor="#040303" opacity="1" vectornator:shadowRadius="10">
+<path stroke="#888a85" stroke-width="1.772" d="M893.619+407.642L1003.42+407.642C1013.53+407.642+1021.72+415.786+1021.72+425.832L1021.72+534.975C1021.72+545.021+1013.53+553.165+1003.42+553.165L893.619+553.165C883.512+553.165+875.319+545.021+875.319+534.975L875.319+425.832C875.319+415.786+883.512+407.642+893.619+407.642Z" fill="#888a85" stroke-linecap="butt" opacity="0.722" stroke-linejoin="miter"/>
+<path d="M888.199+404.704L998.004+404.704C1008.11+404.704+1016.3+412.848+1016.3+422.894L1016.3+532.036C1016.3+542.082+1008.11+550.226+998.004+550.226L888.199+550.226C878.092+550.226+869.899+542.082+869.899+532.036L869.899+422.894C869.899+412.848+878.092+404.704+888.199+404.704Z" opacity="1" fill="url(#LinearGradient_5)"/>
+</g>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M958.517+429.64C958.517+442.646+938.995+453.19+914.914+453.19C890.832+453.19+871.31+442.646+871.31+429.64C871.31+416.633+890.833+406.089+914.914+406.089C938.996+406.089+958.517+416.633+958.517+429.64Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_9)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M1013.16+530.258C1013.16+540.682+1005.05+549.132+995.044+549.132C985.036+549.132+976.924+540.681+976.924+530.258C976.924+519.834+985.036+511.384+995.044+511.384C1005.05+511.384+1013.16+519.834+1013.16+530.258Z" vectornator:shadowOffset="10" fill="url(#RadialGradient_10)" opacity="0.763" vectornator:shadowAngle="1.5708"/>
+<path vectornator:shadowColor="#040303" vectornator:shadowOpacity="0.948979" vectornator:shadowRadius="10" d="M957.367+478.849C957.367+486.563+951.076+492.816+943.316+492.816C935.556+492.816+929.265+486.563+929.265+478.849C929.265+471.136+935.556+464.883+943.316+464.883C951.076+464.883+957.367+471.136+957.367+478.849Z" vectornator:shadowOffset="10" fill="#000000" opacity="1" vectornator:shadowAngle="1.5708"/>
+<path d="M929.56+479.104C930.293+498.877+956.798+498.859+957.539+479.104C954.497+495.144+932.593+495.152+929.56+479.104Z" opacity="1" fill="#ffffff"/>
+<g opacity="0.81845">
+<g>
+<path stroke-linecap="butt" stroke-width="23.05" stroke="#000000" d="M773.643+307.362C719.908+207.202+578.419+173.02+506.824+138.337" fill="none" stroke-linejoin="round"/>
+<path d="M687.633+289.865L794.677+408.932L845.63+257.145L687.633+289.865Z" fill="#000000"/>
+</g>
+</g>
+<path fill-rule="evenodd" vectornator:shadowColor="#151414" vectornator:shadowOpacity="0.965352" vectornator:shadowRadius="3.11567" d="M252.524+18.1379C209.42+18.1379+174.105+66.7064+174.105+126.016L174.105+611.467C174.105+670.777+209.421+719.344+252.524+719.344L1075.79+719.344C1118.89+719.344+1154.21+670.778+1154.21+611.467L1154.21+126.016C1154.21+66.7065+1118.89+18.1377+1075.79+18.1379L252.524+18.1379ZM238.019+42.0221L1087.89+42.0221C1110.49+42.0221+1128.37+68.1067+1128.37+101.112L1128.37+632.921C1128.37+665.927+1110.49+692.014+1087.89+692.011L238.019+692.011C215.415+692.011+197.542+665.928+197.542+632.921L197.542+101.112C197.542+68.1061+215.414+42.0226+238.019+42.0221ZM997.741+453.121C997.689+453.174+997.645+453.248+997.593+453.299L997.889+453.835L1000.71+453.835C999.741+453.594+998.698+453.388+997.741+453.121Z" vectornator:shadowOffset="15.3297" fill="#262926" opacity="1" vectornator:shadowAngle="2.51646"/>
+</g>
+</svg>
