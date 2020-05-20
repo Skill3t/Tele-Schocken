@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>File Not Found</h1>
-    <p><a href="{{ url_for('index') }}">Back</a></p>
+{{ super() }}
+<div class="row col-md-offset-1">
+  <h1>Seite nicht gefunden oder Spiel abgelaufen!</h1>
+</div>
+<div class="row col-md-offset-1">
+  <p>Die Spiele werden 24 Stunden nach dem letzten Wurf gelöscht.</p>
+</div>
+<div class="row col-md-offset-1">
+  <p><a href="{{ url_for('index') }}">zurück zur Startseite</a></p>
+</div>
+
+
 {% endblock %}
