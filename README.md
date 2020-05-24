@@ -1,8 +1,11 @@
 ### Maintained?
-Maintained: [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Skill3t/Tele-Schocken/graphs/commit-activity)
-
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Skill3t/Tele-Schocken/graphs/commit-activity)
 [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](tele-schocken.de/)
-
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Skill3t/Tele-Schocken/blob/master/LICENSE)
+[![GitHub forks](https://img.shields.io/github/forks/Naereen/StrapDown.js.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/Skill3t/Tele-Schocken/network/)
+[![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://github.com/Skill3t/Tele-Schocken/graphs/contributors/)
+[![GitHub issues-closed](https://img.shields.io/github/issues-closed/Naereen/StrapDown.js.svg)](https://github.com/Skill3t/Tele-Schocken/issues?q=is%3Aissue+is%3Aclosed)
 # Tele-Schocken
 In some regions also known as **Jule**, **Mörkeln**, **Knobeln**, **Maxen** or **Meiern**.
 
