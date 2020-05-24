@@ -1,6 +1,5 @@
-<p align="center">
-    [Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-</p>
+[Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+
 # Tele-Schocken
 In some regions also known as **Jule**, **Mörkeln**, **Knobeln**, **Maxen** or **Meiern**.
 
