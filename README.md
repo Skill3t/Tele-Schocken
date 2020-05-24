@@ -1,6 +1,8 @@
 ### Maintained?
 Maintained: [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/Skill3t/Tele-Schocken/graphs/commit-activity)
 
+[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](tele-schocken.de/)
+
 # Tele-Schocken
 In some regions also known as **Jule**, **Mörkeln**, **Knobeln**, **Maxen** or **Meiern**.
 
