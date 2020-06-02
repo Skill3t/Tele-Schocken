@@ -597,6 +597,8 @@ def roll_dice(gid, uid):
             db.session.add(game)
             db.session.commit()
         game.throw_dice_count = game.throw_dice_count + 1
+        db.session.add(game)
+        db.session.commit()
         response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
         response.status_code = 201
         db.session.add(user)
