@@ -2,15 +2,22 @@
 
 {% block content %}
 {{ super() }}
-<div class="row col-md-offset-1">
-  <h1>Seite nicht gefunden oder Spiel abgelaufen!</h1>
-</div>
-<div class="row col-md-offset-1">
-  <p>Die Spiele werden 24 Stunden nach dem letzten Wurf gelöscht.</p>
-</div>
-<div class="row col-md-offset-1">
-  <p><a href="{{ url_for('index') }}">zurück zur Startseite</a></p>
-</div>
 
+
+<div class="row col-md-offset-1 col-xs-offset-1">
+  <div class="col-xs-11 col-md-11">
+      <h1>Seite nicht gefunden oder Spiel abgelaufen!</h1>
+  </div>
+</div>
+<div class="row col-md-offset-1 col-xs-offset-1">
+  <div class="col-xs-11 col-md-11">
+      <p>Die Spiele werden 24 Stunden nach dem letzten Wurf gelöscht.</p>
+  </div>
+</div>
+<div class="row col-md-offset-1 col-xs-offset-1">
+  <div class="col-xs-11 col-md-11">
+      <p><a href="{{ url_for('index') }}">zurück zur Startseite</a></p>
+  </div>
+</div>
 
 {% endblock %}
