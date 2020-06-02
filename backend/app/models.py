@@ -23,6 +23,16 @@ class BaseGameData():
     refreshed = db.Column(db.DateTime())
     schockoutcount = db.Column(db.Integer)
     fallling_dice_count = db.Column(db.Integer)
+    throw_dice_count = db.Column(db.Integer)
+
+    def __init__(self):
+        """
+        Init a Game with 13 chips on the Stack an a changs of 1 % that a dice cann fall frome the table (Liquer round)
+        """
+        self.halfcount = 0
+        self.fallling_dice_count = 0
+        self.schockoutcount = 0
+        self.throw_dice_count = 0
 
 
 class Statistic(BaseGameData, db.Model):
@@ -68,13 +78,13 @@ class Game(BaseGameData, db.Model):
         """
         Init a Game with 13 chips on the Stack an a changs of 1 % that a dice cann fall frome the table (Liquer round)
         """
+        super().__init__()
         self.stack = 13
         self.status = Status.WAITING
         self.UUID = str(uuid.uuid1())
         self.changs_of_fallling_dice = 0.005
         self.started = datetime.now()
         self.refreshed = datetime.now()
-        self.halfcount = 0
 
     def moveName(self, id):
         if id is not None:
