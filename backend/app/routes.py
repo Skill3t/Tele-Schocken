@@ -1,5 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, jsonify
-from werkzeug.urls import url_parse
+from flask import render_template, redirect, url_for
 
 from app import app, db
 from app.forms import CreateGameFrom

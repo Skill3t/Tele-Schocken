@@ -13,6 +13,7 @@ from app.api.errors import bad_request
 
 
 # testforpolling
+# the roud is not used is can be used to improve server performance if needed
 @bp.route('/game/<gid>/poll', methods=['GET'])
 def get_refreshed_game(gid):
     game = Game.query.filter_by(UUID=gid).first()
@@ -287,6 +288,7 @@ def set_game_user(gid):
     return jsonify(game.to_dict())
 
 # Delete Message
+# TODO can be deletet actually not uesed
 @bp.route('/game/<gid>/message', methods=['POST'])
 def delete_message(gid):
     game = Game.query.filter_by(UUID=gid).first()
@@ -421,8 +423,6 @@ def pull_up_dice_cup(gid, uid):
 # user finisch bevor 3 rolls
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
-    """
-    """
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
@@ -855,6 +855,7 @@ def transfer_chips(gid):
         game.status = Status.ROUNDFINISCH
         game.stack = 13
         game.halfcount = game.halfcount + 1
+        game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.001
         response = jsonify(Message='Player {} lose a half'.format(userB.name))
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
