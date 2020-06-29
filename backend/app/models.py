@@ -24,6 +24,7 @@ class BaseGameData():
     schockoutcount = db.Column(db.Integer)
     fallling_dice_count = db.Column(db.Integer)
     throw_dice_count = db.Column(db.Integer)
+    changs_of_fallling_dice = db.Column(db.Float)
 
     def __init__(self):
         """
@@ -33,6 +34,7 @@ class BaseGameData():
         self.fallling_dice_count = 0
         self.schockoutcount = 0
         self.throw_dice_count = 0
+        self.changs_of_fallling_dice = 0.005
 
 
 class Statistic(BaseGameData, db.Model):
@@ -44,13 +46,9 @@ class Game(BaseGameData, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UUID = db.Column(db.String(200), index=True, unique=True)
     users = db.relationship('User')
-
-    secondhalf = db.Column(db.Boolean(), default=False)
     message = db.Column(db.String(300))
     status = db.Column(db.Enum(Status))
     stack = db.Column(db.Integer)
-    changs_of_fallling_dice = db.Column(db.Float)
-
     move_user_id = db.Column(db.Integer)
     first_user_id = db.Column(db.Integer)
     admin_user_id = db.Column(db.Integer)
@@ -82,7 +80,7 @@ class Game(BaseGameData, db.Model):
         self.stack = 13
         self.status = Status.WAITING
         self.UUID = str(uuid.uuid1())
-        self.changs_of_fallling_dice = 0.005
+
         self.started = datetime.now()
         self.refreshed = datetime.now()
 
@@ -98,7 +96,6 @@ class User(db.Model):
     name = db.Column(db.String(200), index=True, unique=True)
     chips = db.Column(db.Integer)
     passive = db.Column(db.Boolean(), default=False)
-    # visible = db.Column(db.Boolean(), default=False)
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
     dice1 = db.Column(db.Integer)
     dice1_visible = db.Column(db.Boolean(), default=False)
@@ -134,7 +131,6 @@ class User(db.Model):
 
     def __init__(self):
         self.chips = 0
-        # self.visible = False
         self.dice1_visible = False
         self.dice2_visible = False
         self.dice3_visible = False
