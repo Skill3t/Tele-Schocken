@@ -27,12 +27,13 @@ def schedulerdeletegame():
         for user in old_game.users:
             db.session.delete(user)
         db.session.delete(old_game)
+        db.session.commit()
     db.session.commit()
 
 
 scheduler = BackgroundScheduler()
 # 3.600 seconds are 1 houer
-scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=3600)
+scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=5)
 
 scheduler.start()
 

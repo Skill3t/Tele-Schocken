@@ -67,8 +67,9 @@ def get_game(gid):
             {
                "Stack":10,
                "State":"String",
-               "First_Halfe":true,
+               "Game_Half_Count":0,
                "Move":"Userid",
+               "Message":"Hallo",
                "First":"Userid",
                "Admin":"Userid",
                "Users":[
@@ -77,14 +78,16 @@ def get_game(gid):
                      "Name":"Hans",
                      "Chips":2,
                      "passive":false,
-                     "visible":false
+                     "Halfcount":0,
+                     "Number_Dice":0,
                   },
                   {
                      "id":11,
                      "Name":"Hans",
                      "Chips":2,
                      "passive":false,
-                     "visible":true,
+                     "Halfcount":0,
+                     "Number_Dice":0,
                      "Dices":[
                         {
                            "Dice1":2
