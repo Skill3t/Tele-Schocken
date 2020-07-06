@@ -55,6 +55,12 @@ br {
   to {color: black;}
 }
 
+
+video {
+ width: 100%;
+ height: auto;
+}
+
 /* The element to apply the animation to */
 .message {
   color: black;
