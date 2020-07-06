@@ -25,7 +25,7 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 ## Graphics 👨‍🎨
 * Thx to Johannes for the .svg
 * Thx to [diskbraker8](https://github.com/diskbraker8) for the css dice
-* Thx to [tornadooma](https://www.twitch.tv/tornadooma) for the instruction video
+* Thx to [TornadoOma](https://www.twitch.tv/tornadooma) for the instruction video
 
 ## Doku 📝
 * make HTML
