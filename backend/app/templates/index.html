@@ -84,19 +84,37 @@
 
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay1" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay01.png') }}">
+        <picture>
+          <source type="image/webp" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay01_webp_big.webp') }}">
+          <source type="image/png" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay01.png') }}">
+          <source type="image/webp" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay01_webp_small.webp') }}">
+          <source type="image/png" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay01_png_small.png') }}">
+          <img alt="Gameplay1" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay01.png') }}">
+        </picture>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay2" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay03.png') }}">
+        <picture>
+          <source type="image/webp" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay03_webp_big.webp') }}">
+          <source type="image/png" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay03.png') }}">
+          <source type="image/webp" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay03_webp_small.webp') }}">
+          <source type="image/png" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay03_png_small.png') }}">
+          <img alt="Gameplay2" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay03.png') }}">
+        </picture>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="col-md-11 col-md-offset-1 example_img">
-        <img alt="Gameplay3" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay02.png') }}">
+        <picture>
+          <source type="image/webp" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay02_webp_big.webp') }}">
+          <source type="image/png" media="(min-width: 1281px)" srcset="{{ url_for('static',filename='image/Gameplay02.png') }}">
+          <source type="image/webp" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay02_webp_small.webp') }}">
+          <source type="image/png" media="(min-width: 374px) and (max-width: 1280px)" srcset="{{ url_for('static',filename='image/Gameplay02_png_small.png') }}">
+          <img alt="Gameplay3" title="Spielaufbau" style="width:100%; height:auto;" src="{{ url_for('static',filename='image/Gameplay02.png') }}">
+        </picture>
       </div>
     </div>
 
