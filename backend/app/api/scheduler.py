@@ -22,6 +22,7 @@ def schedulerdeletegame():
         stat.halfcount = old_game.halfcount
         stat.schockoutcount = old_game.schockoutcount
         stat.fallling_dice_count = old_game.fallling_dice_count
+        stat.changs_of_fallling_dice = old_game.changs_of_fallling_dice
         stat.throw_dice_count = old_game.throw_dice_count
         db.session.add(stat)
         for user in old_game.users:
