@@ -10,6 +10,7 @@ from datetime import datetime
 from jinja2 import utils
 
 from app.api.errors import bad_request
+from app.api.email import sendMial
 
 
 # testforpolling
@@ -169,6 +170,7 @@ def create_Game():
           }
     """
     seed(1)
+    sendMial('New Game Created')
     data = request.get_json() or {}
     response = jsonify()
     if 'name' not in data:
