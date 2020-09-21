@@ -3,9 +3,12 @@
 {% block content %}
 {{ super() }}
 
-<div class="row ">
-  <div class="col-xs-11 col-md-2 col-md-offset-1 col-xs-offset-1">
+<div class="row col-md-offset-1 col-xs-offset-1">
+  <div class="col-xs-10 col-md-2 ">
     <h2>Stapel</h2>
+  </div>
+  <div class="col-md-1 col-xs-offset-10 col-md-offset-8">
+      <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question"></i></a>
   </div>
   <div class="col-md-11 col-md-9 col-xs-offset-1">
     <h2 class="message" id="Message"></h2>
@@ -204,6 +207,68 @@
 
 
 <div class="row col-md-offset-1 col-md-6" style="height:150px;">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
+</div>
+<div class="row col-md-offset-1">
+<!-- The Modal -->
+  <div id="faqModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="faqclose" class="close">&times;</span>
+        <h2>Häufig Fragen</h2>
+      </div>
+      <div class="modal-body">
+        <button class="accordion">Wie würfel ich?</button>
+        <div class="panel">
+          <p>Mit einem einfachen Klick auf das Symbol Würfeln wird gewürfelt</p>
+          <p>Du findest das Symbol links oben</p>
+            <div class="col-md-11 col-md-offset-1 example_img">
+              <picture>
+                <img alt="FAQ Würfeln" style="width:10%; height:auto;" src="{{ url_for('static',filename='image/thowdice.png') }}">
+              </picture>
+            </div>
+        </div>
+        <button class="accordion">Wie decke ich die Würfel auf?</button>
+        <div class="panel">
+          <p>Mit einem einfachen Klick auf das Symbol Aufdecken wird aufgedeckt</p>
+          <p>Du findest das Symbol links oben neben dem Ende Button</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Aufdecken" style="width:10%; height:auto;" src="{{ url_for('static',filename='image/pullupdice.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Wie werden Chips/Deckel verteilt?</button>
+        <div class="panel">
+          <p>Nur dem Admin (derjenige der ein Spiel erstellt hat) steht diese Funktion zur Verfügung</p>
+          <p>Der Admin findet ganz unten einige zusätzliche Bedienelemente</p>
+          <p>Es muss die Anzahl der Chips gewählt werden und von welchem Spieler zu welchem Spieler die Chips verteilt werden sollen</p>
+          <p>Mit dem Button Verteilen wird die Auswahl ausgefürt und die neue Runde startet automatisch</p>
+          <p>Beim Schock aus muss die Anzahl nicht ausgewählt werden. Der unter von: ausgewählte Spieler erhält alle Chips und verliert die Runde</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Chips Verteilen" style="width:70%; height:auto;" src="{{ url_for('static',filename='image/changechips.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Weitere Fragen?</button>
+        <div class="panel">
+          <p>Schau dir gerne noch mal ganz in Ruhe das Erklärvideo an</p>
+          <p>hier werden alle Fragen beantwortet</p>
+          <div class="col-md-4 col-md-offset-1 example_img">
+            <video  controls>
+             <source src="{{ url_for('static',filename='video/540P_Mittel.mp4') }}" type="video/mp4" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/540P_Mittel.webm') }}" type="video/webm" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.mp4') }}" type="video/mp4">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.webm') }}" type="video/webm">
+            Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% block footer %}
@@ -212,6 +277,8 @@
 {% endblock %}
 {% block scripts %}
   {{ super() }}
+  <script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
+  </script>
 <script>
 
 
@@ -628,6 +695,7 @@
   }
 
   function startup(){
+    faq();
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');

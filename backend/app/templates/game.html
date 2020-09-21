@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 {{ super() }}
 <div id="joincontainer">
   <div class="row col-md-offset-1">
-    <div class="col-md-12">
+    <div class="col-md-10">
       <h2>Zum Beitreten Spielname angeben.</h2>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-3 col-md-offset-1" >
+
+  <div class="row col-md-offset-1">
+    <div class="col-md-3 " >
       <div class="input-group mb-6">
         <input id="Name" placeholder="Spielername" type="text" size="20" class="form-control" >
         <div class="input-group-btn">
@@ -17,13 +19,18 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
-<div class="row col-md-offset-1 col-md-11">
+<div class="row col-md-offset-1">
+  <div class="col-md-10">
     <h3 id="admin"></h3>
+  </div>
+  <div class="col-md-1">
+      <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question"></i></a>
+  </div>
 </div>
 <br>
-
 
 
 <div class="row">
@@ -93,7 +100,76 @@
 </div>
 
 <div class="row col-md-offset-1 col-md-6" style="height:90px;">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
+</div>
 
+
+<div class="row col-md-offset-1">
+<!-- The Modal -->
+  <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Modal Header</h2>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the Modal Body</p>
+        <p>Some other text...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row col-md-offset-1">
+<!-- The Modal -->
+  <div id="faqModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="faqclose" class="close">&times;</span>
+        <h2>Häufige Fragen</h2>
+      </div>
+      <div class="modal-body">
+        <button class="accordion">Wie starte ich ein Spiel?</button>
+        <div class="panel">
+          <p>Wenn die gewünschten Spieler in der Spielerliste aufgetaucht sind, einfach auf den Button Starten klicken.</p>
+          <p>Das Spiel startet dann automatisch für alle Mitspieler!</p>
+          <p>Nur der Admin (derjenige der ein Spiel erstellt hat) kann dieses auch starten</p>
+            <div class="col-md-11 col-md-offset-1 example_img">
+              <picture>
+                <img alt="FAQ Spiel Starten" style="width:80%; height:auto;" src="{{ url_for('static',filename='image/start_game.png') }}">
+              </picture>
+            </div>
+        </div>
+        <button class="accordion">Warum sehe ich keine Mitspieler?</button>
+        <div class="panel">
+          <p>Es werden nur die Mitspieler angezeigt die du eingeladen hast und die deiner Einladung gefolgt sind.</p>
+          <p>Sobald jemand deinen link geöffnet hat und beigetreten ist taucht dieser in der Spielerliste auf.</p>
+          <p>Kopiere den Link zur Einladung über den Button kopieren und verteile diesen per Mail oder Messanger deiner Wahl.</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Mitspieler Einladen" style="width:80%; height:auto;" src="{{ url_for('static',filename='image/ShareLink.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Weitere Fragen?</button>
+        <div class="panel">
+          <p>Schau dir gerne noch mal ganz in Ruhe das Erklärvideo an</p>
+          <p>hier werden alle Fragen beantwortet</p>
+          <div class="col-md-4 col-md-offset-1 example_img">
+            <video  controls>
+             <source src="{{ url_for('static',filename='video/540P_Mittel.mp4') }}" type="video/mp4" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/540P_Mittel.webm') }}" type="video/webm" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.mp4') }}" type="video/mp4">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.webm') }}" type="video/webm">
+            Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% block footer %}
@@ -103,6 +179,10 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+
+<script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
+</script>
+
 <script>
   // https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
   function coppy() {
@@ -115,9 +195,6 @@
 
   /* Copy the text inside the text field */
   document.execCommand("copy");
-
-  /* Alert the copied text */
-  //alert("Copied the text: " + copyText.value);
 }
 
   function joinGame(){
@@ -178,6 +255,8 @@
   }
 
   function startup(){
+
+    faq();
     var id = localStorage.getItem('id');
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
