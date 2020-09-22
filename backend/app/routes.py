@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for
 
 from app import app, db
-from app.forms import CreateGameFrom
+from app.forms import CreateGameFrom, FeedbackFrom
 from app.models import Game
+from app.api.email import sendFeedbackMail
 
 
 @app.route('/')
@@ -27,9 +28,14 @@ def game(gid):
     return render_template('game.html', title='Edit Profile', game=game)
 
 
-@app.route('/game/<gid>', methods=['GET'])
+@app.route('/game/<gid>', methods=['GET', 'POST'])
 def game_play(gid):
     game = Game.query.filter_by(UUID=gid).first()
-    if game is None:
-        return render_template('404.html')
-    return render_template('gameplay.html', title='Edit Profile', game=game)
+    form = FeedbackFrom()
+    if form.validate_on_submit():
+        browser = str(form.browser.data)
+        body = str(form.message.data)
+        email = str(form.mail.data)
+        sendFeedbackMail(browser=browser, body=body, email=email)
+        return redirect(url_for('game_play', gid=game.UUID))
+    return render_template('gameplay.html', title='Edit Profile', game=game, form=form)
