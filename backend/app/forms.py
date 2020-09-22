@@ -6,7 +6,6 @@ from wtforms.fields.html5 import EmailField
 BROWSER = (
         'Chrome',
         'Safari',
-        'Edge',
         'Firefox',
         'Edge',
         'Opera',
