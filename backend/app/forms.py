@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextField
-from wtforms.validators import DataRequired, Length, Optional, Email
-from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired, Length, Optional
 
 BROWSER = (
         'Chrome',
@@ -21,6 +20,6 @@ class CreateGameFrom(FlaskForm):
 
 
 class FeedbackFrom(FlaskForm):
-    message = TextField('Nachricht', validators=[Length(min=0, max=450), DataRequired()])
+    message = TextField('Nachricht', validators=[Length(min=0, max=10000), DataRequired()])
     browser = SelectField(label='Browser', choices=[(browser, browser) for browser in BROWSER], validators=[DataRequired()], default='Chrome')
-    mail = EmailField('E-Mai Adresse für Rückfragen (Optional)', validators=[Optional(), Email()])
+    mail = StringField('E-Mai Adresse für Rückfragen (Optional)', validators=[Optional()])

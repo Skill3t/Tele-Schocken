@@ -1,6 +1,7 @@
 from app import app
 from app import mail
 from flask_mail import Message
+from flask import render_template
 
 
 def sendMail(body):
@@ -15,5 +16,6 @@ def sendFeedbackMail(browser, body, email):
     with app.app_context():
         msg = Message('Feedback Teleschocken', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
         msg.body = '{} /n {} {}'.format(browser, body, email)
+        msg.html = render_template('mail.html', message=body, email=email, browser=browser)
         mail.send(msg)
     return
