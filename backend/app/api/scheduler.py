@@ -13,7 +13,6 @@ def schedulerdeletegame():
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
     old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
-    db.session.begin()
     lock = Semaphore()
     with lock:
         # critical section
