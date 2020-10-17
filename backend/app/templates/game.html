@@ -277,6 +277,10 @@
 
       setdamin.innerHTML = 'Du bist Admin. Bitte starten wenn alle Spieler in der Liste stehen.'
     }else{
+      var button = document.getElementById('startgame_id');
+      button.style.display = "none";
+      var hand = document.getElementById('inline_button_text');
+      hand.style.display = "none";
       setdamin.innerHTML = 'Bitte warte bis der Admin das Spiel startet.'
     }
     window.setInterval(function(){
