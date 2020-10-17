@@ -60,22 +60,9 @@
         </tbody>
     </table>
   </div>
-  <div class="col-md-7 col-md-offset-1">
-    <div class="row">
-      <div class="col-md-4">
-        <h3>Erläuterung:</h3>
-      </div>
-    </div>
-    {% include "rules.html" %}
-  </div>
 </div>
 
-<div class="row col-md-offset-1" id="admin_interface">
-  <div class="col-md-9">
-    <h3>Spiel starten (<b>Es kann kein Spieler mehr hinzu kommen</b>)</h3>
-    <button class="btn btn-primary" id='startgame_id'onclick="startGame()" disabled>Starten</button>
-  </div>
-</div>
+
 <div class="row col-md-offset-1 col-md-10">
     <h3>Verteile diesen Link an alle Mitspieler:</h3>
 </div>
@@ -89,7 +76,20 @@
     </div>
   </div>
 </div>
+<div class="row col-md-offset-1" id="admin_interface">
+  <div class="col-md-9">
+    <h3>Spiel starten (<b>Es kann kein Spieler mehr hinzu kommen</b>)</h3>
+  </div>
+</div>
+<div class="row col-md-offset-1" id="admin_interface">
+  <div class="col-md-1" >
+    <button class="btn btn-primary" id='startgame_id'onclick="startGame()" disabled>Starten</button>
+    <div id="inline_button_text" >
+      <h3>👈</h3>
+    </div>
+  </div>
 
+</div>
 
 
 <div class="row col-md-offset-1 col-md-10" >
@@ -272,6 +272,9 @@
         joincontainer.style.display = "none";
       var button = document.getElementById('startgame_id');
       button.disabled = false;
+      var hand = document.getElementById('startgame_id');
+      hand.style.webkitAnimationName = 'run'; // you had a trailing space here which does NOT get trimmed
+    
       setdamin.innerHTML = 'Du bist Admin. Bitte starten wenn alle Spieler in der Liste stehen.'
     }else{
       setdamin.innerHTML = 'Bitte warte bis der Admin das Spiel startet.'

@@ -155,3 +155,19 @@ input[type=checkbox]
 .s {
   width: 100px;
 }
+
+/* Text showing behind buttons in css */
+
+#inline_button_text{
+display: inline-block;
+position: absolute;
+top: -50%;
+left: 100%;
+-webkit-animation:linear infinite alternate;
+-webkit-animation-duration: 0.7s;
+}
+@-webkit-keyframes run {
+    0% { left: 100px;}
+    50%{ left : 110px;}
+    100%{ left: 100px;}
+}
