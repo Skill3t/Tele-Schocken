@@ -14,7 +14,8 @@ def schedulerdeletegame():
     one_day = todayDate + delta
     old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
     lock = Semaphore()
-    with lock:
+    try:
+        lock.acquire()
         # critical section
         for old_game in old_games:
             # print('old_game.refreshed:{}'.format(old_game.refreshed))
@@ -32,6 +33,11 @@ def schedulerdeletegame():
                 db.session.delete(user)
             db.session.delete(old_game)
             db.session.commit()
+        lock.release()
+    except:
+        print("An exception occurred")
+    finally:
+        lock.release()
 
 
 scheduler = BackgroundScheduler()
