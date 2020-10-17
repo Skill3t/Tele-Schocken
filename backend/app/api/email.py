@@ -8,24 +8,24 @@ from threading import Semaphore
 def sendMail(body):
     lock = Semaphore()
     try:
-        lock.acquire()
+        # lock.acquire()
         # critical section
         with app.app_context():
             msg = Message('New Teleschocken Game', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
             msg.body = body
             mail.send(msg)
-        lock.release()
+        # lock.release()
     except:
         print("An exception occurred")
     finally:
-        lock.release()
+        # lock.release()
         return
 
 
 def sendFeedbackMail(browser, body, email):
     lock = Semaphore()
     try:
-        lock.acquire()
+        # lock.acquire()
         # critical section
         with app.app_context():
             msg = Message('Feedback Teleschocken', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
@@ -35,5 +35,5 @@ def sendFeedbackMail(browser, body, email):
     except:
         print("An exception occurred")
     finally:
-        lock.release()
+        # lock.release()
         return
