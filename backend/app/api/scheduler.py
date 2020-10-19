@@ -42,7 +42,7 @@ def schedulerdeletegame():
 
 scheduler = BackgroundScheduler()
 # 3.600 seconds are 1 houer
-scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=10)
+scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=3.600)
 
 scheduler.start()
 
