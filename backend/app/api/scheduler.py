@@ -1,7 +1,7 @@
 import atexit
 from app import app, db
 from threading import Semaphore
-
+import sys
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.models import Game, Statistic
 from datetime import datetime
@@ -12,13 +12,12 @@ def schedulerdeletegame():
     todayDate = datetime.now()
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
-    old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
-    # lock = Semaphore()
+    lock = Semaphore()
     try:
-        # lock.acquire()
+        lock.acquire()
         # critical section
+        old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
         for old_game in old_games:
-            # print('old_game.refreshed:{}'.format(old_game.refreshed))
             stat = Statistic()
             stat.usercount = len(old_game.users)
             stat.started = old_game.started
@@ -33,16 +32,17 @@ def schedulerdeletegame():
                 db.session.delete(user)
             db.session.delete(old_game)
             db.session.commit()
-        # lock.release()
+        lock.release()
     except:
-        print("An exception occurred")
-    # finally:
-        # lock.release()
+        print("Unexpected error:{}".format(sys.exc_info()[0]))
+    finally:
+        lock.release()
+        db.session.commit()
 
 
 scheduler = BackgroundScheduler()
 # 3.600 seconds are 1 houer
-scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=3.600)
+scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=10)
 
 scheduler.start()
 

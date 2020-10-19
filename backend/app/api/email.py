@@ -6,7 +6,7 @@ from threading import Semaphore
 
 
 def sendMail(body):
-    lock = Semaphore()
+    # lock = Semaphore()
     try:
         # lock.acquire()
         # critical section
@@ -23,7 +23,7 @@ def sendMail(body):
 
 
 def sendFeedbackMail(browser, body, email):
-    lock = Semaphore()
+    # lock = Semaphore()
     try:
         # lock.acquire()
         # critical section
