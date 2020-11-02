@@ -202,6 +202,23 @@
       </div>
     </div>
   </div>
+  <div class="row ">
+    <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
+      <h2 id="admin_player">Spieler Verwalten</h2>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-xs-2 col-sm-2 col-md-1 col-md-offset-1 col-xs-offset-1">
+      <label for="delete_player">Spieler:</label>
+      <select id="delete_player" name="count">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="col-xs-1 col-sm-2 col-md-1">
+      <button class="btn btn-primary" id='delete_player_id' onclick="delete_player()">Spieler entfernen</button>
+    </div>
+  </div>
+
 </div>
 
 <div class="row ">
@@ -406,22 +423,29 @@
     xhttp.send(JSON.stringify({dice1:dice1_cb, dice2:dice2_cb, dice3:dice3_cb}));
   }
 
-  function delete_message(){
-    var game = document.getElementById('UUID');
-    var gameid = game.innerHTML;
-    gameid = gameid.replace(/['"]+/g, '');
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/message");
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 201){
-          alert('Fehler');
+  function delete_player(){
+    if (confirm('Bist du sicher das du den Spieler entfernen möchtest. Dies kann nicht rückgängig gemacht werden')) {
+      var game = document.getElementById('UUID');
+      var game_id = game.innerHTML;
+      game_id = game_id.replace(/['"]+/g, '');
+      var delete_player = document.getElementById('delete_player');
+      var user_id = delete_player.options[delete_player.selectedIndex].value;
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("DELETE", "/api/game/"+game_id+"/user/"+user_id);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          var res=JSON.parse(xhttp.responseText);
+          if (xhttp.status != 200){
+            alert(''+res.Message);
+          }else{
+            window.location.reload();
+          }
         }
       }
+      xhttp.send(JSON.stringify({}));
     }
-    xhttp.send(JSON.stringify({}));
   }
 
   function dicehelper(eyes){
@@ -565,9 +589,7 @@
       }
     }
   }
-  function delete_game(){
-    alert('Not implementet jet');
-  }
+
   function finish(){
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
@@ -581,7 +603,6 @@
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status != 200){
           alert(''+res.Message);
-
         }
       }
     }
@@ -705,6 +726,7 @@
     var transfer_target = document.getElementById('transfer_target');
     var target = transfer_target.options[transfer_target.selectedIndex].value;
 
+
     xhttp.open("POST", "/api/game/"+gameid+"/user/chips");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
@@ -753,8 +775,8 @@
         var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 200){
           var selecttionsource = document.getElementById('transfer_source_user');
-
           var selecttiontarget = document.getElementById('transfer_target');
+          var delete_player = document.getElementById('delete_player')
           for (num in res.User) {
             var juser = res.User[num];
             var opt = document.createElement('option');
@@ -765,6 +787,10 @@
             opt2.value = juser['Id'];
             opt2.innerHTML = juser['Name'];
             selecttiontarget.appendChild(opt2);
+            var opt3 = document.createElement('option');
+            opt3.value = juser['Id'];
+            opt3.innerHTML = juser['Name'];
+            delete_player.appendChild(opt3);
           }
         }
       }

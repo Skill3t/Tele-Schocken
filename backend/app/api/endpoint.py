@@ -877,6 +877,30 @@ def transfer_chips(gid):
     response.status_code = 200
     return response
 
+# XHR Delete User from Game
+@bp.route('/game/<gid>/user/<uid>', methods=['DELETE'])
+def delete_player(gid, uid):
+    game = Game.query.filter_by(UUID=gid).first()
+    user = User.query.get_or_404(uid)
+    if game is None:
+        response = jsonify(Message='Game not found')
+        response.status_code = 404
+        return response
+    if user.game_id != game.id:
+        response = jsonify(Message='Player not in Game')
+        response.status_code = 404
+        return response
+
+    if game.admin_user_id == user.id:
+        response = jsonify(Message='Admin can not be removed!')
+        response.status_code = 404
+        return response
+    db.session.delete(user)
+    db.session.commit()
+    response = jsonify(Message='suscess')
+    response.status_code = 200
+    return response
+
 
 def decision(probability) -> bool:
     """
