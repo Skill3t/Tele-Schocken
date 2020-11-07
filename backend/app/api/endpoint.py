@@ -437,11 +437,13 @@ def finish_throwing(gid, uid):
         response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
-    if user.dice1 is None and user.dice2 is None and user.dice3 is None:
+    # no chips on the stack but user has chips so you need to dice onece
+    if game.stack == 0 and user.chips != 0 and user.number_dice == 0:
         response = jsonify(Message='Dice at least once')
         response.status_code = 400
         return response
-    if user.dice1 == 0 and user.dice2 == 0 and user.dice3 == 0:
+    # chips on the stack need to dice onece
+    if game.stack != 0 and user.number_dice == 0:
         response = jsonify(Message='Dice at least once')
         response.status_code = 400
         return response
