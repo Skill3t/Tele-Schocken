@@ -16,13 +16,11 @@ def schedulerdeletegame():
     todayDate = datetime.now()
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
-    print('vor dem lock')
     lock.acquire()
     try:
         # critical section
         old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
         if len(old_games) > 0:
-            print('schedulerdeletegame should be one time ')
             for old_game in old_games:
                 stat = Statistic()
                 stat.usercount = len(old_game.users)
