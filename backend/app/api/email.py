@@ -2,30 +2,31 @@ from app import app
 from app import mail
 from flask_mail import Message
 from flask import render_template
-from threading import Semaphore
+from multiprocessing import Lock
+
+
+lock = Lock()
+lock2 = Lock()
 
 
 def sendMail(body):
-    # lock = Semaphore()
     try:
-        # lock.acquire()
+        lock.acquire()
         # critical section
         with app.app_context():
             msg = Message('New Teleschocken Game', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
             msg.body = body
             mail.send(msg)
-        # lock.release()
     except:
         print("An exception occurred")
     finally:
-        # lock.release()
+        lock.release()
         return
 
 
 def sendFeedbackMail(browser, body, email):
-    # lock = Semaphore()
     try:
-        # lock.acquire()
+        lock2.acquire()
         # critical section
         with app.app_context():
             msg = Message('Feedback Teleschocken', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
@@ -35,5 +36,5 @@ def sendFeedbackMail(browser, body, email):
     except:
         print("An exception occurred")
     finally:
-        # lock.release()
+        lock2.release()
         return
