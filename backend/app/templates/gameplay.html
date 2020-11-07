@@ -732,7 +732,8 @@
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 200){
-          alert('Fehler: '+xhttp.status);
+          var res=JSON.parse(xhttp.responseText);
+          alert(''+res.Message);
         }else{
           var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);

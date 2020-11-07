@@ -437,6 +437,14 @@ def finish_throwing(gid, uid):
         response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
+    if user.dice1 is None and user.dice2 is None and user.dice3 is None:
+        response = jsonify(Message='Dice at least once')
+        response.status_code = 400
+        return response
+    if user.dice1 == 0 and user.dice2 == 0 and user.dice3 == 0:
+        response = jsonify(Message='Dice at least once')
+        response.status_code = 400
+        return response
     if user.dice1 is None or user.dice2 is None or user.dice3 is None:
         response = jsonify(Message='Dice again after turning 6er')
         response.status_code = 400
@@ -895,6 +903,21 @@ def delete_player(gid, uid):
         response = jsonify(Message='Admin can not be removed!')
         response.status_code = 404
         return response
+    if user.id == game.first_user_id:
+        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+        if len(game.users) > aktualuserid[0]+1:
+            game.first_user_id = game.users[aktualuserid[0]+1].id
+        else:
+            game.first_user_id = game.users[0].id
+    if user.id == game.move_user_id:
+        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+        if len(game.users) > aktualuserid[0]+1:
+            game.move_user_id = game.users[aktualuserid[0]+1].id
+        else:
+            game.move_user_id = game.users[0].id
+    game.message = "Spieler: {} vom Admin entfernt".format(user.name)
+    db.session.add(game)
+    db.session.commit()
     db.session.delete(user)
     db.session.commit()
     response = jsonify(Message='suscess')
