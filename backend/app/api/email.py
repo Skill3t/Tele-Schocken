@@ -10,16 +10,19 @@ lock2 = Lock()
 
 
 def sendMail(body):
+    send = False
     try:
         lock.acquire()
-        # critical section
-        with app.app_context():
-            msg = Message('New Teleschocken Game', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
-            msg.body = body
-            mail.send(msg)
+        if not send:
+            # critical section
+            with app.app_context():
+                msg = Message('New Teleschocken Game', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
+                msg.body = body
+                mail.send(msg)
     except:
         print("An exception occurred")
     finally:
+        send = True
         lock.release()
         return
 
