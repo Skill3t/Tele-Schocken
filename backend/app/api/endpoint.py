@@ -292,21 +292,6 @@ def set_game_user(gid):
     db.session.commit()
     return jsonify(game.to_dict())
 
-# Delete Message
-# TODO can be deletet actually not uesed
-@bp.route('/game/<gid>/message', methods=['POST'])
-def delete_message(gid):
-    game = Game.query.filter_by(UUID=gid).first()
-    if game is None:
-        response = jsonify(Message='Game not found')
-        response.status_code = 404
-        return response
-    game.message = None
-    db.session.add(game)
-    db.session.commit()
-    response = jsonify(Message='suscess')
-    response.status_code = 201
-    return response
 
 # Start the Game
 @bp.route('/game/<gid>/start', methods=['POST'])
