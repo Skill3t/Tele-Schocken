@@ -1,25 +1,17 @@
-import atexit
 from app import app, db
-# from threading import Semaphore
 import sys
-from apscheduler.schedulers.background import BackgroundScheduler
 from app.models import Game, Statistic
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from multiprocessing import Lock
 
 
-lock = Lock()
-
-
-def schedulerdeletegame():
+@app.cli.command("create-statistics")
+def statistic():
     todayDate = datetime.now()
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
-    lock.acquire()
     try:
-        # critical section
-        old_games = Game.query.filter(Game.refreshed <= one_day).all() # noqa
+        old_games = db.session.query(Game).filter(Game.refreshed <= one_day).with_for_update().all()
         if len(old_games) > 0:
             for old_game in old_games:
                 stat = Statistic()
@@ -40,14 +32,3 @@ def schedulerdeletegame():
         print("Unexpected error:{}".format(sys.exc_info()[0]))
     finally:
         db.session.commit()
-        lock.release()
-
-
-scheduler = BackgroundScheduler()
-# 3.600 seconds are 1 houer
-scheduler.add_job(func=schedulerdeletegame, trigger="interval", seconds=3600)
-
-scheduler.start()
-
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
