@@ -204,18 +204,29 @@
   </div>
   <div class="row ">
     <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
-      <h2 id="admin_player">Spieler verwalten</h2>
+      <h2 id="admin_player">Spieler verwalten (Beta)</h2>
     </div>
   </div>
   <div class="row ">
-    <div class="col-xs-2 col-sm-2 col-md-1 col-md-offset-1 col-xs-offset-1">
+    <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-1 col-xs-offset-1">
       <label for="delete_player">Spieler:</label>
       <select id="delete_player" name="count">
         <option value=""></option>
       </select>
-    </div>
-    <div class="col-xs-1 col-sm-2 col-md-1">
       <button class="btn btn-primary" id='delete_player_id' onclick="delete_player()">Spieler entfernen</button>
+    </div>
+
+    <div class="col-xs-6 col-sm-4 col-md-3">
+      <label for="choose_admin">Neuen Admin Wählen:</label>
+      <select id="choose_admin" name="count">
+        <option value=""></option>
+      </select>
+      <button class="btn btn-primary" id='choose_admin_id' onclick="choose_admin()">Admin wählen</button>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-1">
+      <label for="back_to_waiting">Spieler hinzufügen?</label>
+
+      <button class="btn btn-primary" id='back_to_waiting' onclick="back_to_waiting()">zurück zum Warteraum</button>
     </div>
   </div>
 
@@ -454,6 +465,56 @@
             alert(''+res.Message);
           }else{
             window.location.reload();
+          }
+        }
+      }
+      xhttp.send(JSON.stringify({}));
+    }
+  }
+
+  function choose_admin(){
+    if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neune Admin rückgängig gemacht werden')) {
+      var game = document.getElementById('UUID');
+      var game_id = game.innerHTML;
+      game_id = game_id.replace(/['"]+/g, '');
+      var choose_admin = document.getElementById('choose_admin');
+      var new_admin_id = choose_admin.options[choose_admin.selectedIndex].value;
+      var admin_el = document.getElementById('admin_id');
+      var old_admin_id = admin_el.innerHTML;
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/api/game/"+game_id+"/user/"+old_admin_id);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          var res=JSON.parse(xhttp.responseText);
+          if (xhttp.status != 200){
+            alert(''+res.Message);
+          }else{
+            window.location.reload();
+          }
+        }
+      }
+      xhttp.send(JSON.stringify({new_admin_id:new_admin_id}));
+    }
+  }
+
+  function back_to_waiting(){
+    if (confirm('Bist du sicher das du zurück zum Warteraum willst um einen Spieler hinzuzufügen?')) {
+      var game = document.getElementById('UUID');
+      var game_id = game.innerHTML;
+      game_id = game_id.replace(/['"]+/g, '');
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/api/game/"+game_id+"/back");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == XMLHttpRequest.DONE) {
+          var res=JSON.parse(xhttp.responseText);
+          if (xhttp.status != 200){
+            alert(''+res.Message);
+          }else{
+            alert(res.Message + ' Alle Speiler geraten zurück zum Warteraum');
           }
         }
       }
@@ -791,6 +852,7 @@
           var selecttionsource = document.getElementById('transfer_source_user');
           var selecttiontarget = document.getElementById('transfer_target');
           var delete_player = document.getElementById('delete_player')
+          var choose_admin = document.getElementById('choose_admin')
           for (num in res.User) {
             var juser = res.User[num];
             var opt = document.createElement('option');
@@ -805,6 +867,10 @@
             opt3.value = juser['Id'];
             opt3.innerHTML = juser['Name'];
             delete_player.appendChild(opt3);
+            var opt4 = document.createElement('option');
+            opt4.value = juser['Id'];
+            opt4.innerHTML = juser['Name'];
+            choose_admin.appendChild(opt4);
           }
         }
       }
@@ -829,6 +895,13 @@
             var gamehalfs = res['Game_Half_Count'];
             var admininfo = document.getElementById('admin_inforamtion');
             admininfo.innerHTML = 'Admin gespiele Hälften: '+gamehalfs;
+            var game_state = res['State'];
+            if (game_state == 'waiting'){
+              // Simulate an HTTP redirect:
+              var getUrl = window.location;
+              var baseUrl = getUrl .protocol + "//" + getUrl.host;
+              window.location.replace(baseUrl+'/game_waiting/'+gameid);
+            }
             //set stack Chips
             var stackchips = document.getElementById('StackChips_id');
             stackchips.innerHTML = 'Chips: '+ res.Stack
