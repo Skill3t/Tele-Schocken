@@ -10,6 +10,7 @@ def statistic():
     todayDate = datetime.now()
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
+    print('Schedular runs')
     try:
         old_games = db.session.query(Game).filter(Game.refreshed <= one_day).with_for_update().all()
         if len(old_games) > 0:
