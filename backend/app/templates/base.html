@@ -27,9 +27,23 @@
 
 {% block scripts %}
 <script type=text/javascript src="{{
-  url_for('static', filename='jquery-1.9.1.min.js') }}"></script>
+  url_for('static', filename='jquery-1.9.1.min.js') }}">
+</script>
 <script type=text/javascript src="{{
-  url_for('static', filename='bootstrap.min.js') }}"></script>
+  url_for('static', filename='bootstrap.min.js') }}">
+</script>
+<script type=text/javascript src="{{url_for('static', filename='scripts/donate.js') }}">
+</script>
+
+<script>
+  function startup(){
+    donate();
+  }
+  startup();
+</script>
+
+
+
 {% endblock %}
 
 {% block footer %}
@@ -40,10 +54,9 @@
       <hr>
     </div>
   </div>
-  <div class="row col-md-offset-1 col-xs-offset-1">
-    <div class="col-xs-2 col-md-3">
-      <p>Github: <a target="_blank" href="https://github.com/Skill3t/Tele-Schocken">
-      Tele-Schocken</a></p>
+  <div class="row col-md-offset-1">
+    <div class="col-xs-3 col-md-3">
+        <a id="donateBtn" href="#">Gib dem Entwickler ein Bier aus 🍺</a>
     </div>
     <div class="col-xs-3 col-md-3">
       <a target="_blank" href="{{ url_for('static',filename='html/impressum.html') }}"">
@@ -63,6 +76,45 @@
       </p>
     </div>
   </div>
+  <div class="row col-md-offset-1 col-md-6" style="height:90px;">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
+  </div>
+  <div class="row col-md-offset-1">
+  <!-- The Modal -->
+    <div id="donateModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span id="donateclose" class="close">&times;</span>
+          <h2>Du willst dem Entwickler ein Bier ausgeben? 🍻</h2>
+          <p>Wenn dir Tele-Schocken gefällt und du viele schöne Stunden damit verbracht hast würde ich mich über eine Spende sehr freuen.</p>
+          <p>Es sind dutzende Stunden in die Entwicklung geflossen und es fallen laufende Serverkosten an.</p>
+          <p>Tele-Schocken ist für mich ein Hobby Projekt. Ich selber mag keine Werbung und will auch keine bunt blinkende Werbung schalten.</p>
+          <p>Ich freue mich wirklich riesig über jeden noch so kleinen Betrag.</p>
+        </div>
+        <div class="modal-body">
+          <div style="height:20px;" class="row col-md-offset-1">
+          </div>
+          <div style="height:40px;" class="row col-md-offset-1">
+            <a target="_blank" href="https://paypal.me/Skill3t/1,3">Ein Kölsch 1,30€ 🍺 (paypal)</a>
+          </div>
+          <div style="height:40px;" class="row col-md-offset-1">
+            <a target="_blank" href="https://paypal.me/Skill3t/4">Ein Weizen 4€ <h3 style="display:inline;">🍺</h3> (paypal)</a>
+          </div>
+          <div style="height:50px;" class="row col-md-offset-1">
+            <a target="_blank" href="https://paypal.me/Skill3t/9">Eine Maß 9€ <h1 style="display:inline;">🍺</h1> (paypal)</a>
+          </div>
+          <div style="height:60px;" class="row col-md-offset-1">
+            <a target="_blank" href="https://paypal.me/Skill3t/">Beliebiger Betrag (paypal)</a>
+          </div>
+          <div style="height:20px;" class="row col-md-offset-1">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </footer>
 
 
