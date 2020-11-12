@@ -4,6 +4,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
+# Will be externely called via cronjob
 @app.cli.command("create-statistics")
 def statistic():
     todayDate = datetime.now()
