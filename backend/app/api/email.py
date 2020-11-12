@@ -11,7 +11,7 @@ from multiprocessing import Lock
 
 lock2 = Lock()
 
-
+# Will be externely called via cronjob
 @app.cli.command("send_new_game_mail")
 def sendMail():
     try:
@@ -23,6 +23,7 @@ def sendMail():
                     msg.body = "New Game Created"
                     mail.send(msg)
                 game.is_mail_send = True
+                print('send_new_game_mail runs')
                 db.session.add(game)
                 db.session.commit()
     finally:
