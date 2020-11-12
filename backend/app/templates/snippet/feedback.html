@@ -1,0 +1,27 @@
+<div class="row col-md-offset-1">
+<!-- The Modal -->
+  <div id="feedbackModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="feedbackclose" class="close">&times;</span>
+        <h2>Anregungen oder Problme?</h2>
+      </div>
+      <div class="modal-body">
+        <p>Wenn es Probleme gibt, bitte immer den Browser mit angeben das hilft mir enorm das Problem nachzuvollziehen</p>
+        <p>Wenn dir das Spiel gefällt oder du Verbesserungen hast kannst du mir gerne schreiben</p>
+        <p>Die E-Mail Adresse ist optional ich kontaktiere dich nur wenn ich Rückfragen habe</p>
+        <form class="form" method="POST" action="{{ url_for('game_play', gid=game.UUID) }}">
+          {{ form.csrf_token }}
+          {{ wtf.form_field(form.browser) }}
+          {{ wtf.form_field(form.message) }}
+          {{ wtf.form_field(form.mail) }}
+          {% for error in form.browser.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+          <input class="btn btn-primary" type="submit" value="Senden">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

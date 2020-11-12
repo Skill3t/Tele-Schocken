@@ -19,8 +19,6 @@ def sendMail(body):
                 msg = Message('New Teleschocken Game', sender='lars@tele-schocken.de', recipients=['lars@tele-schocken.de'])
                 msg.body = body
                 mail.send(msg)
-    except:
-        print("An exception occurred")
     finally:
         send = True
         lock.release()
@@ -36,8 +34,6 @@ def sendFeedbackMail(browser, body, email):
             msg.body = '{} /n {} {}'.format(browser, body, email)
             msg.html = render_template('mail.html', message=body, email=email, browser=browser)
             mail.send(msg)
-    except:
-        print("An exception occurred")
     finally:
         lock2.release()
         return

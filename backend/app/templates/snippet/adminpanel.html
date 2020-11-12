@@ -1,0 +1,65 @@
+<div id="admin_interface">
+  <hr>
+  <div class="row ">
+    <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
+      <h2 id="admin_inforamtion">Admin</h2>
+    </div>
+  </div>
+  <div class="container justify-content-md-center justify-content-sx-center">
+    <div class="row">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-1 col-xs-offset-1">
+        <label for="stack_count_id">Anzahl:</label>
+        <input type="number" id="stack_count_id" name="stack_count_id"
+           min="0" max="13" size="2">
+      </div>
+      <div class="col-xs-5 col-sm-3 col-md-3">
+        <label for="transfer_source">Von:</label>
+        <select id="transfer_source" name="count">
+          <optgroup label="">
+            <option value="stack">Stapel</option>
+            <option value="schockaus">Schock aus</option>
+          </optgroup>
+          <optgroup id="transfer_source_user" label="Spieler">
+          </optgroup>
+        </select>
+      </div>
+      <div class="col-xs-4 col-sm-2 col-md-2">
+        <label for="transfer_target">An:</label>
+        <select id="transfer_target" name="count">
+          <option value=""></option>
+        </select>
+      </div>
+      <div class="col-xs-1 col-sm-2 col-md-1">
+        <button class="btn btn-primary" id='transfere_chips_id' onclick="transfer_chips()">Verteilen</button>
+      </div>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
+      <h2 id="admin_player">Spieler verwalten (Beta)</h2>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-xs-4 col-sm-4 col-md-2 col-md-offset-1 col-xs-offset-1">
+      <label for="delete_player">Spieler:</label>
+      <select id="delete_player" name="count">
+        <option value=""></option>
+      </select>
+      <button class="btn btn-primary" id='delete_player_id' onclick="delete_player()">Spieler entfernen</button>
+    </div>
+
+    <div class="col-xs-6 col-sm-4 col-md-3">
+      <label for="choose_admin">Neuen Admin wählen:</label>
+      <select id="choose_admin" name="count">
+        <option value=""></option>
+      </select>
+      <button class="btn btn-primary" id='choose_admin_id' onclick="choose_admin()">Admin wählen</button>
+    </div>
+    <div class="clearfix visible-xs-block visible-sm-block"></div>
+    <div class="col-xs-6 col-sm-4 col-md-1 col-xs-offset-1">
+      <label for="back_to_waiting">Spieler hinzufügen?</label>
+
+      <button class="btn btn-primary" id='back_to_waiting' onclick="back_to_waiting()">zurück zum Warteraum</button>
+    </div>
+  </div>
+</div>

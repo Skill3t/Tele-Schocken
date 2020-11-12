@@ -1,0 +1,78 @@
+<div class="row col-md-offset-1">
+<!-- The Modal -->
+  <div id="faqModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="faqclose" class="close">&times;</span>
+        <h2>Häufig Fragen</h2>
+      </div>
+      <div class="modal-body">
+        <button class="accordion">Wie würfel ich?</button>
+        <div class="panel">
+          <p>Mit einem einfachen Klick auf das Symbol Würfeln wird gewürfelt</p>
+          <p>Du findest das Symbol links oben</p>
+            <div class="col-md-11 col-md-offset-1 example_img">
+              <picture>
+                <img alt="FAQ Würfeln" style="width:10%; height:auto;" src="{{ url_for('static',filename='image/thowdice.png') }}">
+              </picture>
+            </div>
+        </div>
+        <button class="accordion">Wie decke ich die Würfel auf?</button>
+        <div class="panel">
+          <p>Mit einem einfachen Klick auf das Symbol Aufdecken wird aufgedeckt</p>
+          <p>Du findest das Symbol links oben neben dem Ende Button</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Aufdecken" style="width:10%; height:auto;" src="{{ url_for('static',filename='image/pullupdice.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Wie werden Chips/Deckel verteilt?</button>
+        <div class="panel">
+          <p>Nur dem Admin (derjenige der ein Spiel erstellt hat) steht diese Funktion zur Verfügung</p>
+          <p>Der Admin findet ganz unten einige zusätzliche Bedienelemente</p>
+          <p>Es muss die Anzahl der Chips gewählt werden und von welchem Spieler zu welchem Spieler die Chips verteilt werden sollen</p>
+          <p>Mit dem Button Verteilen wird die Auswahl ausgefürt und die neue Runde startet automatisch</p>
+          <p>Beim Schock aus muss die Anzahl nicht ausgewählt werden. Der unter von: ausgewählte Spieler erhält alle Chips und verliert die Runde</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Chips Verteilen" style="width:70%; height:auto;" src="{{ url_for('static',filename='image/changechips.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Kann ich einen Spieler entfernen?</button>
+        <div class="panel">
+          <p>Nur dem Admin (derjenige der ein Spiel erstellt hat) steht diese Funktion zur Verfügung</p>
+          <p>Der Admin findet ganz unten einige zusätzliche Bedienelemente unter der Rubrick Spieler verwalten</p>
+          <p>Erst muss über das Auswahlfeld der Spieler gewählt werden, der entfernt werden soll.</p>
+          <p>Mit dem Button "Spieler entfernen" wird der ausgewählte Spieler aus dem Spiel entfernt</p>
+          <p>Der Admin kann nicht entfernt werden. Es muss erst der Admin gewchselt werden</p>
+          <div class="col-md-11 col-md-offset-1 example_img">
+            <picture>
+              <img alt="FAQ Spieler löschen" style="width:20%; height:auto;" src="{{ url_for('static',filename='image/delete_player.png') }}">
+            </picture>
+          </div>
+        </div>
+        <button class="accordion">Erläuterungen und Regeln?</button>
+        <div class="panel">
+          {% include "snippet/rules.html" %}
+        </div>
+        <button class="accordion">Weitere Fragen?</button>
+        <div class="panel">
+          <p>Schau dir gerne noch mal ganz in Ruhe das Erklärvideo an</p>
+          <p>hier werden alle Fragen beantwortet</p>
+          <div class="col-md-4 col-md-offset-1 example_img">
+            <video  controls>
+             <source src="{{ url_for('static',filename='video/540P_Mittel.mp4') }}" type="video/mp4" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/540P_Mittel.webm') }}" type="video/webm" media="all and (max-width: 450px)">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.mp4') }}" type="video/mp4">
+             <source src="{{ url_for('static',filename='video/1080P_Hoch.webm') }}" type="video/webm">
+            Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

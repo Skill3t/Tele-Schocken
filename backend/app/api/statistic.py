@@ -1,5 +1,4 @@
 from app import app, db
-import sys
 from app.models import Game, Statistic
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -29,7 +28,5 @@ def statistic():
                     db.session.delete(user)
                 db.session.delete(old_game)
                 db.session.commit()
-    except:
-        print("Unexpected error:{}".format(sys.exc_info()[0]))
     finally:
         db.session.commit()
