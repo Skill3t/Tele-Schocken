@@ -77,7 +77,7 @@
 </div>
 <div class="row col-md-offset-1" id="admin_interface">
   <div class="col-md-9">
-    <h3>Spiel starten (<b>Der Admin kann Spieler nachträglich hinzufügen</b>)</h3>
+    <h3>Spiel starten (<b>Du kann Spieler auch nachträglich hinzufügen</b>)</h3>
   </div>
 </div>
 <div class="row col-md-offset-1" id="admin_interface">
@@ -175,7 +175,6 @@
   /* Select the text field */
   copyText.select();
   copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-
   /* Copy the text inside the text field */
   document.execCommand("copy");
 }
@@ -310,7 +309,7 @@
       }
       xhttp.send(JSON.stringify({}));
 
-    }, 1000);
+    }, 2000);
   }
 
   startup();

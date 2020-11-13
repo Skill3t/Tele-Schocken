@@ -553,8 +553,10 @@
     turn(count);
   }
 
-
-
+  var sound_is_played_once = 0;
+  function set_sound_play(val){
+    sound_is_played_once = val
+  }
 
 
   function startup(){
@@ -610,111 +612,127 @@
     }
     xhttp.send(JSON.stringify({}));
 
-    window.setInterval(function(){
-      var game = document.getElementById('UUID');
-      var gameid = game.innerHTML;
-      gameid = gameid.replace(/['"]+/g, '');
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "/api/game/"+gameid);
-      xhttp.setRequestHeader("Content-Type", "application/json");
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == XMLHttpRequest.DONE) {
-          var res=JSON.parse(xhttp.responseText);
-          if (xhttp.status == 200){
-            var waiting_user_id = res.Move
-            var waitinguserstorage = document.getElementById('waiting_id');
-            var throwbutton = document.getElementById('startgame_id');
-            //Admin GAme Info Half count
-            var gamehalfs = res['Game_Half_Count'];
-            var admininfo = document.getElementById('admin_inforamtion');
-            admininfo.innerHTML = 'Admin gespiele Hälften: '+gamehalfs;
-            var game_state = res['State'];
-            if (game_state == 'waiting'){
-              // Simulate an HTTP redirect:
-              var getUrl = window.location;
-              var baseUrl = getUrl .protocol + "//" + getUrl.host;
-              window.location.replace(baseUrl+'/game_waiting/'+gameid);
-            }
-            //set stack Chips
-            var stackchips = document.getElementById('StackChips_id');
-            stackchips.innerHTML = 'Chips: '+ res.Stack
-            var firstuser_id = res['First']
+    var intervalID = window.setInterval(myCallback, 2000, sound_is_played_once);
 
-            // set Game Message
-            var el_message = document.getElementById('Message');
-            if (res.Message){
-              if (el_message.innerHTML != 'Nachricht: '+ res.Message){
-                el_message.className = "message"
-                el_message.style.animation = 'none';
-                el_message.offsetHeight; /* trigger reflow */
-                el_message.style.animation = null;
+  }
+
+  function myCallback(sound_is_played_once){
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "/api/game/"+gameid);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status == 200){
+          var waiting_user_id = res.Move
+          var waitinguserstorage = document.getElementById('waiting_id');
+          var throwbutton = document.getElementById('startgame_id');
+          //Admin GAme Info Half count
+          var gamehalfs = res['Game_Half_Count'];
+          var admininfo = document.getElementById('admin_inforamtion');
+          admininfo.innerHTML = 'Admin gespiele Hälften: '+gamehalfs;
+          var game_state = res['State'];
+          if (game_state == 'waiting'){
+            // Simulate an HTTP redirect:
+            var getUrl = window.location;
+            var baseUrl = getUrl .protocol + "//" + getUrl.host;
+            window.location.replace(baseUrl+'/game_waiting/'+gameid);
+          }
+          //set stack Chips
+          var stackchips = document.getElementById('StackChips_id');
+          stackchips.innerHTML = 'Chips: '+ res.Stack
+          var firstuser_id = res['First']
+
+          // set Game Message
+          var el_message = document.getElementById('Message');
+          if (res.Message){
+            // Only animate once
+            if (el_message.innerHTML != 'Nachricht: '+ res.Message){
+              if (res.Message.startsWith('Aufdecken')){
+                var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
+                audio.play();
               }
-              el_message.innerHTML = 'Nachricht: '+ res.Message
+              el_message.className = "message"
+              el_message.style.animation = 'none';
+              el_message.offsetHeight; /* trigger reflow */
+              el_message.style.animation = null;
+            }
+            el_message.innerHTML = 'Nachricht: '+ res.Message
+          }else{
+            el_message.innerHTML = ''
+          }
+
+          for (num in res.User) {
+            var juser = res.User[num];
+            var str = 'chips'+juser['Id']
+            var chips = document.getElementById('chips'+juser['Id']);
+            chips.innerHTML = juser['Chips'];
+            //set anzahl würfe
+            if (juser['Id'] == firstuser_id){
+              var anzahlel = document.getElementById('throw_id');
+              anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+              var row = document.getElementById('row'+juser['Id']);
+              row.style.backgroundColor = "lightblue";
             }else{
-              el_message.innerHTML = ''
+              var row = document.getElementById('row'+juser['Id']);
+              row.style.backgroundColor = "#11ffee00";
+            }
+            var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
+            anzahluserel.innerHTML = juser['Number_Dice'];
+
+            // sound whene i have to dice
+            if (juser['Id'] == waiting_user_id){
+              if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
+                if (juser['Name'] == localStorage.getItem('name') && !res.Message.startsWith('Aufdecken')){
+                  var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
+                  audio.play();
+                }
+              }
+              // set Waiting user Name
+              waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
             }
 
-            for (num in res.User) {
-              var juser = res.User[num];
-              var str = 'chips'+juser['Id']
-              var chips = document.getElementById('chips'+juser['Id']);
-              chips.innerHTML = juser['Chips'];
-              //set anzahl würfe
-              if (juser['Id'] == firstuser_id){
-                var anzahlel = document.getElementById('throw_id');
-                anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
-                var row = document.getElementById('row'+juser['Id']);
-                row.style.backgroundColor = "lightblue";
-              }else{
-                var row = document.getElementById('row'+juser['Id']);
-                row.style.backgroundColor = "#11ffee00";
-              }
-              var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
-              anzahluserel.innerHTML = juser['Number_Dice'];
 
-              // set Waiting user Name
-              if (juser['Id'] == waiting_user_id){
-                waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
-              }
 
-              // set button color
-              var id = localStorage.getItem('id');
-              if (id == waiting_user_id){
-                throwbutton.className  = 'buttongreen containerturner';
-              }else{
-                throwbutton.className  = 'buttongray containerturner';
-              }
+            // set button color
+            var id = localStorage.getItem('id');
+            if (id == waiting_user_id){
+              throwbutton.className  = 'buttongreen containerturner';
+            }else{
+              throwbutton.className  = 'buttongray containerturner';
+            }
 
-              var userhalfs = juser['Halfcount']
-              var userfirsthalfel = document.getElementById('first'+juser['Id']);
-              userfirsthalfel.innerHTML = userhalfs;
+            var userhalfs = juser['Halfcount']
+            var userfirsthalfel = document.getElementById('first'+juser['Id']);
+            userfirsthalfel.innerHTML = userhalfs;
 
-              // set dices
-              var dice1_v = document.getElementById('dice1'+juser['Id']);
-              var dice2_v = document.getElementById('dice2'+juser['Id']);
-              var dice3_v = document.getElementById('dice3'+juser['Id']);
-              if (juser.Dices){
-                dice1_v.innerHTML = '';
-                dice2_v.innerHTML = '';
-                dice3_v.innerHTML = '';
-                for (num in juser.Dices) {
-                  var jdice = juser.Dices[num];
-                  dice1_v.appendChild(dicehelper2(jdice['Dice1']));
-                  dice2_v.appendChild(dicehelper2(jdice['Dice2']));
-                  dice3_v.appendChild(dicehelper2(jdice['Dice3']));
-                }
-              }else{
-                dice1_v.innerHTML = '';
-                dice2_v.innerHTML = '';
-                dice3_v.innerHTML = '';
+            // set dices
+            var dice1_v = document.getElementById('dice1'+juser['Id']);
+            var dice2_v = document.getElementById('dice2'+juser['Id']);
+            var dice3_v = document.getElementById('dice3'+juser['Id']);
+            if (juser.Dices){
+              dice1_v.innerHTML = '';
+              dice2_v.innerHTML = '';
+              dice3_v.innerHTML = '';
+              for (num in juser.Dices) {
+                var jdice = juser.Dices[num];
+                dice1_v.appendChild(dicehelper2(jdice['Dice1']));
+                dice2_v.appendChild(dicehelper2(jdice['Dice2']));
+                dice3_v.appendChild(dicehelper2(jdice['Dice3']));
               }
+            }else{
+              dice1_v.innerHTML = '';
+              dice2_v.innerHTML = '';
+              dice3_v.innerHTML = '';
             }
           }
         }
       }
-      xhttp.send(JSON.stringify({}));
-
-    }, 1000);
+    }
+    xhttp.send(JSON.stringify({}));
   }
 
   startup()

@@ -8,9 +8,12 @@
         <h2>Anregungen oder Problme?</h2>
       </div>
       <div class="modal-body">
-        <p>Wenn es Probleme gibt, bitte immer den Browser mit angeben das hilft mir enorm das Problem nachzuvollziehen</p>
-        <p>Wenn dir das Spiel gefällt oder du Verbesserungen hast kannst du mir gerne schreiben</p>
-        <p>Die E-Mail Adresse ist optional ich kontaktiere dich nur wenn ich Rückfragen habe</p>
+        <p>Wenn es <b>technische Probleme</b> gibt, bitte immer den <b>Browser</b> mit <b>angeben</b> das hilft mir enorm das Problem nachzuvollziehen</p>
+        <p>Wenn dir das Spiel gefällt oder du Verbesserungen hast kannst du mir gerne schreiben.</p>
+        <p>Positive Feedbacks freuen mich sehr und motivieren mich das Spiel weiter zu entwickeln.</p>
+        <p>Wenn dir das Spiel <b>nicht gefällt</b> versuche bitte präzise zu <b>beschreiben was dir nicht gefällt</b> und wie man es <b>verbessern</b> kann.</p>
+        <p>Hinter Tele Schocken steckt keine Firma, es ist mein Hobbyprojekt welches ich in meiner Freizeit in vielen dutzende Stunden arbeit erstellt habe.</p>
+        <p>Ich bitte dich um ein <b>konstruktives Feedback!</b></p>
         <form class="form" method="POST" action="{{ url_for('game_play', gid=game.UUID) }}">
           {{ form.csrf_token }}
           {{ wtf.form_field(form.browser) }}
