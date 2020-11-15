@@ -645,11 +645,9 @@
     if (game.Message){
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
-        if (game.Message){
-          if (game.Message.startsWith('Aufdecken')){
-            var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
-            audio.play();
-          }
+        if (game.Message.startsWith('Aufdecken')){
+          var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
+          audio.play();
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
@@ -679,18 +677,19 @@
       var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
       anzahluserel.innerHTML = juser['Number_Dice'];
 
-      // sound whene i have to dice
-      if (juser['Id'] == waiting_user_id){
-        if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
-          if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-            var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
-            audio.play();
+      if (game.Message){
+        // sound whene i have to dice
+        if (juser['Id'] == waiting_user_id){
+          if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
+            if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
+              var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
+              audio.play();
+            }
           }
+          // set Waiting user Name
+          waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
         }
-        // set Waiting user Name
-        waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
       }
-
       // set button color
       var id = localStorage.getItem('id');
       if (id == waiting_user_id){
