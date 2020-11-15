@@ -18,7 +18,6 @@ app.register_blueprint(api_bp, url_prefix='/api')
 from app import routes, models, errors
 bootstrap = Bootstrap(app)
 
-# from app.api import email
 
 
 def create_app():

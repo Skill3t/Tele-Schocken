@@ -1,6 +1,9 @@
 from app.api import bp
 from app import db
 
+from flask_socketio import emit
+
+
 from flask import jsonify
 from flask import request
 from app.models import User, Game, Status
@@ -124,6 +127,7 @@ def start_game(gid):
     db.session.commit()
     response = jsonify(Message='suscess')
     response.status_code = 201
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
 
@@ -281,6 +285,7 @@ def transfer_chips(gid):
     db.session.add(game)
     db.session.commit()
     response.status_code = 200
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
 # XHR Delete User from Game
@@ -320,6 +325,7 @@ def delete_player(gid, uid):
     db.session.commit()
     response = jsonify(Message='suscess')
     response.status_code = 200
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
 
@@ -354,6 +360,7 @@ def choose_admin(gid, uid):
         db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 200
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     response = jsonify(Message='Unknown Error')
     response.status_code = 404
@@ -399,4 +406,5 @@ def wait_game(gid):
     db.session.commit()
     response = jsonify(Message='suscess')
     response.status_code = 201
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response

@@ -37,6 +37,6 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 
 ## TODO's 🚀
 * Add Test's
-* change periodic get to socket
+* change periodic get to socket ✅
 * bring statistic to the public
 * add feedbackchangel with mail gateway ✅

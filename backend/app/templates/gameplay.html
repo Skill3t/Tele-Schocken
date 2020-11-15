@@ -196,6 +196,10 @@
   </script>
   <script type=text/javascript src="{{url_for('static', filename='scripts/adminpanel.js') }}">
   </script>
+  <script type=text/javascript src="{{url_for('static', filename='scripts/socket.io.js') }}">
+  </script>
+  <script type=text/javascript src="{{url_for('static', filename='scripts/jquery-3.5.1.min.js') }}">
+  </script>
 
 <script>
 
@@ -562,6 +566,7 @@
   function startup(){
     faq();
     feedback();
+    initial_game_data();
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');
@@ -611,12 +616,115 @@
       }
     }
     xhttp.send(JSON.stringify({}));
+  }
+  function refresh_game(game){
+    var game_uuid = document.getElementById('UUID');
+    var gameid = game_uuid.innerHTML;
+    gameid = gameid.replace(/['"]+/g, '');
+    var waiting_user_id = game.Move
+    var waitinguserstorage = document.getElementById('waiting_id');
+    var throwbutton = document.getElementById('startgame_id');
+    //Admin GAme Info Half count
+    var gamehalfs = game['Game_Half_Count'];
+    var admininfo = document.getElementById('admin_inforamtion');
+    admininfo.innerHTML = 'Admin gespiele Hälften: '+gamehalfs;
+    var game_state = game['State'];
+    if (game_state == 'waiting'){
+      // Simulate an HTTP redirect:
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host;
+      window.location.replace(baseUrl+'/game_waiting/'+gameid);
+    }
+    //set stack Chips
+    var stackchips = document.getElementById('StackChips_id');
+    stackchips.innerHTML = 'Chips: '+ game.Stack
+    var firstuser_id = game['First']
 
-    var intervalID = window.setInterval(myCallback, 2000, sound_is_played_once);
+    // set Game Message
+    var el_message = document.getElementById('Message');
+    if (game.Message){
+      // Only animate once
+      if (el_message.innerHTML != 'Nachricht: '+ game.Message){
+        if (game.Message.startsWith('Aufdecken')){
+          var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
+          audio.play();
+        }
+        el_message.className = "message"
+        el_message.style.animation = 'none';
+        el_message.offsetHeight; /* trigger reflow */
+        el_message.style.animation = null;
+      }
+      el_message.innerHTML = 'Nachricht: '+ game.Message
+    }else{
+      el_message.innerHTML = ''
+    }
+
+    for (num in game.User) {
+      var juser = game.User[num];
+      var str = 'chips'+juser['Id']
+      var chips = document.getElementById('chips'+juser['Id']);
+      chips.innerHTML = juser['Chips'];
+      //set anzahl würfe
+      if (juser['Id'] == firstuser_id){
+        var anzahlel = document.getElementById('throw_id');
+        anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+        var row = document.getElementById('row'+juser['Id']);
+        row.style.backgroundColor = "lightblue";
+      }else{
+        var row = document.getElementById('row'+juser['Id']);
+        row.style.backgroundColor = "#11ffee00";
+      }
+      var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
+      anzahluserel.innerHTML = juser['Number_Dice'];
+
+      // sound whene i have to dice
+      if (juser['Id'] == waiting_user_id){
+        if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
+          if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
+            var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
+            audio.play();
+          }
+        }
+        // set Waiting user Name
+        waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
+      }
+
+      // set button color
+      var id = localStorage.getItem('id');
+      if (id == waiting_user_id){
+        throwbutton.className  = 'buttongreen containerturner';
+      }else{
+        throwbutton.className  = 'buttongray containerturner';
+      }
+
+      var userhalfs = juser['Halfcount']
+      var userfirsthalfel = document.getElementById('first'+juser['Id']);
+      userfirsthalfel.innerHTML = userhalfs;
+
+      // set dices
+      var dice1_v = document.getElementById('dice1'+juser['Id']);
+      var dice2_v = document.getElementById('dice2'+juser['Id']);
+      var dice3_v = document.getElementById('dice3'+juser['Id']);
+      if (juser.Dices){
+        dice1_v.innerHTML = '';
+        dice2_v.innerHTML = '';
+        dice3_v.innerHTML = '';
+        for (num in juser.Dices) {
+          var jdice = juser.Dices[num];
+          dice1_v.appendChild(dicehelper2(jdice['Dice1']));
+          dice2_v.appendChild(dicehelper2(jdice['Dice2']));
+          dice3_v.appendChild(dicehelper2(jdice['Dice3']));
+        }
+      }else{
+        dice1_v.innerHTML = '';
+        dice2_v.innerHTML = '';
+        dice3_v.innerHTML = '';
+      }
+    }
 
   }
 
-  function myCallback(sound_is_played_once){
+  function initial_game_data(){
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
@@ -625,110 +733,9 @@
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
         if (xhttp.status == 200){
-          var waiting_user_id = res.Move
-          var waitinguserstorage = document.getElementById('waiting_id');
-          var throwbutton = document.getElementById('startgame_id');
-          //Admin GAme Info Half count
-          var gamehalfs = res['Game_Half_Count'];
-          var admininfo = document.getElementById('admin_inforamtion');
-          admininfo.innerHTML = 'Admin gespiele Hälften: '+gamehalfs;
-          var game_state = res['State'];
-          if (game_state == 'waiting'){
-            // Simulate an HTTP redirect:
-            var getUrl = window.location;
-            var baseUrl = getUrl .protocol + "//" + getUrl.host;
-            window.location.replace(baseUrl+'/game_waiting/'+gameid);
-          }
-          //set stack Chips
-          var stackchips = document.getElementById('StackChips_id');
-          stackchips.innerHTML = 'Chips: '+ res.Stack
-          var firstuser_id = res['First']
-
-          // set Game Message
-          var el_message = document.getElementById('Message');
-          if (res.Message){
-            // Only animate once
-            if (el_message.innerHTML != 'Nachricht: '+ res.Message){
-              if (res.Message.startsWith('Aufdecken')){
-                var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
-                audio.play();
-              }
-              el_message.className = "message"
-              el_message.style.animation = 'none';
-              el_message.offsetHeight; /* trigger reflow */
-              el_message.style.animation = null;
-            }
-            el_message.innerHTML = 'Nachricht: '+ res.Message
-          }else{
-            el_message.innerHTML = ''
-          }
-
-          for (num in res.User) {
-            var juser = res.User[num];
-            var str = 'chips'+juser['Id']
-            var chips = document.getElementById('chips'+juser['Id']);
-            chips.innerHTML = juser['Chips'];
-            //set anzahl würfe
-            if (juser['Id'] == firstuser_id){
-              var anzahlel = document.getElementById('throw_id');
-              anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
-              var row = document.getElementById('row'+juser['Id']);
-              row.style.backgroundColor = "lightblue";
-            }else{
-              var row = document.getElementById('row'+juser['Id']);
-              row.style.backgroundColor = "#11ffee00";
-            }
-            var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
-            anzahluserel.innerHTML = juser['Number_Dice'];
-
-            // sound whene i have to dice
-            if (juser['Id'] == waiting_user_id){
-              if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
-                if (juser['Name'] == localStorage.getItem('name') && !res.Message.startsWith('Aufdecken')){
-                  var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
-                  audio.play();
-                }
-              }
-              // set Waiting user Name
-              waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
-            }
-
-
-
-            // set button color
-            var id = localStorage.getItem('id');
-            if (id == waiting_user_id){
-              throwbutton.className  = 'buttongreen containerturner';
-            }else{
-              throwbutton.className  = 'buttongray containerturner';
-            }
-
-            var userhalfs = juser['Halfcount']
-            var userfirsthalfel = document.getElementById('first'+juser['Id']);
-            userfirsthalfel.innerHTML = userhalfs;
-
-            // set dices
-            var dice1_v = document.getElementById('dice1'+juser['Id']);
-            var dice2_v = document.getElementById('dice2'+juser['Id']);
-            var dice3_v = document.getElementById('dice3'+juser['Id']);
-            if (juser.Dices){
-              dice1_v.innerHTML = '';
-              dice2_v.innerHTML = '';
-              dice3_v.innerHTML = '';
-              for (num in juser.Dices) {
-                var jdice = juser.Dices[num];
-                dice1_v.appendChild(dicehelper2(jdice['Dice1']));
-                dice2_v.appendChild(dicehelper2(jdice['Dice2']));
-                dice3_v.appendChild(dicehelper2(jdice['Dice3']));
-              }
-            }else{
-              dice1_v.innerHTML = '';
-              dice2_v.innerHTML = '';
-              dice3_v.innerHTML = '';
-            }
-          }
+          var res=JSON.parse(xhttp.responseText);
+          refresh_game(res);
         }
       }
     }
@@ -736,5 +743,39 @@
   }
 
   startup()
+
+</script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        // Use a "/game_waiting" namespace.
+        // An application can open a connection on multiple namespaces, and
+        // Socket.IO will multiplex all those connections on a single
+        // physical channel. If you don't care about multiple channels, you
+        // can set the namespace to an empty string.
+        namespace = '/game';
+
+        // Connect to the Socket.IO server.
+        // The connection URL has the following format, relative to the current page:
+        //     http[s]://<domain>:<port>[/<namespace>]
+        var socket = io(namespace);
+
+        // Event handler for new connections.
+        // The callback function is invoked when a connection with the
+        // server is established.
+        socket.on('connect', function() {
+            socket.emit('my_event', {data: 'I\'m connected!'});
+        });
+
+        socket.on('reload_game', function(game, cb) {
+            if (game){
+              refresh_game(game);
+            }
+        });
+       // join the room
+        var game = document.getElementById('UUID');
+        var gameid = game.innerHTML;
+        gameid = gameid.replace(/^"(.+)"$/,'$1');
+        socket.emit('join', {room: gameid});
+    });
 </script>
 {% endblock %}

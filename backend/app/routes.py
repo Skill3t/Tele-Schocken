@@ -6,6 +6,11 @@ from app.models import Game
 from app.api.email import sendFeedbackMail
 
 
+@app.route('/index2')
+def index2():
+    return render_template('index2.html')
+
+
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():

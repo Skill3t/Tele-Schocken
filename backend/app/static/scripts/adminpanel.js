@@ -61,11 +61,9 @@ function back_to_waiting(){
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 200){
+        if (xhttp.status != 201){
+          var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);
-        }else{
-          alert(res.Message + ' Alle Speiler geraten zurück zum Warteraum');
         }
       }
     }

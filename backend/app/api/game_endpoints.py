@@ -1,45 +1,43 @@
 from app.api import bp
-from app import db
+from app import app, db
 
+from flask_socketio import emit, join_room, rooms
 from flask import jsonify
 from flask import request
 from app.models import User, Game, Status
 from random import randint, random
-import time
 from datetime import datetime
 from jinja2 import utils
 
 from app.api.errors import bad_request
 
 
-# testforpolling
-# the roud is not used is can be used to improve server performance if needed
-@bp.route('/game/<gid>/poll', methods=['GET'])
-def get_refreshed_game(gid):
-    game = Game.query.filter_by(UUID=gid).first()
-    old_game = game.to_dict()
-    # db.session.expire_all()
-    if game is None:
-        response = jsonify(Message='Game id not in Database')
-        response.status_code = 404
-        return response
-    # Check if the Game os not modified
-    modified = False
-    counter = 0
-    while counter < 20:
-        counter = counter + 1
-        db.session.commit()
-        game2 = Game.query.filter_by(UUID=gid).first()
-        new_game = game2.to_dict()
-        modified = not sorted(old_game.items()) == sorted(new_game.items())
-        time.sleep(0.5)
-        if modified:
-            response = jsonify(game.to_dict())
-            response.status_code = 200
-            return response
-    response = jsonify(Message='Game data not changed')
-    response.status_code = 200
-    return response
+from flask import session
+
+from flask_socketio import SocketIO
+# Set this variable to "threading", "eventlet" or "gevent" to test the
+# different async modes, or leave it set to None for the application to choose
+# the best option based on installed packages.
+async_mode = "gevent"
+socketio = SocketIO(app, async_mode=async_mode)
+
+
+@socketio.on('connect', namespace='/game')
+def test_connect():
+    emit('my_response', {'data': 'Connected', 'count': 0})
+
+
+@socketio.on('join', namespace='/game')
+def join(message):
+    join_room(message['room'])
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    print('join room {}'.format(message['room']))
+    game = Game.query.filter_by(UUID=message['room']).first()
+    emit('my_response',
+         {'data': 'In rooms: ' + ', '.join(rooms()),
+          'count': session['receive_count'], 'game': game.to_dict()})
+
+
 
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
@@ -119,9 +117,6 @@ def get_game(gid):
     response = jsonify(game.to_dict())
     response.status_code = 200
     return response
-
-
-
 
 
 # set User to Game
@@ -218,6 +213,7 @@ def set_game_user(gid):
     game.users.append(user)
     db.session.add(game)
     db.session.commit()
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return jsonify(game.to_dict())
 
 
@@ -286,6 +282,7 @@ def pull_up_dice_cup(gid, uid):
             db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 201
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
         response = jsonify(Message="Request must include visible")
@@ -335,6 +332,7 @@ def finish_throwing(gid, uid):
         db.session.commit()
         response = jsonify(Message='suscess')
         response.status_code = 200
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
         response = jsonify(Message='Its not your turn')
@@ -486,6 +484,7 @@ def roll_dice(gid, uid):
         response.status_code = 201
         db.session.add(user)
         db.session.commit()
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
         response = jsonify(Message='Its not your turn')

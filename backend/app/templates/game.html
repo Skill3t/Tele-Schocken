@@ -31,9 +31,7 @@
 </div>
 <br>
 
-
 <div class="row">
-
   <div class="col-md-3 col-md-offset-1">
     <div class="row">
       <div class="col-md-12">
@@ -165,6 +163,10 @@
 
 <script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
 </script>
+<script type=text/javascript src="{{url_for('static', filename='scripts/socket.io.js') }}">
+</script>
+<script type=text/javascript src="{{url_for('static', filename='scripts/jquery-3.5.1.min.js') }}">
+</script>
 
 <script>
   // https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
@@ -227,8 +229,8 @@
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
         if (xhttp.status != 201){
+          var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);
         }
       }
@@ -237,7 +239,6 @@
   }
 
   function startup(){
-
     faq();
     var id = localStorage.getItem('id');
     var admin_el = document.getElementById('admin_id');
@@ -265,55 +266,70 @@
       hand.style.display = "none";
       setdamin.innerHTML = 'Bitte warte bis der Admin das Spiel startet.'
     }
-    window.setInterval(function(){
-      /// call your function here
-      var game = document.getElementById('UUID');
-      var gameid = game.innerHTML;
-      gameid = gameid.replace(/^"(.+)"$/,'$1');
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "/api/game/"+gameid);
-      xhttp.setRequestHeader("Content-Type", "application/json");
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == XMLHttpRequest.DONE) {
-          var res=JSON.parse(xhttp.responseText);
-          var sate = res.State
-          var table = document.getElementById('player_tbody');
-          table.innerHTML = '';
-          for (num in res.User) {
-            var juser = res.User[num];
-
-            // reload table data
-            var tr = document.createElement('tr');
-            var th = document.createElement('th');
-            th.className = 'counterCell';
-            th.scope = 'row';
-            var td = document.createElement('td');
-            td.innerHTML = juser['Name']
-            tr.appendChild(th);
-            tr.appendChild(td);
-            table.appendChild(tr);
-
-            if (juser['Id'] == id){
-              var name = document.getElementById('Name');
-              name.disabled = true;
-              var btn = document.getElementById('jointbtn');
-              btn.disabled = true;
-            }
-          }
-
-          if (sate == 'started'){
-            //alert('Spiel vom admin gestartet eine moment noch');
-            window.location.href = "/game/"+gameid;
-          }
-        }
-      }
-      xhttp.send(JSON.stringify({}));
-
-    }, 2000);
   }
-
   startup();
+</script>
 
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        // Use a "/game_waiting" namespace.
+        // An application can open a connection on multiple namespaces, and
+        // Socket.IO will multiplex all those connections on a single
+        // physical channel. If you don't care about multiple channels, you
+        // can set the namespace to an empty string.
+        namespace = '/game';
 
+        // Connect to the Socket.IO server.
+        // The connection URL has the following format, relative to the current page:
+        //     http[s]://<domain>:<port>[/<namespace>]
+        var socket = io(namespace);
+
+        // Event handler for new connections.
+        // The callback function is invoked when a connection with the
+        // server is established.
+        socket.on('connect', function() {
+            socket.emit('my_event', {data: 'I\'m connected!'});
+        });
+
+        socket.on('reload_game', function(game, cb) {
+            if (game){
+              var id = localStorage.getItem('id');
+              var res = game;
+              var sate = res.State
+              var table = document.getElementById('player_tbody');
+              table.innerHTML = '';
+              for (num in res.User) {
+                var juser = res.User[num];
+
+                // reload table data
+                var tr = document.createElement('tr');
+                var th = document.createElement('th');
+                th.className = 'counterCell';
+                th.scope = 'row';
+                var td = document.createElement('td');
+                td.innerHTML = juser['Name']
+                tr.appendChild(th);
+                tr.appendChild(td);
+                table.appendChild(tr);
+
+                if (juser['Id'] == id){
+                  var name = document.getElementById('Name');
+                  name.disabled = true;
+                  var btn = document.getElementById('jointbtn');
+                  btn.disabled = true;
+                }
+              }
+              if (sate == 'started'){
+                //alert('Spiel vom admin gestartet eine moment noch');
+                window.location.href = "/game/"+gameid;
+              }
+            }
+        });
+       // join the room
+        var game = document.getElementById('UUID');
+        var gameid = game.innerHTML;
+        gameid = gameid.replace(/^"(.+)"$/,'$1');
+        socket.emit('join', {room: gameid});
+    });
 </script>
 {% endblock %}

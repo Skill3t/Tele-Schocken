@@ -26,11 +26,9 @@
 {% endblock %}
 
 {% block scripts %}
-<script type=text/javascript src="{{
-  url_for('static', filename='jquery-1.9.1.min.js') }}">
+<script type=text/javascript src="{{url_for('static', filename='scripts/jquery-3.5.1.min.js') }}">
 </script>
-<script type=text/javascript src="{{
-  url_for('static', filename='bootstrap.min.js') }}">
+<script type=text/javascript src="{{url_for('static', filename='scripts/bootstrap.min.js') }}">
 </script>
 <script type=text/javascript src="{{url_for('static', filename='scripts/donate.js') }}">
 </script>
