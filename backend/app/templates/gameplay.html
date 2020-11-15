@@ -645,9 +645,11 @@
     if (game.Message){
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
-        if (game.Message.startsWith('Aufdecken')){
-          var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
-          audio.play();
+        if (game.Message){
+          if (game.Message.startsWith('Aufdecken')){
+            var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
+            audio.play();
+          }
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
