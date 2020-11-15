@@ -40,3 +40,5 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 * change periodic get to socket ✅
 * bring statistic to the public
 * add feedbackchangel with mail gateway ✅
+* choice of dice color
+* config game (play final, push end if you have now chips)
