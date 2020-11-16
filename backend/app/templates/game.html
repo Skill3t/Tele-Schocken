@@ -323,6 +323,10 @@
 
   socket.on('reload_game', function(game, cb) {
       if (game){
+        var game_el = document.getElementById('UUID');
+        var gameid = game_el.innerHTML;
+        gameid = gameid.replace(/^"(.+)"$/,'$1');
+
         var id = localStorage.getItem('id');
         var res = game;
         var sate = res.State
