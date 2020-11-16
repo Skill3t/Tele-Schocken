@@ -311,56 +311,50 @@
     reconnectionDelayMax: 5000,     // maximum amount of time to wait between reconnection attempts. Each attempt increases the reconnection delay by 2x along with a randomization factor
     randomizationFactor: 0.5
   });
+  // Event handler for new connections.
+  // The callback function is invoked when a connection with the
+  // server is established.
+  socket.on('connect', function() {
+      var game = document.getElementById('UUID');
+      var gameid = game.innerHTML;
+      gameid = gameid.replace(/^"(.+)"$/,'$1');
+      socket.emit('join', {room: gameid});
+  });
 
-    $(document).ready(function() {
+  socket.on('reload_game', function(game, cb) {
+      if (game){
+        var id = localStorage.getItem('id');
+        var res = game;
+        var sate = res.State
+        var table = document.getElementById('player_tbody');
+        table.innerHTML = '';
+        for (num in res.User) {
+          var juser = res.User[num];
 
+          // reload table data
+          var tr = document.createElement('tr');
+          var th = document.createElement('th');
+          th.className = 'counterCell';
+          th.scope = 'row';
+          var td = document.createElement('td');
+          td.innerHTML = juser['Name']
+          tr.appendChild(th);
+          tr.appendChild(td);
+          table.appendChild(tr);
 
-        // Event handler for new connections.
-        // The callback function is invoked when a connection with the
-        // server is established.
-        socket.on('connect', function() {
-            socket.emit('my_event', {data: 'I\'m connected!'});
-        });
+          if (juser['Id'] == id){
+            var name = document.getElementById('Name');
+            name.disabled = true;
+            var btn = document.getElementById('jointbtn');
+            btn.disabled = true;
+          }
+        }
+        if (sate == 'started'){
+          //alert('Spiel vom admin gestartet eine moment noch');
+          window.location.href = "/game/"+gameid;
+        }
+      }
+  });
 
-        socket.on('reload_game', function(game, cb) {
-            if (game){
-              var id = localStorage.getItem('id');
-              var res = game;
-              var sate = res.State
-              var table = document.getElementById('player_tbody');
-              table.innerHTML = '';
-              for (num in res.User) {
-                var juser = res.User[num];
-
-                // reload table data
-                var tr = document.createElement('tr');
-                var th = document.createElement('th');
-                th.className = 'counterCell';
-                th.scope = 'row';
-                var td = document.createElement('td');
-                td.innerHTML = juser['Name']
-                tr.appendChild(th);
-                tr.appendChild(td);
-                table.appendChild(tr);
-
-                if (juser['Id'] == id){
-                  var name = document.getElementById('Name');
-                  name.disabled = true;
-                  var btn = document.getElementById('jointbtn');
-                  btn.disabled = true;
-                }
-              }
-              if (sate == 'started'){
-                //alert('Spiel vom admin gestartet eine moment noch');
-                window.location.href = "/game/"+gameid;
-              }
-            }
-        });
-       // join the room
-        var game = document.getElementById('UUID');
-        var gameid = game.innerHTML;
-        gameid = gameid.replace(/^"(.+)"$/,'$1');
-        socket.emit('join', {room: gameid});
-    });
 </script>
 {% endblock %}

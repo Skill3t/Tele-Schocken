@@ -769,26 +769,21 @@
     randomizationFactor: 0.5
   });
 
-    $(document).ready(function() {
+  // Event handler for new connections.
+  // The callback function is invoked when a connection with the
+  // server is established.
+  socket.on('connect', function() {
+      var game = document.getElementById('UUID');
+      var gameid = game.innerHTML;
+      gameid = gameid.replace(/^"(.+)"$/,'$1');
+      socket.emit('join', {room: gameid});
+  });
 
+  socket.on('reload_game', function(game, cb) {
+      if (game){
+        refresh_game(game);
+      }
+  });
 
-        // Event handler for new connections.
-        // The callback function is invoked when a connection with the
-        // server is established.
-        socket.on('connect', function() {
-            socket.emit('my_event', {data: 'I\'m connected!'});
-        });
-
-        socket.on('reload_game', function(game, cb) {
-            if (game){
-              refresh_game(game);
-            }
-        });
-       // join the room
-        var game = document.getElementById('UUID');
-        var gameid = game.innerHTML;
-        gameid = gameid.replace(/^"(.+)"$/,'$1');
-        socket.emit('join', {room: gameid});
-    });
 </script>
 {% endblock %}
