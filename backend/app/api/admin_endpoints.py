@@ -318,6 +318,17 @@ def delete_player(gid, uid):
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
             game.move_user_id = game.users[0].id
+    for user in game.users:
+        user.chips = 0
+        user.dice1 = 0
+        user.dice2 = 0
+        user.dice3 = 0
+        user.number_dice = 0
+        # user.visible = False
+        user.dice1_visible = False
+        user.dice2_visible = False
+        user.dice3_visible = False
+    game.stack = 13
     game.message = "Spieler: {} vom Admin entfernt".format(user.name)
     db.session.add(game)
     db.session.commit()
@@ -401,6 +412,17 @@ def wait_game(gid):
         response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
+    for user in game.users:
+        user.chips = 0
+        user.dice1 = 0
+        user.dice2 = 0
+        user.dice3 = 0
+        user.number_dice = 0
+        # user.visible = False
+        user.dice1_visible = False
+        user.dice2_visible = False
+        user.dice3_visible = False
+    game.stack = 13
     game.status = Status.WAITING
     db.session.add(game)
     db.session.commit()

@@ -1,5 +1,5 @@
 function delete_player(){
-  if (confirm('Bist du sicher das du den Spieler entfernen möchtest. Dies kann nicht rückgängig gemacht werden')) {
+  if (confirm('Bist du sicher das du den Spieler entfernen möchtest. Dies kann nicht rückgängig gemacht werden. Die Runde startet von vorne!')) {
     var game = document.getElementById('UUID');
     var game_id = game.innerHTML;
     game_id = game_id.replace(/['"]+/g, '');
@@ -51,7 +51,7 @@ function choose_admin(){
 }
 
 function back_to_waiting(){
-  if (confirm('Bist du sicher das du zurück zum Warteraum willst um einen Spieler hinzuzufügen?')) {
+  if (confirm('Bist du sicher das du zurück zum Warteraum willst um einen Spieler hinzuzufügen? Die Runde startet von vorne!')) {
     var game = document.getElementById('UUID');
     var game_id = game.innerHTML;
     game_id = game_id.replace(/['"]+/g, '');

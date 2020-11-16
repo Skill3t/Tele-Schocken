@@ -254,7 +254,7 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
           }else{
-            var audio = new Audio("{{ url_for("static", filename = "audio/wuerfeln.mp3")}}");
+            var audio = new Audio("{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}");
             audio.play();
             if (dice1_cb){
               dice1_v.className = "spin animated"
@@ -646,7 +646,7 @@
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
         if (game.Message.startsWith('Aufdecken')){
-          var audio = new Audio('{{ url_for("static", filename = "audio/hoch_die_Becher_Markus.mp3")}}');
+          var audio = new Audio("{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}");
           audio.play();
         }
         el_message.className = "message"
@@ -682,7 +682,7 @@
         if (juser['Id'] == waiting_user_id){
           if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
             if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-              var audio = new Audio('{{ url_for("static", filename = "audio/wuerfelnYannick.mp3")}}');
+              var audio = new Audio("{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}");
               audio.play();
             }
           }
