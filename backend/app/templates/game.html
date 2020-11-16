@@ -153,6 +153,19 @@
   </div>
 </div>
 
+<div class="row ">
+  <div class="col-md-1 col-xs-offset-10 col-md-offset-10">
+      <a class="roundetb" id="feedbackBtn" href="#"><i class="fas fa-paper-plane" title="Feedback senden"></i></a>
+  </div>
+</div>
+
+<div class="row col-md-offset-1 col-md-6">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
+</div>
+
+{% include "snippet/feedback.html" %}
+
+
 {% block footer %}
 {{ super() }}
 {% endblock %}
@@ -162,6 +175,8 @@
 {{ super() }}
 
 <script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
+</script>
+<script type=text/javascript src="{{url_for('static', filename='scripts/feedback.js') }}">
 </script>
 <script type=text/javascript src="{{url_for('static', filename='scripts/socket.io.js') }}">
 </script>
@@ -240,6 +255,7 @@
 
   function startup(){
     faq();
+    feedback();
     var id = localStorage.getItem('id');
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;

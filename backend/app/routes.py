@@ -27,10 +27,11 @@ def index():
 
 @app.route('/game_waiting/<gid>', methods=['GET'])
 def game(gid):
+    form = FeedbackFrom()
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         return render_template('404.html')
-    return render_template('game.html', title='Edit Profile', game=game)
+    return render_template('game.html', title='Spiel', game=game, form=form)
 
 
 @app.route('/game/<gid>', methods=['GET', 'POST'])
@@ -43,4 +44,4 @@ def game_play(gid):
         email = str(form.mail.data)
         sendFeedbackMail(browser=browser, body=body, email=email)
         return redirect(url_for('game_play', gid=game.UUID))
-    return render_template('gameplay.html', title='Edit Profile', game=game, form=form)
+    return render_template('gameplay.html', title='Spiel', game=game, form=form)

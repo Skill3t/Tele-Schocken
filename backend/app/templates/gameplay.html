@@ -184,6 +184,24 @@
 
 
 {% include "snippet/feedback.html" %}
+
+<audio id="audio_wuerfeln">
+  <source src="{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<audio id="audio_wuerfelnYannick">
+  <source src="{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+
+<audio id="audio_hoch_die_Becher_Markus">
+  <source src="{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}">
+  Your browser does not support the audio element.
+</audio>
+
+
 {% block footer %}
   {{ super() }}
 {% endblock %}
@@ -254,8 +272,7 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
           }else{
-            var audio = new Audio("{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}");
-            audio.play();
+            document.getElementById('audio_wuerfeln').play();
             if (dice1_cb){
               dice1_v.className = "spin animated"
               dice1_v.style.animation = 'none';
@@ -646,8 +663,7 @@
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
         if (game.Message.startsWith('Aufdecken')){
-          var audio = new Audio("{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}");
-          audio.play();
+          document.getElementById('audio_hoch_die_Becher_Markus').play();
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
@@ -682,8 +698,7 @@
         if (juser['Id'] == waiting_user_id){
           if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
             if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-              var audio = new Audio("{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}");
-              audio.play();
+              document.getElementById('audio_wuerfelnYannick').play();
             }
           }
           // set Waiting user Name
