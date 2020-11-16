@@ -197,7 +197,7 @@
 
 
 <audio id="audio_hoch_die_Becher_Markus">
-  <source src="{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}">
+  <source src="{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -221,11 +221,6 @@
 
 <script>
 
-
-
-  function refreshGame(){
-    location=location;
-  }
   function dice(){
     document.getElementById("btn_dice").disabled = true;
     setTimeout(function(){document.getElementById("btn_dice").disabled = false;},2500);
@@ -272,7 +267,9 @@
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
           }else{
-            document.getElementById('audio_wuerfeln').play();
+            soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}";
+            soundEffect.play();
+
             if (dice1_cb){
               dice1_v.className = "spin animated"
               dice1_v.style.animation = 'none';
@@ -584,6 +581,7 @@
     faq();
     feedback();
     initial_game_data();
+
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');
@@ -635,6 +633,8 @@
     xhttp.send(JSON.stringify({}));
   }
   function refresh_game(game){
+
+
     var game_uuid = document.getElementById('UUID');
     var gameid = game_uuid.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
@@ -663,7 +663,8 @@
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
         if (game.Message.startsWith('Aufdecken')){
-          document.getElementById('audio_hoch_die_Becher_Markus').play();
+          soundEffect.src = "{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}";
+          soundEffect.play();
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
@@ -698,7 +699,8 @@
         if (juser['Id'] == waiting_user_id){
           if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
             if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-              document.getElementById('audio_wuerfelnYannick').play();
+              soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}";
+              soundEffect.play();
             }
           }
           // set Waiting user Name
@@ -757,7 +759,7 @@
     }
     xhttp.send(JSON.stringify({}));
   }
-
+  const soundEffect = new Audio();
   startup()
 
 </script>
