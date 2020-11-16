@@ -422,6 +422,7 @@ def wait_game(gid):
         user.dice1_visible = False
         user.dice2_visible = False
         user.dice3_visible = False
+    game.message = ""
     game.stack = 13
     game.status = Status.WAITING
     db.session.add(game)
