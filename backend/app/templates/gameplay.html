@@ -750,25 +750,26 @@
 
 </script>
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        // Use a "/game_waiting" namespace.
-        // An application can open a connection on multiple namespaces, and
-        // Socket.IO will multiplex all those connections on a single
-        // physical channel. If you don't care about multiple channels, you
-        // can set the namespace to an empty string.
-        namespace = '/game';
+  // Use a "/game_waiting" namespace.
+  // An application can open a connection on multiple namespaces, and
+  // Socket.IO will multiplex all those connections on a single
+  // physical channel. If you don't care about multiple channels, you
+  // can set the namespace to an empty string.
+  namespace = '/game';
 
-        // Connect to the Socket.IO server.
-        // The connection URL has the following format, relative to the current page:
-        //     http[s]://<domain>:<port>[/<namespace>]
-        // var socket = io(namespace);
-        const socket = io(namespace, {
-          reconnection: true,             // whether to reconnect automatically
-          reconnectionAttempts: Infinity, // number of reconnection attempts before giving up
-          reconnectionDelay: 1000,        // how long to initially wait before attempting a new reconnection
-          reconnectionDelayMax: 5000,     // maximum amount of time to wait between reconnection attempts. Each attempt increases the reconnection delay by 2x along with a randomization factor
-          randomizationFactor: 0.5
-        });
+  // Connect to the Socket.IO server.
+  // The connection URL has the following format, relative to the current page:
+  //     http[s]://<domain>:<port>[/<namespace>]
+  // var socket = io(namespace);
+  const socket = io(namespace, {
+    reconnection: true,             // whether to reconnect automatically
+    reconnectionAttempts: Infinity, // number of reconnection attempts before giving up
+    reconnectionDelay: 1000,        // how long to initially wait before attempting a new reconnection
+    reconnectionDelayMax: 5000,     // maximum amount of time to wait between reconnection attempts. Each attempt increases the reconnection delay by 2x along with a randomization factor
+    randomizationFactor: 0.5
+  });
+
+    $(document).ready(function() {
 
 
         // Event handler for new connections.
