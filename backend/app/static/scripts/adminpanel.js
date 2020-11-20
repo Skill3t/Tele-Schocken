@@ -23,6 +23,30 @@ function delete_player(){
   }
 }
 
+function sort_dice(){
+    var game = document.getElementById('UUID');
+    var game_id = game.innerHTML;
+    game_id = game_id.replace(/['"]+/g, '');
+    var admin_el = document.getElementById('admin_id');
+    var admin_id = admin_el.innerHTML;
+
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("PUT", "/api/game/"+game_id+"/sort");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        if (xhttp.status != 200){
+          var res=JSON.parse(xhttp.responseText);
+          alert(''+res.Message);
+        }else{
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({admin_id:admin_id}));
+}
+
+
 function choose_admin(){
   if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neune Admin rückgängig gemacht werden')) {
     var game = document.getElementById('UUID');

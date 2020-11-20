@@ -601,6 +601,44 @@ def turn_dice(gid, uid):
     return response
 
 
+# XHR Route
+@bp.route('/game/<gid>/sort', methods=['PUT'])
+def sort_dice(gid):
+    data = request.get_json() or {}
+    if 'admin_id' in data:
+        game = Game.query.filter_by(UUID=gid).first()
+        escape = str(utils.escape(data['admin_id']))
+        user = User.query.get_or_404(escape)
+        if game is None:
+            response = jsonify(Message='Game not found')
+            response.status_code = 404
+            return response
+        if user.game_id != game.id:
+            response = jsonify(Message='User not in game')
+            response.status_code = 404
+            return response
+        if game.message == "Warten auf Vergabe der Chips!":
+            for user in game.users:
+                dices = [user.dice1, user.dice2, user.dice3]
+                dices.sort()
+                user.dice1 = dices[0]
+                user.dice2 = dices[1]
+                user.dice3 = dices[2]
+            db.session.add(game)
+            db.session.commit()
+            emit('reload_game', game.to_dict(), room=gid, namespace='/game')
+        else:
+            response = jsonify(Message='Warten bis der Admin die Chips verteilen darf (Alle aufgedeckt haben)!')
+            response.status_code = 403
+            return response
+    else:
+        print('Log Bad request')
+        return bad_request('must include admin_id')
+    response = jsonify()
+    response.status_code = 200
+    return response
+
+
 def decision(probability) -> bool:
     """
     Return a Boolen that reprenet a fallen dice
