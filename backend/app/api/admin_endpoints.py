@@ -329,7 +329,7 @@ def delete_player(gid, uid):
         user.dice2_visible = False
         user.dice3_visible = False
     game.stack = 13
-    game.message = "Spieler: {} vom Admin entfernt".format(delete_user.name)
+    game.message = "Spieler: {} vom Admin entfernt (ggf. Seite neu laden um Spielerliste zu aktualisieren)".format(delete_user.name)
     db.session.add(game)
     db.session.commit()
     db.session.delete(delete_user)
