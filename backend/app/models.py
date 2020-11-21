@@ -89,7 +89,10 @@ class Game(BaseGameData, db.Model):
     def moveName(self, id):
         if id is not None:
             user = User.query.filter_by(id=id).first()
-            return user.name
+            if user is not None:
+                return user.name
+            else:
+                return ''
         return ''
 
 

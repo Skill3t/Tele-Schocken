@@ -292,28 +292,28 @@ def transfer_chips(gid):
 @bp.route('/game/<gid>/user/<uid>', methods=['DELETE'])
 def delete_player(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    delete_user = User.query.get_or_404(uid)
     if game is None:
         response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
-    if user.game_id != game.id:
+    if delete_user.game_id != game.id:
         response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
 
-    if game.admin_user_id == user.id:
+    if game.admin_user_id == delete_user.id:
         response = jsonify(Message='Admin can not be removed!')
         response.status_code = 404
         return response
-    if user.id == game.first_user_id:
-        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+    if delete_user.id == game.first_user_id:
+        aktualuserid = [i for i, x in enumerate(game.users) if x == delete_user]
         if len(game.users) > aktualuserid[0]+1:
             game.first_user_id = game.users[aktualuserid[0]+1].id
         else:
             game.first_user_id = game.users[0].id
-    if user.id == game.move_user_id:
-        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+    if delete_user.id == game.move_user_id:
+        aktualuserid = [i for i, x in enumerate(game.users) if x == delete_user]
         if len(game.users) > aktualuserid[0]+1:
             game.move_user_id = game.users[aktualuserid[0]+1].id
         else:
@@ -329,10 +329,10 @@ def delete_player(gid, uid):
         user.dice2_visible = False
         user.dice3_visible = False
     game.stack = 13
-    game.message = "Spieler: {} vom Admin entfernt".format(user.name)
+    game.message = "Spieler: {} vom Admin entfernt".format(delete_user.name)
     db.session.add(game)
     db.session.commit()
-    db.session.delete(user)
+    db.session.delete(delete_user)
     db.session.commit()
     response = jsonify(Message='suscess')
     response.status_code = 200
