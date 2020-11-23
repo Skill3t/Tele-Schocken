@@ -4,15 +4,16 @@
 {{ super() }}
 
 <div class="row col-md-offset-1 col-xs-offset-1">
-  <div class="col-xs-10 col-md-2 ">
-    <h2>Stapel</h2>
-  </div>
-  <div class="col-md-1 col-xs-offset-10 col-md-offset-8">
-      <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question" title="Fragen?"></i></a>
-  </div>
-  <div class="col-md-11 col-xs-offset-1">
+  <div class="col-md-9 col-xs-7" style="text-align: center">
     <h2 class="message" id="Message"></h2>
   </div>
+  <div class="col-md-1 col-xs-2">
+      <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question" title="Fragen?"></i></a>
+  </div>
+  <div class="col-md-1 col-xs-2">
+      <a class="roundetb" id="feedbackBtn" href="#"><i class="fas fa-paper-plane" title="Feedback senden"></i></a>
+  </div>
+
 </div>
 <div class="container-fluid">
   <div class="row">
@@ -39,10 +40,11 @@
 <div class="container-fluid">
   <div class="row ">
     <div class="col-xs-6 col-md-2 col-md-offset-1">
-      <div class="col-xs-5 col-md-8 ">
+      <div class="col-xs-6 col-md-6 ">
         <div class="containerturner" id='startgame_id'>
          <img src="{{ url_for('static', filename = 'image/throw_the_dice.svg')}}" alt="throw the dice">
-         <button id='btn_dice' onclick="dice()" class="btn" title="Würfeln"></button>
+         <button id='btn_dice' onclick="dice()" class="btn" title="Würfeln">Würfeln</button>
+         <p style="text-align: center">Würfeln</p>
         </div>
       </div>
       <div class="col-xs-1 col-md-2">
@@ -53,13 +55,15 @@
       <div class="col-xs-6 col-md-6">
         <div class="containercup">
          <img src="{{ url_for('static', filename = 'image/pulldiceup.svg')}}" alt="pull dice cup up" >
-         <button onclick="pullup()" class="btn" title="Aufdecken"></button>
+         <button onclick="pullup()" class="btn" title="Aufdecken">Aufdecken</button>
+         <p style="text-align: center">Aufdecken</p>
         </div>
       </div>
       <div class="col-xs-6 col-md-6 ">
         <div class="containercup">
          <img src="{{ url_for('static', filename = 'image/pulldicedown.svg')}}" alt="pull dice cup down" >
-         <button onclick="pulldown()" class="btn" title="Zudecken"></button>
+         <button onclick="pulldown()" class="btn" title="Zudecken">Zudecken</button>
+         <p style="text-align: center">Zudecken</p>
         </div>
       </div>
     </div>
@@ -117,11 +121,9 @@
 
   </div>
 </div>
-
+<div style="height:30px;" class="row col-md-offset-1 col-xs-offset-1">
+</div>
 <div class="row ">
-  <div class="col-md-11 col-md-offset-1">
-    <h2>Spieler</h2>
-  </div>
 </div>
 <div class="row" data-example-id="striped-table">
   <div class="col-md-10 col-md-offset-1">
@@ -171,11 +173,7 @@
 
 
 
-<div class="row ">
-  <div class="col-md-1 col-xs-offset-10 col-md-offset-10">
-      <a class="roundetb" id="feedbackBtn" href="#"><i class="fas fa-paper-plane" title="Feedback senden"></i></a>
-  </div>
-</div>
+
 
 <div class="row col-md-offset-1 col-md-6">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
