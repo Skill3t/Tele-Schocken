@@ -627,6 +627,26 @@ def sort_dice(gid):
             db.session.add(game)
             db.session.commit()
             emit('reload_game', game.to_dict(), room=gid, namespace='/game')
+        elif game.stack == 0:
+            all_needed_visible = True
+            for user in game.users:
+                if user.chips != 0:
+                    if not (user.dice1_visible and user.dice2_visible and user.dice3_visible):
+                        all_needed_visible = False
+            if all_needed_visible:
+                for user in game.users:
+                    dices = [user.dice1, user.dice2, user.dice3]
+                    dices.sort()
+                    user.dice1 = dices[0]
+                    user.dice2 = dices[1]
+                    user.dice3 = dices[2]
+                db.session.add(game)
+                db.session.commit()
+                emit('reload_game', game.to_dict(), room=gid, namespace='/game')
+            else:
+                response = jsonify(Message='Warten bis der Admin die Chips verteilen darf (Alle aufgedeckt haben)!')
+                response.status_code = 403
+                return response
         else:
             response = jsonify(Message='Warten bis der Admin die Chips verteilen darf (Alle aufgedeckt haben)!')
             response.status_code = 403
