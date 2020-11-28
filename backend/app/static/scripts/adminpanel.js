@@ -3,7 +3,7 @@ function delete_player(){
     var game = document.getElementById('UUID');
     var game_id = game.innerHTML;
     game_id = game_id.replace(/['"]+/g, '');
-    var delete_player = document.getElementById('delete_player');
+    var delete_player = document.getElementById('select_delete_player');
     var user_id = delete_player.options[delete_player.selectedIndex].value;
 
     var xhttp = new XMLHttpRequest();
@@ -11,15 +11,14 @@ function delete_player(){
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
         if (xhttp.status != 200){
-          alert(''+res.Message);
+          alert('Fehler');
         }else{
           window.location.reload();
         }
       }
-    }
-    xhttp.send(JSON.stringify({}));
+    };
+    xhttp.send();
   }
 }
 
@@ -29,8 +28,6 @@ function sort_dice(){
     game_id = game_id.replace(/['"]+/g, '');
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
-
-
     var xhttp = new XMLHttpRequest();
     xhttp.open("PUT", "/api/game/"+game_id+"/sort");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -39,7 +36,6 @@ function sort_dice(){
         if (xhttp.status != 200){
           var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);
-        }else{
         }
       }
     }
@@ -48,29 +44,29 @@ function sort_dice(){
 
 
 function choose_admin(){
-  if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neune Admin rückgängig gemacht werden')) {
     var game = document.getElementById('UUID');
     var game_id = game.innerHTML;
     game_id = game_id.replace(/['"]+/g, '');
-    var choose_admin = document.getElementById('choose_admin');
-    var new_admin_id = choose_admin.options[choose_admin.selectedIndex].value;
+    var choose_admin_el = document.getElementById('select_choose_admin');
+    var new_admin_id = choose_admin_el.options[choose_admin_el.selectedIndex].value;
     var admin_el = document.getElementById('admin_id');
     var old_admin_id = admin_el.innerHTML;
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+game_id+"/user/"+old_admin_id);
+    xhttp.open("POST", "/api/game/"+game_id+"/user/"+old_admin_id+"/change_admin");
     xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhttp.setRequestHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
         if (xhttp.status != 200){
-          alert(''+res.Message);
-        }else{
-          window.location.reload();
+          alert('Fehler');
         }
       }
     }
-    xhttp.send(JSON.stringify({new_admin_id:new_admin_id}));
+    if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neune Admin rückgängig gemacht werden')) {
+      xhttp.send(JSON.stringify({new_admin_id:new_admin_id}));
+      var bladi = 'Hallo';
   }
 }
 

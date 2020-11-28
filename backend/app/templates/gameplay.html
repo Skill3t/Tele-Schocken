@@ -564,7 +564,6 @@
     faq();
     feedback();
     initial_game_data();
-
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');
@@ -589,8 +588,8 @@
         if (xhttp.status == 200){
           var selecttionsource = document.getElementById('transfer_source_user');
           var selecttiontarget = document.getElementById('transfer_target');
-          var delete_player = document.getElementById('delete_player')
-          var choose_admin = document.getElementById('choose_admin')
+          var delete_player = document.getElementById('select_delete_player')
+          var choose_admin = document.getElementById('select_choose_admin')
           for (num in res.User) {
             var juser = res.User[num];
             var opt = document.createElement('option');
@@ -781,11 +780,21 @@
       socket.emit('join', {room: gameid});
   });
 
-  socket.on('reload_game', function(game, cb) {
+  socket.on('reload_game', function(game) {
       if (game){
         refresh_game(game);
       }
   });
+    /*
+  window.on('beforeunload', function(){
+    socket.close();
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    socket.close();
+});
+*/
+
 
 </script>
 {% endblock %}

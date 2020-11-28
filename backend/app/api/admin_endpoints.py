@@ -330,19 +330,19 @@ def delete_player(gid, uid):
         user.dice3_visible = False
     game.stack = 13
     game.message = "Spieler: {} vom Admin entfernt (ggf. Seite neu laden um Spielerliste zu aktualisieren)".format(delete_user.name)
+    db.session.delete(delete_user)
     db.session.add(game)
     db.session.commit()
-    db.session.delete(delete_user)
-    db.session.commit()
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     response = jsonify(Message='suscess')
     response.status_code = 200
-    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
 
 # XHR choose  new admin
-@bp.route('/game/<gid>/user/<uid>', methods=['POST'])
+@bp.route('/game/<gid>/user/<uid>/change_admin', methods=['POST'])
 def choose_admin(gid, uid):
+    print('TEST1')
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     data = request.get_json() or {}
@@ -369,9 +369,9 @@ def choose_admin(gid, uid):
         game.message = "Admin gewechselt neuer Admin: {}! Neuer Admin muss die Seite einmal neu laden".format(new_admin.name)
         db.session.add(game)
         db.session.commit()
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         response = jsonify(Message='suscess')
         response.status_code = 200
-        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     response = jsonify(Message='Unknown Error')
     response.status_code = 404
@@ -407,6 +407,7 @@ def wait_game(gid):
                 "Message": "suscess",
             }
     """
+    print('TEST2')
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')

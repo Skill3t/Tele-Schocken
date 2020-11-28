@@ -51,27 +51,23 @@
   <div class="container-fluid">
     <div class="row ">
       <div class="col-xs-10 col-md-3 col-md-offset-1 col-xs-offset-1">
-        <form class="form-inline">
-          <div class="form-group">
-            <label for="delete_player">Spieler:</label>
-            <select id="delete_player" name="count">
-              <option value=""></option>
-            </select>
-            <button class="btn btn-primary" id='delete_player_id' onclick="delete_player()">Spieler entfernen</button>
-          </div>
-        </form>
+        <div class="form-group form-inline">
+          <label for="select_delete_player">Spieler:</label>
+          <select id="select_delete_player" name="count">
+            <option value=""></option>
+          </select>
+          <button class="btn btn-primary" id='delete_player_id' onclick="delete_player()">Spieler entfernen</button>
+        </div>
       </div>
 
       <div class="col-xs-10 col-xs-offset-1 col-md-3">
-        <form class="form-inline">
-          <div class="form-group">
-            <label for="choose_admin">Neuen Admin wählen:</label>
-            <select id="choose_admin" name="count">
-              <option value=""></option>
-            </select>
-            <button class="btn btn-primary" id='choose_admin_id' onclick="choose_admin()">Admin wählen</button>
-          </div>
-        </form>
+        <div class="form-group form-inline">
+          <label for="select_choose_admin">Neuen Admin wählen:</label>
+          <select id="select_choose_admin" name="count">
+            <option value=""></option>
+          </select>
+          <button class="btn btn-primary" id='choose_admin_id' onclick="choose_admin()">Admin wählen</button>
+        </div>
       </div>
       <div class="clearfix visible-xs-block visible-sm-block"></div>
       <div class="col-xs-6 col-md-3 col-xs-offset-1">
