@@ -61,6 +61,8 @@ function choose_admin(){
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 200){
           alert('Fehler');
+        }else{
+          window.location.reload();
         }
       }
     }

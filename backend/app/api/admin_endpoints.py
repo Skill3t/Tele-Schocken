@@ -407,7 +407,6 @@ def wait_game(gid):
                 "Message": "suscess",
             }
     """
-    print('TEST2')
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')
