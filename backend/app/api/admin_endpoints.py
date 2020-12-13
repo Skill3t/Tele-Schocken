@@ -186,7 +186,7 @@ def transfer_chips(gid):
                 "Message": "Request must include value",
             }
     """
-    response = jsonify(Message='sucess')
+    response = jsonify(Message='success')
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')

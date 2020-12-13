@@ -1,7 +1,7 @@
 from app.api import bp
 from app import app, db
 
-from flask_socketio import emit, join_room, rooms
+from flask_socketio import emit, join_room
 from flask import jsonify
 from flask import request
 from app.models import User, Game, Status
@@ -38,7 +38,6 @@ def join(message):
     # emit('my_response',
     #     {'data': 'In rooms: ' + ', '.join(rooms()),
     #       'count': session['receive_count'], 'game': game.to_dict()})
-
 
 
 # get Game Data
