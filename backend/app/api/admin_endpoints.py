@@ -125,9 +125,9 @@ def start_game(gid):
     game.move_user_id = game.first_user_id
     db.session.add(game)
     db.session.commit()
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     response = jsonify(Message='suscess')
     response.status_code = 201
-    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
 
@@ -288,6 +288,7 @@ def transfer_chips(gid):
     emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response
 
+
 # XHR Delete User from Game
 @bp.route('/game/<gid>/user/<uid>', methods=['DELETE'])
 def delete_player(gid, uid):
@@ -427,7 +428,7 @@ def wait_game(gid):
     game.status = Status.WAITING
     db.session.add(game)
     db.session.commit()
+    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     response = jsonify(Message='suscess')
     response.status_code = 201
-    emit('reload_game', game.to_dict(), room=gid, namespace='/game')
     return response

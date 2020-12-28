@@ -644,6 +644,11 @@
     if (game.Message){
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
+        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an")){
+          document.getElementById("dice1_cb").checked = true;
+          document.getElementById("dice2_cb").checked = true;
+          document.getElementById("dice3_cb").checked = true;
+        }
         if (game.Message.startsWith('Aufdecken')){
           soundEffect.src = "{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}";
           soundEffect.play();
