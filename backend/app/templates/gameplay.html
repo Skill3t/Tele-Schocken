@@ -28,6 +28,9 @@
         <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
         <p id="UUID" hidden>{{game.UUID}}</p>
         <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+        <p id="first_user_id" hidden>{{game.first_user_id}}</p>
+        <p id="first_user_dice_count_id" hidden>3</p>
+        <p id="your_number_of_dice_id" hidden>0</p>
     </div>
   </div>
 </div>
@@ -72,7 +75,7 @@
     <div class="col-xs-12 col-md-3">
       <div class="row col-md-offset-1">
         <div class="col-xs-12 col-md-9 text-center">
-          <p>Würfel für Becher wählen</p>
+          <p>Würfel für Becher wählen<br>Letzter Wurf muss aufgedeckt werden</p>
         </div>
       </div>
       <div class="clearfix visible-xs-block visible-sm-block"></div>
@@ -277,6 +280,33 @@
             dice1_v.appendChild(dicehelper2(res.dice1));
             dice2_v.appendChild(dicehelper2(res.dice2));
             dice3_v.appendChild(dicehelper2(res.dice3));
+            var your_number_of_dice = document.getElementById('your_number_of_dice_id').innerHTML;
+            var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id').innerHTML;
+            var first_user_id = document.getElementById('first_user_id').innerHTML;
+            var me = localStorage.getItem('id');
+
+            if (first_user_id != me || your_number_of_dice == '3'){
+              if (your_number_of_dice == anzahlel_first_mumber){
+                if (dice1_cb){
+                  dice1_v.style.display = "none";
+                  dice1_v.style.animation = 'none';
+                }
+                if (dice2_cb){
+                  dice2_v.style.display = "none";
+                  dice2_v.style.animation = 'none';
+                }
+                if (dice3_cb){
+                  dice3_v.style.display = "none";
+                  dice3_v.style.animation = 'none';
+                }
+
+
+              }else{
+                dice1_v.style.display = "block";
+                dice2_v.style.display = "block";
+                dice3_v.style.display = "block";
+              }
+            }
             if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
               v2_6er_button.hidden = false;
             }
@@ -461,6 +491,12 @@
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
+    var dice1_v = document.getElementById('dice1_v');
+    var dice2_v = document.getElementById('dice2_v');
+    var dice3_v = document.getElementById('dice3_v');
+    dice1_v.style.display = "block";
+    dice2_v.style.display = "block";
+    dice3_v.style.display = "block";
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onreadystatechange = function() {
@@ -479,6 +515,12 @@
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
+    var dice1_v = document.getElementById('dice1_v');
+    var dice2_v = document.getElementById('dice2_v');
+    var dice3_v = document.getElementById('dice3_v');
+    dice1_v.style.display = "none";
+    dice2_v.style.display = "none";
+    dice3_v.style.display = "none";
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -638,7 +680,8 @@
     var stackchips = document.getElementById('StackChips_id');
     stackchips.innerHTML = 'Chips: '+ game.Stack
     var firstuser_id = game['First']
-
+    var first_user_id_el = document.getElementById('first_user_id');
+    first_user_id_el.innerHTML = firstuser_id;
     // set Game Message
     var el_message = document.getElementById('Message');
     if (game.Message){
@@ -670,10 +713,15 @@
       chips.innerHTML = juser['Chips'];
       //set anzahl würfe
       if (juser['Id'] == firstuser_id){
+
+
         var anzahlel = document.getElementById('throw_id');
+
         anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
         var row = document.getElementById('row'+juser['Id']);
         row.style.backgroundColor = "lightblue";
+        var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
+        anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
       }else{
         var row = document.getElementById('row'+juser['Id']);
         row.style.backgroundColor = "#11ffee00";
@@ -705,6 +753,12 @@
         throwbutton.className  = 'buttongreen containerturner';
       }else{
         throwbutton.className  = 'buttongray containerturner';
+      }
+      // save your numbers of dice to how wehe i have to pull up
+      if (juser['Id'] == id){
+        your_number_of_dice_id
+        var your_number_of_dice_id = document.getElementById('your_number_of_dice_id');
+        your_number_of_dice_id.innerHTML = juser['Number_Dice'];
       }
 
       var userhalfs = juser['Halfcount']
