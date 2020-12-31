@@ -284,8 +284,8 @@
             var first_user_id = document.getElementById('first_user_id').innerHTML;
             var me = localStorage.getItem('id');
 
-            if (first_user_id != me || res.number_dice == "3"){
-              if (res.number_dice == anzahlel_first_mumber || first_user_id != me){
+            if (first_user_id != me || res.number_dice == 3){
+              if (String(res.number_dice) == anzahlel_first_mumber || first_user_id == me){
                 if (dice1_cb){
                   dice1_v.style.display = "none";
                   dice1_v.style.animation = 'none';
@@ -305,6 +305,10 @@
                 dice2_v.style.display = "block";
                 dice3_v.style.display = "block";
               }
+            }else{
+              dice1_v.style.display = "block";
+              dice2_v.style.display = "block";
+              dice3_v.style.display = "block";
             }
             if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
               v2_6er_button.hidden = false;
