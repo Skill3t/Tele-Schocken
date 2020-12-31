@@ -280,13 +280,12 @@
             dice1_v.appendChild(dicehelper2(res.dice1));
             dice2_v.appendChild(dicehelper2(res.dice2));
             dice3_v.appendChild(dicehelper2(res.dice3));
-            var your_number_of_dice = document.getElementById('your_number_of_dice_id').innerHTML;
             var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id').innerHTML;
             var first_user_id = document.getElementById('first_user_id').innerHTML;
             var me = localStorage.getItem('id');
 
-            if (first_user_id != me || your_number_of_dice == '3'){
-              if (your_number_of_dice == anzahlel_first_mumber){
+            if (first_user_id != me || res.number_dice == "3"){
+              if (res.number_dice == anzahlel_first_mumber){
                 if (dice1_cb){
                   dice1_v.style.display = "none";
                   dice1_v.style.animation = 'none';
@@ -754,7 +753,7 @@
       }else{
         throwbutton.className  = 'buttongray containerturner';
       }
-      // save your numbers of dice to how wehe i have to pull up
+      // save your numbers of dice to how when i have to pull up did not uesed any more
       if (juser['Id'] == id){
         your_number_of_dice_id
         var your_number_of_dice_id = document.getElementById('your_number_of_dice_id');
