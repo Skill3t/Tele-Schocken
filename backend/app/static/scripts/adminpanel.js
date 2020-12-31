@@ -114,8 +114,13 @@ function back_to_waiting(){
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 200){
-          var res=JSON.parse(xhttp.responseText);
-          alert(''+res.Message);
+          try {
+            var res=JSON.parse(xhttp.responseText);
+            alert(''+res.Message);
+          }
+          catch (e) {
+            alert('Allgemeiner Fehler');
+          }
         }else{
           var res=JSON.parse(xhttp.responseText);
           alert(''+res.Message);

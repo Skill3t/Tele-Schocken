@@ -198,6 +198,10 @@ def transfer_chips(gid):
         response = jsonify(Message='request must include target')
         response.status_code = 400
         return response
+    if data['count'] is None:
+        response = jsonify(Message='Keinen Wert für Chips gewählt')
+        response.status_code = 400
+        return response
     # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
         escapedsource = str(utils.escape(data['source']))
@@ -226,6 +230,7 @@ def transfer_chips(gid):
         escapedtarget = str(utils.escape(data['target']))
         userB = User.query.get_or_404(escapedtarget)
         escapedcount = int(utils.escape(data['count']))
+
         if game.stack >= escapedcount:
             game.stack = game.stack - escapedcount
             userB.chips = userB.chips + escapedcount
