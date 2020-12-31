@@ -285,7 +285,7 @@
             var me = localStorage.getItem('id');
 
             if (first_user_id != me || res.number_dice == "3"){
-              if (res.number_dice == anzahlel_first_mumber){
+              if (res.number_dice == anzahlel_first_mumber || first_user_id != me){
                 if (dice1_cb){
                   dice1_v.style.display = "none";
                   dice1_v.style.animation = 'none';
