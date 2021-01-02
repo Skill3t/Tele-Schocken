@@ -198,10 +198,11 @@ def transfer_chips(gid):
         response = jsonify(Message='request must include target')
         response.status_code = 400
         return response
-    if data['count'] is None:
-        response = jsonify(Message='Keinen Wert für Chips gewählt')
-        response.status_code = 400
-        return response
+    # need to fix later on
+    # if data['count'] is None:
+    #    response = jsonify(Message='Keinen Wert für Chips gewählt')
+    #    response.status_code = 400
+    #    return response
     # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
         escapedsource = str(utils.escape(data['source']))
