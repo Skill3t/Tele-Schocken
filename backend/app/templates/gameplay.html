@@ -23,6 +23,7 @@
     <div class="clearfix visible-xs-block visible-sm-block"></div>
     <div class="col-xs-6 col-md-3">
       <h3 id="throw_id">Anzahl würfe:</h3>
+      <p id="throw_number_id" hidden></p>
     </div>
     <div class="col-xs-6 col-md-3">
         <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
@@ -49,8 +50,15 @@
          <p style="text-align: center">Würfeln</p>
         </div>
       </div>
+
       <div class="col-xs-1 col-md-2">
-        <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
+        <div class="row" style="white-space:nowrap">
+          <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
+        </div>
+        <div class="row" style="white-space:nowrap" id='set_passiv_div_id'>
+          <input type="checkbox" title="Du wirst übersprungen bis die Runde ausgespielt ist" id="setpassivid" name="setpassivid" value="False" onchange="set_user_passiv(this)">
+          <label for="setpassivid">Pause (beta)</label>
+        </div>
       </div>
     </div>
     <div class="col-xs-6 col-md-3">
@@ -474,6 +482,28 @@
     }
   }
 
+  function set_user_passiv(){
+    var id = localStorage.getItem('id');
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    var userstateel = document.getElementById('setpassivid');
+    var userstate = userstateel.checked;
+
+    gameid = gameid.replace(/['"]+/g, '');
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/passiv");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+        var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200){
+          alert(''+res.Message);
+        }
+      }
+    }
+    xhttp.send(JSON.stringify({userstate:userstate}));
+  }
+
   function finish(){
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
@@ -721,11 +751,10 @@
       chips.innerHTML = juser['Chips'];
       //set anzahl würfe
       if (juser['Id'] == firstuser_id){
-
-
         var anzahlel = document.getElementById('throw_id');
-
+        var anzahl_number_el = document.getElementById('throw_number_id');
         anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+        anzahl_number_el.innerHTML = juser['Number_Dice'];
         var row = document.getElementById('row'+juser['Id']);
         row.style.backgroundColor = "lightblue";
         var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
@@ -755,8 +784,20 @@
           waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
         }
       }
-      // set button color
+      // me as user
       var id = localStorage.getItem('id');
+      if (juser['Id'] == id){
+        if (game.Stack == 0 && juser['Chips'] == 0){
+          var set_passiv_div_id = document.getElementById('set_passiv_div_id');
+          set_passiv_div_id.style.display = "block";
+        }else{
+          var set_passiv_div_id = document.getElementById('set_passiv_div_id');
+          set_passiv_div_id.style.display = "none";
+          var setpassivid = document.getElementById('setpassivid');
+          setpassivid.checked = false;
+        }
+      }
+      // set button color
       if (id == waiting_user_id){
         throwbutton.className  = 'buttongreen containerturner';
       }else{

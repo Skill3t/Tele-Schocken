@@ -316,15 +316,50 @@ def finish_throwing(gid, uid):
         return response
     waitinguser = User.query.get_or_404(game.move_user_id)
     if waitinguser.id == user.id:
-        # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
-        aktualuserid = [i for i, x in enumerate(game.users) if x == user]
-        if len(game.users) > aktualuserid[0]+1:
-            game.move_user_id = game.users[aktualuserid[0]+1].id
-        else:
-            game.move_user_id = game.users[0].id
-        next_user = User.query.get_or_404(game.move_user_id)
-        if next_user.number_dice != 0:
+        potenzial_next = None
+        upperfound = False
+        # first find aktuell user and check all users behind for the next user (not passive)
+        for i, x in enumerate(game.users):
+            if upperfound:
+                potenzial_next = User.query.get_or_404(game.users[i].id)
+                # Netxt user is passiv and need to scip
+                if (potenzial_next.passive):
+                    potenzial_next = None
+                    continue
+                # next user is active and ist the real next user
+                else:
+                    break
+            if (x == user):
+                upperfound = True
+        # no user found so check the first "half" of the list for the next user
+        if potenzial_next is None:
+            for i, x in enumerate(game.users):
+                # already check this part of the list
+                if (x == user):
+                    break
+                else:
+                    potenzial_next = User.query.get_or_404(game.users[i].id)
+                    # Netxt user is passiv and need to scip
+                    if (potenzial_next.passive):
+                        potenzial_next = None
+                        continue
+                    # next user is active and ist the real next user
+                    else:
+                        break
+        if potenzial_next is None or potenzial_next.number_dice != 0:
             game.message = "Aufdecken!"
+        else:
+            game.move_user_id = potenzial_next.id
+        # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
+        # aktualuserid = [i for i, x in enumerate(game.users) if x == user]
+        # aktualuserid = [i for i, x in enumerate(game.users) if (x == user and not x.passive)]
+        # if len(game.users) > aktualuserid[0]+1:
+        #    game.move_user_id = game.users[aktualuserid[0]+1].id
+        # else:
+        #    game.move_user_id = game.users[0].id
+        # next_user = User.query.get_or_404(game.move_user_id)
+        # if next_user.number_dice != 0:
+        #    game.message = "Aufdecken!"
         db.session.add(game)
         db.session.commit()
         response = jsonify(Message='suscess')
@@ -338,6 +373,36 @@ def finish_throwing(gid, uid):
     response = jsonify(Message='Error')
     response.status_code = 400
     return response
+
+
+# set user aktiv or passiv
+@bp.route('/game/<gid>/user/<uid>/passiv', methods=['POST'])
+def set_user_passiv(gid, uid):
+    game = Game.query.filter_by(UUID=gid).first()
+    user = User.query.get_or_404(uid)
+    if game is None:
+        response = jsonify(Message='Game not found')
+        response.status_code = 404
+        return response
+    data = request.get_json() or {}
+    if 'userstate' in data:
+        escapeduserstate = str(utils.escape(data['userstate']))
+        val = escapeduserstate.lower() in ['true', '1']
+        user.passive = val
+        # # TODO: Wheren player needs to dice and check the box
+        if game.move_user_id == user.id and val:
+            print('Hier')
+        db.session.add(user)
+        db.session.commit()
+        response = jsonify(Message='suscess')
+        response.status_code = 201
+        # needed ???
+        emit('reload_game', game.to_dict(), room=gid, namespace='/game')
+        return response
+    else:
+        response = jsonify(Message="Request must include userstate")
+        response.status_code = 400
+        return response
 
 
 # roll dice
@@ -409,11 +474,9 @@ def roll_dice(gid, uid):
     first_user = User.query.get_or_404(game.first_user_id)
     waitinguser = User.query.get_or_404(game.move_user_id)
     game.refreshed = datetime.now()
-    if waitinguser.id == user.id or user.passive:
+    if waitinguser.id == user.id:
         if game.status == Status.GAMEFINISCH:
             game.status = Status.STARTED
-        if user.passive:
-            user.passive = False
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
             if user.number_dice >= 3:
                 response = jsonify(Message='User hase alread dice 3 times')
@@ -423,6 +486,7 @@ def roll_dice(gid, uid):
             fallen = decision(game.changs_of_fallling_dice)
             if fallen:
                 game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
+                # Statistic
                 game.fallling_dice_count = game.fallling_dice_count + 1
                 db.session.add(game)
                 db.session.commit()
@@ -432,18 +496,54 @@ def roll_dice(gid, uid):
                 return response
             user.number_dice = user.number_dice + 1
             if user.number_dice == first_user.number_dice and user.id != first_user.id or user.number_dice == 3:
-                # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
-                aktualuserid = [i for i, x in enumerate(game.users) if x == user]
-                if len(game.users) > aktualuserid[0]+1:
-                    game.move_user_id = game.users[aktualuserid[0]+1].id
-                else:
-                    game.move_user_id = game.users[0].id
-                next_user = User.query.get_or_404(game.move_user_id)
-                # Back to first user
-                if next_user.number_dice != 0:
+                potenzial_next = None
+                upperfound = False
+                # first find aktuell user and check all users behind for the next user (not passive)
+                for i, x in enumerate(game.users):
+                    if upperfound:
+                        potenzial_next = User.query.get_or_404(game.users[i].id)
+                        # Netxt user is passiv and need to scip
+                        if (potenzial_next.passive):
+                            potenzial_next = None
+                            continue
+                        # next user is active and ist the real next user
+                        else:
+                            break
+                    if (x == user):
+                        upperfound = True
+                # no user found so check the first "half" of the list for the next user
+                if potenzial_next is None:
+                    for i, x in enumerate(game.users):
+                        # already check this part of the list
+                        if (x == user):
+                            break
+                        else:
+                            potenzial_next = User.query.get_or_404(game.users[i].id)
+                            # Netxt user is passiv and need to scip
+                            if (potenzial_next.passive):
+                                potenzial_next = None
+                                continue
+                            # next user is active and ist the real next user
+                            else:
+                                break
+                if potenzial_next is None or potenzial_next.number_dice != 0:
                     game.message = "Aufdecken!"
-                    db.session.add(game)
-                    db.session.commit()
+                else:
+                    game.move_user_id = potenzial_next.id
+                # https://stackoverflow.com/questions/364621/how-to-get-items-position-in-a-list
+                # aktualuserid = [i for i, x in enumerate(game.users) if (x == user and not x.passive)]
+                # print(aktualuserid)
+                # nex user is first user
+                # if len(game.users) > aktualuserid[0]+1:
+                #    game.move_user_id = game.users[aktualuserid[0]+1].id
+                # else:
+                #    game.move_user_id = game.users[0].id
+                # next_user = User.query.get_or_404(game.move_user_id)
+                # Back to first user
+                # if next_user.number_dice != 0:
+                #    game.message = "Aufdecken!"
+                db.session.add(game)
+                db.session.commit()
             if 'dice1' in data:
                 escapeddice1 = str(utils.escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
@@ -473,6 +573,7 @@ def roll_dice(gid, uid):
             response = jsonify(Message='Its not your turn')
             response.status_code = 400
             return response
+        # Statistic
         if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
             game.schockoutcount = game.schockoutcount + 1
             db.session.add(game)

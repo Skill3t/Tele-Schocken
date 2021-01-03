@@ -289,6 +289,7 @@ def transfer_chips(gid):
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
             user.chips = 0
+            user.passive = False
         user.dice1 = 0
         user.dice2 = 0
         user.dice3 = 0
