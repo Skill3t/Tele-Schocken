@@ -30,7 +30,6 @@
         <p id="admin_id" hidden>{{game.admin_user_id}}</p>
         <p id="first_user_id" hidden>{{game.first_user_id}}</p>
         <p id="first_user_dice_count_id" hidden>3</p>
-        <p id="your_number_of_dice_id" hidden>0</p>
     </div>
   </div>
 </div>
@@ -304,17 +303,23 @@
                 dice1_v.style.display = "block";
                 dice2_v.style.display = "block";
                 dice3_v.style.display = "block";
+                if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
+                  v2_6er_button.hidden = false;
+                }
+                if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6){
+                  v3_6er_button.hidden = false;
+                }
               }
             }else{
               dice1_v.style.display = "block";
               dice2_v.style.display = "block";
               dice3_v.style.display = "block";
-            }
-            if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
-              v2_6er_button.hidden = false;
-            }
-            if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6){
-              v3_6er_button.hidden = false;
+              if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
+                v2_6er_button.hidden = false;
+              }
+              if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6){
+                v3_6er_button.hidden = false;
+              }
             }
           }
         }else{
@@ -757,13 +762,6 @@
       }else{
         throwbutton.className  = 'buttongray containerturner';
       }
-      // save your numbers of dice to how when i have to pull up did not uesed any more
-      if (juser['Id'] == id){
-        your_number_of_dice_id
-        var your_number_of_dice_id = document.getElementById('your_number_of_dice_id');
-        your_number_of_dice_id.innerHTML = juser['Number_Dice'];
-      }
-
       var userhalfs = juser['Halfcount']
       var userfirsthalfel = document.getElementById('first'+juser['Id']);
       userfirsthalfel.innerHTML = userhalfs;

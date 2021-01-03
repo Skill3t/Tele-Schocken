@@ -35,10 +35,6 @@ def join(message):
     game = Game.query.filter_by(UUID=message['room']).first()
     emit('reload_game', game.to_dict(), room=game.UUID, namespace='/game')
 
-    # emit('my_response',
-    #     {'data': 'In rooms: ' + ', '.join(rooms()),
-    #       'count': session['receive_count'], 'game': game.to_dict()})
-
 
 # get Game Data
 @bp.route('/game/<gid>', methods=['GET'])
@@ -405,7 +401,7 @@ def roll_dice(gid, uid):
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify()
+        response = jsonify(Message='Player not in Game')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -416,13 +412,23 @@ def roll_dice(gid, uid):
     if waitinguser.id == user.id or user.passive:
         if game.status == Status.GAMEFINISCH:
             game.status = Status.STARTED
-            response = jsonify(Message='New Game Startet')
         if user.passive:
             user.passive = False
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
             if user.number_dice >= 3:
                 response = jsonify(Message='User hase alread dice 3 times')
                 response.status_code = 404
+                return response
+            # Check if a dice fall from the table and return if so
+            fallen = decision(game.changs_of_fallling_dice)
+            if fallen:
+                game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
+                game.fallling_dice_count = game.fallling_dice_count + 1
+                db.session.add(game)
+                db.session.commit()
+                response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3, number_dice=user.number_dice)
+                response.status_code = 201
+                emit('reload_game', game.to_dict(), room=gid, namespace='/game')
                 return response
             user.number_dice = user.number_dice + 1
             if user.number_dice == first_user.number_dice and user.id != first_user.id or user.number_dice == 3:
@@ -467,13 +473,6 @@ def roll_dice(gid, uid):
             response = jsonify(Message='Its not your turn')
             response.status_code = 400
             return response
-        fallen = decision(game.changs_of_fallling_dice)
-        if fallen:
-            user.number_dice = user.number_dice - 1
-            game.message = "Hoppla, {} ist ein Würfel vom Tisch gefallen!".format(user.name)
-            game.fallling_dice_count = game.fallling_dice_count + 1
-            db.session.add(game)
-            db.session.commit()
         if user.dice1 == 1 and user.dice2 == 1 and user.dice3 == 1:
             game.schockoutcount = game.schockoutcount + 1
             db.session.add(game)
@@ -491,6 +490,7 @@ def roll_dice(gid, uid):
         response = jsonify(Message='Its not your turn')
         response.status_code = 400
     return response
+
 
 # turn dice (2 or 3 6er to 1 or 2 1er)
 @bp.route('/game/<gid>/user/<uid>/diceturn', methods=['POST'])
@@ -601,6 +601,9 @@ def turn_dice(gid, uid):
 
 
 # XHR Route
+# after everyone has pull up the dice cup the admin is able to sort the dice1
+# This make it easyer to visial see witch player wind and witch player select_choose_admin
+# Could be enhanced to directly highlight the potensial Winner (not exactly possible because of to many diffrent rules)
 @bp.route('/game/<gid>/sort', methods=['PUT'])
 def sort_dice(gid):
     data = request.get_json() or {}
@@ -658,6 +661,8 @@ def sort_dice(gid):
     return response
 
 
+# to fall a dice from the tableCount
+# the chanse increases each round
 def decision(probability) -> bool:
     """
     Return a Boolen that reprenet a fallen dice
