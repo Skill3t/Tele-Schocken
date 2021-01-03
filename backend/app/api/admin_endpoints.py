@@ -209,7 +209,12 @@ def transfer_chips(gid):
         userA = User.query.get_or_404(escapedsource)
         escapedtarget = str(utils.escape(data['target']))
         userB = User.query.get_or_404(escapedtarget)
-        escapedcount = int(utils.escape(data['count']))
+        if data['count'] is not None:
+            escapedcount = int(utils.escape(data['count']))
+        else:
+            response = jsonify(Message='No chips in count. try again')
+            response.status_code = 400
+            return response
 
         if userA.chips >= escapedcount:
             userA.chips = userA.chips - escapedcount
@@ -230,8 +235,12 @@ def transfer_chips(gid):
     if 'count' in data and 'stack' in data and 'target' in data:
         escapedtarget = str(utils.escape(data['target']))
         userB = User.query.get_or_404(escapedtarget)
-        escapedcount = int(utils.escape(data['count']))
-
+        if data['count'] is not None:
+            escapedcount = int(utils.escape(data['count']))
+        else:
+            response = jsonify(Message='No chips in count. try again')
+            response.status_code = 400
+            return response
         if game.stack >= escapedcount:
             game.stack = game.stack - escapedcount
             userB.chips = userB.chips + escapedcount
