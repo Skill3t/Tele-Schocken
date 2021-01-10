@@ -34,7 +34,7 @@ class BaseGameData():
         self.fallling_dice_count = 0
         self.schockoutcount = 0
         self.throw_dice_count = 0
-        self.changs_of_fallling_dice = 0.005
+        self.changs_of_fallling_dice = 0.003
 
 
 class Statistic(BaseGameData, db.Model):

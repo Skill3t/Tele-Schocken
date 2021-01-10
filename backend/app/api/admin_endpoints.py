@@ -284,7 +284,7 @@ def transfer_chips(gid):
         game.status = Status.ROUNDFINISCH
         game.stack = 13
         game.halfcount = game.halfcount + 1
-        game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.001
+        game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.0002
         response = jsonify(Message='Player {} lose a half'.format(userB.name))
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
