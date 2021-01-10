@@ -284,9 +284,9 @@
             dice1_v.innerHTML = '';
             dice2_v.innerHTML = '';
             dice3_v.innerHTML = '';
-            dice1_v.appendChild(dicehelper2(res.dice1));
-            dice2_v.appendChild(dicehelper2(res.dice2));
-            dice3_v.appendChild(dicehelper2(res.dice3));
+            dice1_v.appendChild(dicehelper(res.dice1));
+            dice2_v.appendChild(dicehelper(res.dice2));
+            dice3_v.appendChild(dicehelper(res.dice3));
             var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id').innerHTML;
             var first_user_id = document.getElementById('first_user_id').innerHTML;
             var me = localStorage.getItem('id');
@@ -341,24 +341,6 @@
 
 
   function dicehelper(eyes){
-    if (eyes == 1){
-      return 'dice-first-face'
-    }else if (eyes == 2) {
-      return 'dice-second-face'
-    }else if (eyes == 3) {
-      return 'dice-third-face'
-    }else if (eyes == 4) {
-      return 'ddice-fourth-face'
-    }else if (eyes == 5) {
-      return 'dice-fifth-face'
-    }else if (eyes == 6) {
-      return 'dice-sixth-face'
-    }else{
-      return ''
-    }
-  }
-
-  function dicehelper2(eyes){
     switch (eyes) {
       case 1: {
         var div = document.createElement('div');
@@ -600,19 +582,19 @@
             dice2_v.innerHTML = '';
             dice3_v.innerHTML = '';
             if (res.dice1){
-              dice1_v.appendChild(dicehelper2(res.dice1));
+              dice1_v.appendChild(dicehelper(res.dice1));
             }else{
               dice1_cb.checked = true;
               dice1_cb.disabled = true;
             }
             if (res.dice2){
-              dice2_v.appendChild(dicehelper2(res.dice2));
+              dice2_v.appendChild(dicehelper(res.dice2));
             }else{
                 dice2_cb.checked = true;
                 dice2_cb.disabled = true;
             }
             if (res.dice3){
-              dice3_v.appendChild(dicehelper2(res.dice3));
+              dice3_v.appendChild(dicehelper(res.dice3));
             }else{
                 dice3_cb.checked = true;
                 dice3_cb.disabled = true;
@@ -694,9 +676,8 @@
     }
     xhttp.send(JSON.stringify({}));
   }
+
   function refresh_game(game){
-
-
     var game_uuid = document.getElementById('UUID');
     var gameid = game_uuid.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
@@ -817,9 +798,9 @@
         dice3_v.innerHTML = '';
         for (num in juser.Dices) {
           var jdice = juser.Dices[num];
-          dice1_v.appendChild(dicehelper2(jdice['Dice1']));
-          dice2_v.appendChild(dicehelper2(jdice['Dice2']));
-          dice3_v.appendChild(dicehelper2(jdice['Dice3']));
+          dice1_v.appendChild(dicehelper(jdice['Dice1']));
+          dice2_v.appendChild(dicehelper(jdice['Dice2']));
+          dice3_v.appendChild(dicehelper(jdice['Dice3']));
         }
       }else{
         dice1_v.innerHTML = '';

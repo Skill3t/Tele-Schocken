@@ -548,6 +548,7 @@ def roll_dice(gid, uid):
                 escapeddice1 = str(utils.escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
                     user.dice1 = randint(1, 6)
+                    user.dice1_visible = False
                 else:
                     user.dice1_visible = True
             else:
@@ -556,6 +557,7 @@ def roll_dice(gid, uid):
                 escapeddice2 = str(utils.escape(data['dice2']))
                 if escapeddice2.lower() in ['true', '1']:
                     user.dice2 = randint(1, 6)
+                    user.dice2_visible = False
                 else:
                     user.dice2_visible = True
             else:
@@ -565,6 +567,7 @@ def roll_dice(gid, uid):
                 escapeddice3 = str(utils.escape(data['dice3']))
                 if escapeddice3.lower() in ['true', '1']:
                     user.dice3 = randint(1, 6)
+                    user.dice3_visible = False
                 else:
                     user.dice3_visible = True
             else:
@@ -581,10 +584,10 @@ def roll_dice(gid, uid):
         game.throw_dice_count = game.throw_dice_count + 1
         db.session.add(game)
         db.session.commit()
-        response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3, number_dice=user.number_dice)
-        response.status_code = 201
         db.session.add(user)
         db.session.commit()
+        response = jsonify(fallen=fallen, dice1=user.dice1, dice2=user.dice2, dice3=user.dice3, number_dice=user.number_dice)
+        response.status_code = 201
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
