@@ -252,7 +252,7 @@ def pull_up_dice_cup(gid, uid):
         HTTP/1.1 201
         Content-Type: text/json
             {
-                "Message": "suscess",
+                "Message": "success",
             }
     """
     game = Game.query.filter_by(UUID=gid).first()
@@ -278,7 +278,7 @@ def pull_up_dice_cup(gid, uid):
             game.message = "Warten auf Vergabe der Chips!"
             db.session.add(game)
             db.session.commit()
-        response = jsonify(Message='suscess')
+        response = jsonify(Message='success')
         response.status_code = 201
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
@@ -363,7 +363,7 @@ def finish_throwing(gid, uid):
         #    game.message = "Aufdecken!"
         db.session.add(game)
         db.session.commit()
-        response = jsonify(Message='suscess')
+        response = jsonify(Message='success')
         response.status_code = 200
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
@@ -395,7 +395,7 @@ def set_user_passiv(gid, uid):
             print('Hier')
         db.session.add(user)
         db.session.commit()
-        response = jsonify(Message='suscess')
+        response = jsonify(Message='success')
         response.status_code = 201
         # needed ???
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')

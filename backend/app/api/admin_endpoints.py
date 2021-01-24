@@ -114,7 +114,7 @@ def start_game(gid):
         HTTP/1.1 201
         Content-Type: text/json
             {
-                "Message": "suscess",
+                "Message": "success",
             }
     """
     data = request.get_json() or {}
@@ -137,7 +137,7 @@ def start_game(gid):
     db.session.add(game)
     db.session.commit()
     emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-    response = jsonify(Message='suscess')
+    response = jsonify(Message='success')
     response.status_code = 201
     return response
 
@@ -362,7 +362,7 @@ def delete_player(gid, uid):
     db.session.add(game)
     db.session.commit()
     emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-    response = jsonify(Message='suscess')
+    response = jsonify(Message='success')
     response.status_code = 200
     return response
 
@@ -398,7 +398,7 @@ def choose_admin(gid, uid):
         db.session.add(game)
         db.session.commit()
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-        response = jsonify(Message='suscess')
+        response = jsonify(Message='success')
         response.status_code = 200
         return response
     response = jsonify(Message='Unknown Error')
@@ -432,7 +432,7 @@ def wait_game(gid):
         HTTP/1.1 201
         Content-Type: text/json
             {
-                "Message": "suscess",
+                "Message": "success",
             }
     """
     game = Game.query.filter_by(UUID=gid).first()
@@ -456,6 +456,6 @@ def wait_game(gid):
     db.session.add(game)
     db.session.commit()
     emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-    response = jsonify(Message='suscess')
+    response = jsonify(Message='success')
     response.status_code = 201
     return response
