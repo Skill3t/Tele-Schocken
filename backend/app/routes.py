@@ -37,6 +37,8 @@ def game(gid):
 @app.route('/game/<gid>', methods=['GET', 'POST'])
 def game_play(gid):
     game = Game.query.filter_by(UUID=gid).first()
+    if game is None:
+        return render_template('404.html')
     form = FeedbackFrom()
     if form.validate_on_submit():
         browser = str(form.browser.data)
