@@ -24,6 +24,7 @@ def statistic():
                 stat.fallling_dice_count = old_game.fallling_dice_count
                 stat.changs_of_fallling_dice = old_game.changs_of_fallling_dice
                 stat.throw_dice_count = old_game.throw_dice_count
+                stat.stack_max = old_game.stack_max
                 db.session.add(stat)
                 for user in old_game.users:
                     db.session.delete(user)

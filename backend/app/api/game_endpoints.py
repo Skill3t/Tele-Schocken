@@ -33,7 +33,8 @@ def join(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
     print('join room {}'.format(message['room']))
     game = Game.query.filter_by(UUID=message['room']).first()
-    emit('reload_game', game.to_dict(), room=game.UUID, namespace='/game')
+    if game is not None:
+        emit('reload_game', game.to_dict(), room=game.UUID, namespace='/game')
 
 
 # get Game Data

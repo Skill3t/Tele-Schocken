@@ -73,19 +73,29 @@
     </div>
   </div>
 </div>
-<div class="row col-md-offset-1" id="admin_interface">
+<div class="row col-md-offset-1 admin_interface" id="admin_interface1">
   <div class="col-md-9">
-    <h3>Spiel starten (<b>Du kann Spieler auch nachträglich hinzufügen</b>)</h3>
+    <h3>Spiel starten (<b>Du kannst Spieler auch nachträglich hinzufügen</b>)</h3>
   </div>
 </div>
-<div class="row col-md-offset-1" id="admin_interface">
+<div class="row col-md-offset-1 admin_interface" id="admin_interface2">
+  <div class="col-md-9">
+    <label for="stack_max">Anzahl Chips / Deckel wählen:</label>
+    <select name="stack_max" id="stack_max" class="form-select">
+     <option value="12">12</option>
+     <option value="13" selected="selected">13 </option>
+     <option value="15">15</option>
+     <option value="24">24</option>
+    </select>
+  </div>
+</div>
+<div class="row col-md-offset-1 admin_interface" id="admin_interface3">
   <div class="col-md-1" >
     <button class="btn btn-primary" id='startgame_id'onclick="startGame()" disabled>Starten</button>
     <div id="inline_button_text" >
       <h3>👈</h3>
     </div>
   </div>
-
 </div>
 
 
@@ -246,6 +256,8 @@
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     gameid = gameid.replace(/^"(.+)"$/,'$1');
+    var stack_max = document.getElementById("stack_max").value;
+
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/game/"+gameid+"/start");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -262,7 +274,7 @@
         }
       }
     }
-    xhttp.send(JSON.stringify({}));
+    xhttp.send(JSON.stringify({stack_max:stack_max}));
   }
 
   function startup(){
@@ -273,9 +285,15 @@
     var admin_id = admin_el.innerHTML;
     var setdamin = document.getElementById('admin');
     if (id != admin_id){
-      var x = document.getElementById("admin_interface");
+      var x1 = document.getElementById("admin_interface1");
       //Disable admin interface for none admins
-      x.style.display = "none";
+      x1.style.display = "none";
+      var x2 = document.getElementById("admin_interface2");
+      //Disable admin interface for none admins
+      x2.style.display = "none";
+      var x3 = document.getElementById("admin_interface3");
+      //Disable admin interface for none admins
+      x3.style.display = "none";
     }
 
     if (id == admin_id){

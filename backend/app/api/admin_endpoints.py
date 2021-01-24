@@ -96,6 +96,8 @@ def start_game(gid):
     ----------
     gid : 'int'
         A Game UUID
+    stack_max : 'int'
+        stack_max
 
     Examples
     --------
@@ -115,12 +117,21 @@ def start_game(gid):
                 "Message": "suscess",
             }
     """
+    data = request.get_json() or {}
+    # requierd attribute not included
+    if 'stack_max' not in data:
+        response = jsonify(Message='request must include stack_max')
+        response.status_code = 400
+        return response
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')
         response.status_code = 404
         return response
     game.status = Status.STARTED
+    escaped_stack_max = int(utils.escape(data['stack_max']))
+    game.stack_max = escaped_stack_max
+    game.stack = escaped_stack_max
     game.first_user_id = game.users[randrange(len(game.users))].id
     game.move_user_id = game.first_user_id
     db.session.add(game)
@@ -262,7 +273,7 @@ def transfer_chips(gid):
         escapedschockaus = utils.escape(data['schockaus'])
         if escapedschockaus:
             game.stack = 0
-            userB.chips = 13
+            userB.chips = game.stack_max
             game.first_user_id = userB.id
             game.move_user_id = userB.id
             game.message = "Schockaus alle Chips an: {} verteilt!".format(userB.name)
@@ -279,10 +290,10 @@ def transfer_chips(gid):
     # Game GAMEFINISCH or ROUNDFINISCH
     escapedtarget = str(utils.escape(data['target']))
     userB = User.query.get_or_404(escapedtarget)
-    if userB.chips == 13:
+    if userB.chips == game.stack_max:
         userB.halfcount = userB.halfcount + 1
         game.status = Status.ROUNDFINISCH
-        game.stack = 13
+        game.stack = game.stack_max
         game.halfcount = game.halfcount + 1
         game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.0002
         response = jsonify(Message='Player {} lose a half'.format(userB.name))
@@ -345,7 +356,7 @@ def delete_player(gid, uid):
         user.dice1_visible = False
         user.dice2_visible = False
         user.dice3_visible = False
-    game.stack = 13
+    game.stack = game.stack_max
     game.message = "Spieler: {} vom Admin entfernt (ggf. Seite neu laden um Spielerliste zu aktualisieren)".format(delete_user.name)
     db.session.delete(delete_user)
     db.session.add(game)
@@ -440,7 +451,7 @@ def wait_game(gid):
         user.dice2_visible = False
         user.dice3_visible = False
     game.message = ""
-    game.stack = 13
+    game.stack = game.stack_max
     game.status = Status.WAITING
     db.session.add(game)
     db.session.commit()
