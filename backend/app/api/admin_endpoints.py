@@ -352,6 +352,7 @@ def delete_player(gid, uid):
         user.dice2 = 0
         user.dice3 = 0
         user.number_dice = 0
+        user.passive = False
         # user.visible = False
         user.dice1_visible = False
         user.dice2_visible = False
@@ -370,7 +371,6 @@ def delete_player(gid, uid):
 # XHR choose  new admin
 @bp.route('/game/<gid>/user/<uid>/change_admin', methods=['POST'])
 def choose_admin(gid, uid):
-    print('TEST1')
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     data = request.get_json() or {}
@@ -392,7 +392,6 @@ def choose_admin(gid, uid):
         response.status_code = 404
         return response
     if game.admin_user_id == user.id:
-        print(new_admin)
         game.admin_user_id = new_admin.id
         game.message = "Admin gewechselt neuer Admin: {}! Neuer Admin muss die Seite einmal neu laden".format(new_admin.name)
         db.session.add(game)
@@ -446,6 +445,7 @@ def wait_game(gid):
         user.dice2 = 0
         user.dice3 = 0
         user.number_dice = 0
+        user.passive = False
         # user.visible = False
         user.dice1_visible = False
         user.dice2_visible = False
