@@ -297,7 +297,7 @@ def transfer_chips(gid):
     # Game GAMEFINISCH or ROUNDFINISCH
     escapedtarget = str(utils.escape(data['target']))
     userB = User.query.get_or_404(escapedtarget)
-    #if userB.chips == game.stack_max:
+    # if userB.chips == game.stack_max:
     #    userB.halfcount = userB.halfcount + 1
     #    game.status = Status.ROUNDFINISCH
     #    game.stack = game.stack_max
