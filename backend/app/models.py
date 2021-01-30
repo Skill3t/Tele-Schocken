@@ -8,6 +8,7 @@ from app import db
 import enum
 import uuid
 from datetime import datetime
+from flask import Markup
 
 
 class Status(enum.Enum):
@@ -112,6 +113,9 @@ class User(db.Model):
     dice3_visible = db.Column(db.Boolean(), default=False)
     number_dice = db.Column(db.Integer)  # Max Value = 3
     halfcount = db.Column(db.Integer)
+
+    def user_name(self):
+        return Markup(self.name)
 
     def to_dict(self):
         dice = []

@@ -154,8 +154,8 @@
         {% for user in game.users %}
         <tr id="row{{user.id}}">
           <th class="counterCell" scope="row"></th>
-            <td>
-              {{user.name}}
+            <td id="user{{user.id}}">
+              {{user.user_name()}}
             </td>
             <td id="chips{{user.id}}">
               {{user.chips}}
