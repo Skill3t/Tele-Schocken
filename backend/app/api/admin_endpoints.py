@@ -123,6 +123,10 @@ def start_game(gid):
         response = jsonify(Message='request must include stack_max')
         response.status_code = 400
         return response
+    if 'play_final' not in data:
+        response = jsonify(Message='request must include play_final')
+        response.status_code = 400
+        return response
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
         response = jsonify(Message='Game not found')
@@ -130,8 +134,16 @@ def start_game(gid):
         return response
     game.status = Status.STARTED
     escaped_stack_max = int(utils.escape(data['stack_max']))
+
     game.stack_max = escaped_stack_max
     game.stack = escaped_stack_max
+
+    escaped_play_final = str(utils.escape(data['play_final']))
+    if escaped_play_final.lower() in ['true', '1', 't', 'y', 'yes']:
+        game.play_final = True
+    else:
+        game.play_final = False
+
     game.first_user_id = game.users[randrange(len(game.users))].id
     game.move_user_id = game.first_user_id
     db.session.add(game)
@@ -142,7 +154,7 @@ def start_game(gid):
     return response
 
 
-# transfer chips
+# transfer s
 @bp.route('/game/<gid>/user/chips', methods=['POST'])
 def transfer_chips(gid):
     """At the end of a round the Admin Transers chips from the Stack to a User or
@@ -209,11 +221,6 @@ def transfer_chips(gid):
         response = jsonify(Message='request must include target')
         response.status_code = 400
         return response
-    # need to fix later on
-    # if data['count'] is None:
-    #    response = jsonify(Message='Keinen Wert für Chips gewählt')
-    #    response.status_code = 400
-    #    return response
     # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
         escapedsource = str(utils.escape(data['source']))
@@ -285,22 +292,95 @@ def transfer_chips(gid):
             response = jsonify(Message='wrong transfere check transfere and try again')
             response.status_code = 400
             return response
-    if game.status == Status.ROUNDFINISCH:
+    if game.status == Status.ROUNDFINISCH or game.status == Status.GAMEFINISCH:
         game.status = Status.STARTED
     # Game GAMEFINISCH or ROUNDFINISCH
     escapedtarget = str(utils.escape(data['target']))
     userB = User.query.get_or_404(escapedtarget)
+    #if userB.chips == game.stack_max:
+    #    userB.halfcount = userB.halfcount + 1
+    #    game.status = Status.ROUNDFINISCH
+    #    game.stack = game.stack_max
+    #    game.halfcount = game.halfcount + 1
+    #    game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.0002
+    #    response = jsonify(Message='Player {} lose a half'.format(userB.name))
     if userB.chips == game.stack_max:
-        userB.halfcount = userB.halfcount + 1
-        game.status = Status.ROUNDFINISCH
-        game.stack = game.stack_max
-        game.halfcount = game.halfcount + 1
+        # someone lose a half increas the changse of fallen dice because they are more drunken
         game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.0002
-        response = jsonify(Message='Player {} lose a half'.format(userB.name))
+        # play final
+        if game.play_final:
+            print('Hier')
+            print('userB.halfcount {}'.format(userB.halfcount))
+            print('game.halfcount {}'.format(game.halfcount))
+            if game.status == Status.PLAYFINAL:
+                message = 'Player {} lose the Game'.format(userB.name)
+                game.message = 'Player {} lose the Game'.format(userB.name)
+                game.status = Status.GAMEFINISCH
+                game.halfcount = 0
+                game.stack = game.stack_max
+            else:
+                # second half to the same user --> game finish
+                if userB.halfcount == 1:
+                    game.stack = game.stack_max
+                    game.halfcount = game.halfcount + 1
+                    if game.halfcount == 2:
+                        game.stack = game.stack_max
+                        game.status = Status.PLAYFINAL
+                        print('play final')
+                        game.halfcount = 0
+                        for user in game.users:
+                            user.passive = False
+                            user.chips = 0
+                        game.finalcount = game.finalcount + 1
+                        message = 'Finale wird gespiel'
+                        game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
+                    else:
+
+                        message = 'Player {} lose the Game'.format(userB.name)
+                # fist half round finish
+                elif userB.halfcount == 0:
+                    game.stack = game.stack_max
+                    game.halfcount = game.halfcount + 1
+                    userB.halfcount = userB.halfcount + 1
+                    if game.halfcount == 2:
+                        game.status = Status.PLAYFINAL
+                        print('play final')
+                        game.halfcount = 0
+                        for user in game.users:
+                            user.passive = False
+                            user.chips = 0
+                        message = 'Finale wird gespiel'
+                        game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
+                    else:
+                        game.status = Status.ROUNDFINISCH
+                        message = 'Player {} lose a half'.format(userB.name)
+                else:
+                    message = 'Fehler'
+                    print('log error final ')
+        # no final only count halfs
+        else:
+            userB.halfcount = userB.halfcount + 1
+            game.status = Status.ROUNDFINISCH
+            game.stack = game.stack_max
+            game.halfcount = game.halfcount + 1
+            message = 'Player {} lose a half'.format(userB.name)
+    else:
+        message = 'OK'
+
+    # message = round(userB, game)
+    response = jsonify(Message=message)
     for user in game.users:
         if game.status == Status.ROUNDFINISCH:
             user.chips = 0
             user.passive = False
+
+        if game.status == Status.GAMEFINISCH:
+            user.chips = 0
+            user.passive = False
+            user.halfcount = 0
+        if game.status == Status.PLAYFINAL:
+            if user.halfcount == 0:
+                user.passive = True
         user.dice1 = 0
         user.dice2 = 0
         user.dice3 = 0
@@ -440,6 +520,8 @@ def wait_game(gid):
         response.status_code = 404
         return response
     for user in game.users:
+        if game.play_final:
+            user.halfcount = 0
         user.chips = 0
         user.dice1 = 0
         user.dice2 = 0
@@ -450,6 +532,8 @@ def wait_game(gid):
         user.dice1_visible = False
         user.dice2_visible = False
         user.dice3_visible = False
+    if game.play_final:
+        game.halfcount = 0
     game.message = ""
     game.stack = game.stack_max
     game.status = Status.WAITING

@@ -15,11 +15,13 @@ class Status(enum.Enum):
     WAITING = "waiting"
     STARTED = "started"
     ROUNDFINISCH = "roundfinish"
+    PLAYFINAL = "playfinal"
     GAMEFINISCH = "gamefinish"
 
 
 class BaseGameData():
     halfcount = db.Column(db.Integer)
+    finalcount = db.Column(db.Integer)
     started = db.Column(db.DateTime())
     refreshed = db.Column(db.DateTime())
     schockoutcount = db.Column(db.Integer)
@@ -27,17 +29,20 @@ class BaseGameData():
     throw_dice_count = db.Column(db.Integer)
     changs_of_fallling_dice = db.Column(db.Float)
     stack_max = db.Column(db.Integer)
+    play_final = db.Column(db.Boolean(), default=False)
 
     def __init__(self):
         """
         Init a Game with 13 chips on the Stack an a changs of 0,3 % that a dice cann fall frome the table (Liquer round)
         """
         self.halfcount = 0
+        self.finalcount = 0
         self.fallling_dice_count = 0
         self.schockoutcount = 0
         self.throw_dice_count = 0
         self.changs_of_fallling_dice = 0.003
         self.stack_max = 13
+        self.play_final = False
 
 
 class Statistic(BaseGameData, db.Model):

@@ -727,23 +727,34 @@
 
     for (num in game.User) {
       var juser = game.User[num];
-      var str = 'chips'+juser['Id']
-      var chips = document.getElementById('chips'+juser['Id']);
-      chips.innerHTML = juser['Chips'];
-      //set anzahl würfe
-      if (juser['Id'] == firstuser_id){
-        var anzahlel = document.getElementById('throw_id');
-        var anzahl_number_el = document.getElementById('throw_number_id');
-        anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
-        anzahl_number_el.innerHTML = juser['Number_Dice'];
-        var row = document.getElementById('row'+juser['Id']);
-        row.style.backgroundColor = "lightblue";
-        var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
-        anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
+      // finale
+      var row = document.getElementById('row'+juser['Id']);
+      if (game_state == 'playfinal'){
+        if (juser['Passive']){
+          row.style.backgroundColor = "lightgray";
+        }else{
+          row.style.backgroundColor = "lightblue";
+        }
       }else{
-        var row = document.getElementById('row'+juser['Id']);
-        row.style.backgroundColor = "#11ffee00";
+        var str = 'chips'+juser['Id']
+        var chips = document.getElementById('chips'+juser['Id']);
+        chips.innerHTML = juser['Chips'];
+        //set anzahl würfe
+        if (juser['Id'] == firstuser_id){
+          var anzahlel = document.getElementById('throw_id');
+          var anzahl_number_el = document.getElementById('throw_number_id');
+          anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+          anzahl_number_el.innerHTML = juser['Number_Dice'];
+          var row = document.getElementById('row'+juser['Id']);
+          row.style.backgroundColor = "lightblue";
+          var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
+          anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
+        }else{
+          var row = document.getElementById('row'+juser['Id']);
+          row.style.backgroundColor = "#11ffee00";
+        }
       }
+
       var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
       anzahluserel.innerHTML = juser['Number_Dice'];
 
