@@ -235,6 +235,11 @@ def transfer_chips(gid):
             return response
 
         if userA.chips >= escapedcount:
+            if game.status == Status.PLAYFINAL:
+                if userB.halfcount == 0 or userA.halfcount == 0:
+                    response = jsonify(Message='Benutzer nicht im finale')
+                    response.status_code = 400
+                    return response
             userA.chips = userA.chips - escapedcount
             userB.chips = userB.chips + escapedcount
             game.first_user_id = userB.id
@@ -260,6 +265,11 @@ def transfer_chips(gid):
             response.status_code = 400
             return response
         if game.stack >= escapedcount:
+            if game.status == Status.PLAYFINAL:
+                if userB.halfcount == 0:
+                    response = jsonify(Message='Benutzer nicht im finale')
+                    response.status_code = 400
+                    return response
             game.stack = game.stack - escapedcount
             userB.chips = userB.chips + escapedcount
             game.first_user_id = userB.id
@@ -279,6 +289,11 @@ def transfer_chips(gid):
         userB = User.query.get_or_404(escapedtarget)
         escapedschockaus = utils.escape(data['schockaus'])
         if escapedschockaus:
+            if game.status == Status.PLAYFINAL:
+                if userB.halfcount == 0:
+                    response = jsonify(Message='Benutzer nicht im finale')
+                    response.status_code = 400
+                    return response
             game.stack = 0
             userB.chips = game.stack_max
             game.first_user_id = userB.id
@@ -316,6 +331,7 @@ def transfer_chips(gid):
                 message = 'Player {} lose the Game'.format(userB.name)
                 game.message = 'Player {} lose the Game'.format(userB.name)
                 game.status = Status.GAMEFINISCH
+                userB.finalcount = userB.finalcount + 1
                 game.halfcount = 0
                 game.stack = game.stack_max
             else:

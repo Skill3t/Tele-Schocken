@@ -92,8 +92,13 @@
 </div>
 <div class="row col-md-offset-1 admin_interface">
   <div class="col-md-9">
-    <label for="final">Willst du ein Finale spielen?  </label>
-    <input type="checkbox" id="final_cb" name="final" value="False">
+    <label for="final">Willst du ein Finale spielen? (beta sende mir gerne euer Feedback via instagram oder <i class="fas fa-paper-plane" title="Feedback senden"></i> )</label>
+    {% if game.play_final %}
+      <input type="checkbox" id="final_cb" name="final" value="True" checked>
+    {% else %}
+      <input type="checkbox" id="final_cb" name="final" value="False">
+    {% endif %}
+
   </div>
 </div>
 <div class="row col-md-offset-1 admin_interface">

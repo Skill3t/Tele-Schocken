@@ -77,6 +77,7 @@ class Game(BaseGameData, db.Model):
             'First': self.first_user_id,
             'Admin': self.admin_user_id,
             'Game_Half_Count': self.halfcount,
+            'Game_Final_Count': self.finalcount,
             'User': arrayuser,
         }
         return data
@@ -118,6 +119,7 @@ class User(db.Model):
     dice3_visible = db.Column(db.Boolean(), default=False)
     number_dice = db.Column(db.Integer)  # Max Value = 3
     halfcount = db.Column(db.Integer)
+    finalcount = db.Column(db.Integer)
 
     def user_name(self):
         return Markup(self.name)
@@ -140,6 +142,7 @@ class User(db.Model):
             'Chips': self.chips,
             'Passive': self.passive,
             'Halfcount': self.halfcount,
+            'Finalcount': self.finalcount,
             'Number_Dice': self.number_dice,
             'Dices': dice
         }
@@ -153,3 +156,4 @@ class User(db.Model):
         self.passive = False
         self.number_dice = 0
         self.halfcount = 0
+        self.finalcount = 0

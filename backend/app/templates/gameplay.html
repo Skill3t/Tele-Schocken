@@ -57,7 +57,7 @@
         </div>
         <div class="row" style="white-space:nowrap" id='set_passiv_div_id'>
           <input type="checkbox" title="Du wirst übersprungen bis die Runde ausgespielt ist" id="setpassivid" name="setpassivid" value="False" onchange="set_user_passiv(this)">
-          <label for="setpassivid">Pause (beta)</label>
+          <label for="setpassivid">Pause</label>
         </div>
       </div>
     </div>
@@ -148,6 +148,9 @@
           <th>Würfel2</th>
           <th>Würfel3</th>
           <th>Würfe</th>
+          {% if game.play_final %}
+            <th>Runden</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -171,6 +174,11 @@
             <td id="Number_Dice{{user.id}}">
               {{user.number_dice}}
             </td>
+            {% if game.play_final %}
+              <td id="finalcount{{user.id}}">
+                {{user.finalcount}}
+              </td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>
@@ -798,6 +806,12 @@
       var userhalfs = juser['Halfcount']
       var userfirsthalfel = document.getElementById('first'+juser['Id']);
       userfirsthalfel.innerHTML = userhalfs;
+
+      var userfinals = juser['Finalcount']
+      var userfinalhalfel = document.getElementById('finalcount'+juser['Id']);
+      if (userfinalhalfel){
+        userfinalhalfel.innerHTML = userfinals;
+      }
 
       // set dices
       var dice1_v = document.getElementById('dice1'+juser['Id']);
