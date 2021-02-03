@@ -322,14 +322,15 @@ def transfer_chips(gid):
     if userB.chips == game.stack_max:
         # someone lose a half increas the changse of fallen dice because they are more drunken
         game.changs_of_fallling_dice = game.changs_of_fallling_dice + 0.0002
-        # play final
+        # play final (option choos)
         if game.play_final:
             print('Hier')
             print('userB.halfcount {}'.format(userB.halfcount))
             print('game.halfcount {}'.format(game.halfcount))
+            print()
             if game.status == Status.PLAYFINAL:
-                message = 'Player {} lose the Game'.format(userB.name)
-                game.message = 'Player {} lose the Game'.format(userB.name)
+                message = 'Spieler {} hat das Finale verloren'.format(userB.name)
+                game.message = 'Spieler {} hat das Finale verloren'.format(userB.name)
                 game.status = Status.GAMEFINISCH
                 userB.finalcount = userB.finalcount + 1
                 game.halfcount = 0
@@ -338,21 +339,17 @@ def transfer_chips(gid):
                 # second half to the same user --> game finish
                 if userB.halfcount == 1:
                     game.stack = game.stack_max
-                    game.halfcount = game.halfcount + 1
-                    if game.halfcount == 2:
-                        game.stack = game.stack_max
-                        game.status = Status.PLAYFINAL
-                        print('play final')
-                        game.halfcount = 0
-                        for user in game.users:
-                            user.passive = False
-                            user.chips = 0
-                        game.finalcount = game.finalcount + 1
-                        message = 'Finale wird gespiel'
-                        game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
-                    else:
+                    userB.finalcount = userB.finalcount + 1
+                    game.finalcount = game.finalcount + 1
+                    game.status = Status.GAMEFINISCH
+                    game.halfcount = 0
+                    for user in game.users:
+                        user.passive = False
+                        user.chips = 0
+                        user.halfcount = 0
+                    message = 'Spieler {} hat das Finale verloren'.format(userB.name)
+                    game.message = 'Spieler {} hat das Finale verloren'.format(userB.name)
 
-                        message = 'Player {} lose the Game'.format(userB.name)
                 # fist half round finish
                 elif userB.halfcount == 0:
                     game.stack = game.stack_max

@@ -254,7 +254,7 @@
     dicenumber = parseInt(dicenumber);
     if (dicenumber == 0){
       if (!dice1_cb || !dice2_cb || !dice3_cb){
-        alert('please put all dice in the cub');
+        alert('Beim ersten Wurf alle Würfel in den Becher Packen!');
         return
       }
     }
@@ -714,7 +714,7 @@
     if (game.Message){
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: '+ game.Message){
-        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an")){
+        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an") || game.Message.includes("hat das Finale verloren")){
           document.getElementById("dice1_cb").checked = true;
           document.getElementById("dice2_cb").checked = true;
           document.getElementById("dice3_cb").checked = true;
@@ -743,24 +743,23 @@
         }else{
           row.style.backgroundColor = "lightblue";
         }
+      }
+      var str = 'chips'+juser['Id']
+      var chips = document.getElementById('chips'+juser['Id']);
+      chips.innerHTML = juser['Chips'];
+      //set anzahl würfe
+      if (juser['Id'] == firstuser_id){
+        var anzahlel = document.getElementById('throw_id');
+        var anzahl_number_el = document.getElementById('throw_number_id');
+        anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+        anzahl_number_el.innerHTML = juser['Number_Dice'];
+        var row = document.getElementById('row'+juser['Id']);
+        row.style.backgroundColor = "lightblue";
+        var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
+        anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
       }else{
-        var str = 'chips'+juser['Id']
-        var chips = document.getElementById('chips'+juser['Id']);
-        chips.innerHTML = juser['Chips'];
-        //set anzahl würfe
-        if (juser['Id'] == firstuser_id){
-          var anzahlel = document.getElementById('throw_id');
-          var anzahl_number_el = document.getElementById('throw_number_id');
-          anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
-          anzahl_number_el.innerHTML = juser['Number_Dice'];
-          var row = document.getElementById('row'+juser['Id']);
-          row.style.backgroundColor = "lightblue";
-          var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
-          anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
-        }else{
-          var row = document.getElementById('row'+juser['Id']);
-          row.style.backgroundColor = "#11ffee00";
-        }
+        var row = document.getElementById('row'+juser['Id']);
+        row.style.backgroundColor = "#11ffee00";
       }
 
       var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
