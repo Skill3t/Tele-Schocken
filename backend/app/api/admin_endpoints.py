@@ -362,7 +362,7 @@ def transfer_chips(gid):
                         for user in game.users:
                             user.passive = False
                             user.chips = 0
-                        message = 'Finale wird gespiel'
+                        message = 'Finale wird gespielt'
                         game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
                     else:
                         game.status = Status.ROUNDFINISCH
