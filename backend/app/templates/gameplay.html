@@ -737,13 +737,6 @@
       var juser = game.User[num];
       // finale
       var row = document.getElementById('row'+juser['Id']);
-      if (game_state == 'playfinal'){
-        if (juser['Passive']){
-          row.style.backgroundColor = "lightgray";
-        }else{
-          row.style.backgroundColor = "lightblue";
-        }
-      }
       var str = 'chips'+juser['Id']
       var chips = document.getElementById('chips'+juser['Id']);
       chips.innerHTML = juser['Chips'];
@@ -759,7 +752,11 @@
         anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
       }else{
         var row = document.getElementById('row'+juser['Id']);
-        row.style.backgroundColor = "#11ffee00";
+        if (juser['Passive']){
+          row.style.backgroundColor = "lightgray";
+        }else{
+          row.style.backgroundColor = "#11ffee00";
+        }
       }
 
       var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
