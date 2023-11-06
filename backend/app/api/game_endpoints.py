@@ -5,7 +5,7 @@ from flask_socketio import emit, join_room
 from flask import jsonify
 from flask import request
 from app.models import User, Game, Status
-from random import randint, random
+from random import randint, random, seed
 from datetime import datetime
 from jinja2 import utils
 
@@ -545,6 +545,7 @@ def roll_dice(gid, uid):
                 #    game.message = "Aufdecken!"
                 db.session.add(game)
                 db.session.commit()
+            seed()
             if 'dice1' in data:
                 escapeddice1 = str(utils.escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
