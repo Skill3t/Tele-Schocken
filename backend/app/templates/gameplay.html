@@ -783,7 +783,7 @@
       // me as user
       var id = localStorage.getItem('id');
       if (juser['Id'] == id){
-        if (game.Stack == 0 && juser['Chips'] == 0){
+        if (game.Stack == 0 && juser['Chips'] == 0 && game_state != 'playfinal'){
           var set_passiv_div_id = document.getElementById('set_passiv_div_id');
           set_passiv_div_id.style.display = "block";
         }else{
