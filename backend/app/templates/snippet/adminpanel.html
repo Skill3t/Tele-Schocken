@@ -2,7 +2,13 @@
   <hr>
   <div class="row ">
     <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
-      <h2 id="admin_inforamtion">Admin</h2>
+      <h2 id="admin_alert">&nbsp;</h2>
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="col-xs-11 col-md-11 col-md-offset-1 col-xs-offset-1">
+      <h4 id="admin_information">Admin</h4>
     </div>
   </div>
   <div class="container-fluid">
@@ -11,16 +17,17 @@
         <button class="btn btn-primary" id='sort_dice_id' onclick="sort_dice()">Würfel sortieren</button>
       </div>
       <div class="col-xs-5 col-md-1">
-        <label for="stack_count_id">Anzahl:</label>
-        <input type="number" id="stack_count_id" name="stack_count_id"
-           min="0" max="13" size="2">
+        <label for="stack_count_id">Anzahl:</label><br />
+        <select id="stack_count_id" name="stack_count_id">
+          <option value="0">0</option>
+        </select>
       </div>
       <div class="clearfix visible-xs-block visible-sm-block"></div>
       <div class="col-xs-offset-1">
         <div class="col-xs-6 col-md-2">
-          <label for="transfer_source">Von:</label>
+          <label for="transfer_source">Von:</label><br />
           <select id="transfer_source" name="count">
-            <optgroup label="">
+            <optgroup label="Allgemein">
               <option value="stack">Stapel</option>
               <option value="schockaus">Schock aus</option>
             </optgroup>
@@ -29,9 +36,10 @@
           </select>
         </div>
         <div class="col-xs-5  col-md-2">
-          <label for="transfer_target">An:</label>
+          <label for="transfer_target">An:</label><br />
           <select id="transfer_target" name="count">
-            <option value=""></option>
+            <optgroup id="transfer_target_user" label="Spieler">
+            </optgroup>
           </select>
         </div>
       </div>

@@ -622,18 +622,17 @@
   }
 
 
-  function startup(){
+  function startup() {
     faq();
-    feedback();
     initial_game_data();
     var id = localStorage.getItem('id');
     var user = document.getElementById('ownuser');
     //var test = localStorage.getItem('name');
-    user.innerHTML = "Spieler: "+localStorage.getItem('name');
+    user.innerHTML = "Spieler: " + localStorage.getItem('name');
 
     var admin_el = document.getElementById('admin_id');
     var admin_id = admin_el.innerHTML;
-    if (id != admin_id){
+    if (id != admin_id) {
       var x = document.getElementById("admin_interface");
       //Disable admin interface for none admins
       x.style.display = "none";
@@ -642,14 +641,22 @@
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "/api/game/"+gameid);
+    xhttp.open("GET", "/api/game/" + gameid);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status == 200){
-          var selecttionsource = document.getElementById('transfer_source_user');
-          var selecttiontarget = document.getElementById('transfer_target');
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status == 200) {
+          var selectionchips = document.getElementById('stack_count_id');
+          for (let i = 1; i <= res.Stack_Max; i++){
+            var chipcount = document.createElement('option');
+            chipcount.value = i;
+            chipcount.innerHTML = i.toString();
+            selectionchips.appendChild(chipcount);
+          }
+          selectionchips.setAttribute('size', Math.floor(res.Stack_Max / 2) + 2);
+          var selectionsource = document.getElementById('transfer_source_user');
+          var selectiontarget = document.getElementById('transfer_target_user');
           var delete_player = document.getElementById('select_delete_player')
           var choose_admin = document.getElementById('select_choose_admin')
           for (num in res.User) {
@@ -657,11 +664,11 @@
             var opt = document.createElement('option');
             opt.value = juser['Id'];
             opt.innerHTML = juser['Name'];
-            selecttionsource.appendChild(opt);
+            selectionsource.appendChild(opt);
             var opt2 = document.createElement('option');
             opt2.value = juser['Id'];
             opt2.innerHTML = juser['Name'];
-            selecttiontarget.appendChild(opt2);
+            selectiontarget.appendChild(opt2);
             var opt3 = document.createElement('option');
             opt3.value = juser['Id'];
             opt3.innerHTML = juser['Name'];
@@ -671,6 +678,8 @@
             opt4.innerHTML = juser['Name'];
             choose_admin.appendChild(opt4);
           }
+          document.getElementById('transfer_source').setAttribute('size', res.User.length + 4);
+          document.getElementById('transfer_target').setAttribute('size', res.User.length + 1);
         }
       }
     }
@@ -686,7 +695,7 @@
     var throwbutton = document.getElementById('startgame_id');
     //Admin GAme Info Half count
     var gamehalfs = game['Game_Half_Count'];
-    var admininfo = document.getElementById('admin_inforamtion');
+    var admininfo = document.getElementById('admin_information');
     admininfo.innerHTML = 'Admin gespielte Hälften: '+gamehalfs;
     var game_state = game['State'];
     if (game_state == 'waiting'){
