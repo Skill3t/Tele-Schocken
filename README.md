@@ -22,10 +22,11 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 * Thx to [stematon](https://github.com/stematon) for [typo](https://github.com/Skill3t/Tele-Schocken/pull/3/)
 * Thx to [diskbraker8](https://github.com/diskbraker8) for part of [Frontend](https://github.com/Skill3t/Tele-Schocken/pull/1)
 
-## Graphics 👨‍🎨
+## Graphics 👨‍🎨 & Hall of Thanks
 * Thx to Johannes for the .svg
 * Thx to [diskbraker8](https://github.com/diskbraker8) for the css dice
 * Thx to [TornadoOma](https://www.twitch.tv/tornadooma) for the instruction video
+* Thx to [Wiiilmaa](https://github.com/Wiiilmaa) for improving the Final game.
 
 ## Doku 📝
 * make HTML
