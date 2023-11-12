@@ -19,8 +19,7 @@ from flask_socketio import SocketIO
 # different async modes, or leave it set to None for the application to choose
 # the best option based on installed packages.
 async_mode = "gevent"
-socketio = SocketIO(app, async_mode=async_mode)
-
+socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins="https://"+os.environ.get('SERVER_NAME'))
 
 @socketio.on('connect', namespace='/game')
 def test_connect():
