@@ -10,9 +10,6 @@
   <div class="col-md-1 col-xs-2">
       <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question" title="Fragen?"></i></a>
   </div>
-  <div class="col-md-1 col-xs-2">
-      <a class="roundetb" id="feedbackBtn" href="#"><i class="fas fa-paper-plane" title="Feedback senden"></i></a>
-  </div>
 
 </div>
 <div class="container-fluid">
@@ -56,7 +53,8 @@
           <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
         </div>
         <div class="row" style="white-space:nowrap" id='set_passiv_div_id'>
-          <input type="checkbox" title="Du wirst übersprungen bis die Runde ausgespielt ist" id="setpassivid" name="setpassivid" value="False" onchange="set_user_passiv(this)">
+          <input type="checkbox" title="Du wirst übersprungen bis die Runde ausgespielt ist" id="setpassivid"
+            name="setpassivid" value="False" onchange="set_user_passiv(this)">
           <label for="setpassivid">Pause</label>
         </div>
       </div>
@@ -192,13 +190,9 @@
 
 
 
-<div class="row col-md-offset-1 col-md-6">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/feedback.css') }}">
-</div>
 {% include "snippet/game_play_faq.html" %}
 
 
-{% include "snippet/feedback.html" %}
 
 
 
@@ -208,16 +202,14 @@
 {% endblock %}
 {% endblock %}
 {% block scripts %}
-  {{ super() }}
-  <script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
+{{ super() }}
+<script type=text/javascript src="{{url_for('static', filename='scripts/faq.js') }}">
   </script>
-  <script type=text/javascript src="{{url_for('static', filename='scripts/feedback.js') }}">
+<script type=text/javascript src="{{url_for('static', filename='scripts/adminpanel.js') }}">
   </script>
-  <script type=text/javascript src="{{url_for('static', filename='scripts/adminpanel.js') }}">
+<script type=text/javascript src="{{url_for('static', filename='scripts/socket.io.js') }}">
   </script>
-  <script type=text/javascript src="{{url_for('static', filename='scripts/socket.io.js') }}">
-  </script>
-  <script type=text/javascript src="{{url_for('static', filename='scripts/jquery-3.5.1.min.js') }}">
+<script type=text/javascript src="{{url_for('static', filename='scripts/jquery-3.5.1.min.js') }}">
   </script>
 
 <script>
