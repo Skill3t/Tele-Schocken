@@ -29,7 +29,7 @@ class BaseGameData():
     throw_dice_count = db.Column(db.Integer)
     changs_of_fallling_dice = db.Column(db.Float)
     stack_max = db.Column(db.Integer)
-    play_final = db.Column(db.Boolean(), default=False)
+    play_final = db.Column(db.Boolean(), default=True)
 
     def __init__(self):
         """
@@ -42,7 +42,7 @@ class BaseGameData():
         self.throw_dice_count = 0
         self.changs_of_fallling_dice = 0.003
         self.stack_max = 13
-        self.play_final = False
+        self.play_final = True
 
 
 class Statistic(BaseGameData, db.Model):
@@ -69,6 +69,7 @@ class Game(BaseGameData, db.Model):
         for user in self.users:
             arrayuser.append(user.to_dict())
         data = {
+            'Stack_Max': self.stack_max,
             'Stack': self.stack,
             'State': self.status.value,
             'Move': self.move_user_id,
