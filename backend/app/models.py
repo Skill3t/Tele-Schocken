@@ -53,7 +53,6 @@ class Statistic(BaseGameData, db.Model):
 class Game(BaseGameData, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UUID = db.Column(db.String(200), index=True, unique=True)
-    is_mail_send = db.Column(db.Boolean(), default=False)
     users = db.relationship('User')
     message = db.Column(db.String(300))
     status = db.Column(db.Enum(Status))
@@ -93,7 +92,6 @@ class Game(BaseGameData, db.Model):
 
         self.started = datetime.now()
         self.refreshed = datetime.now()
-        self.mail_send = False
 
     def moveName(self, id):
         if id is not None:
