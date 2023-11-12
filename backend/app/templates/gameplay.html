@@ -692,7 +692,10 @@
     //Admin GAme Info Half count
     var gamehalfs = game['Game_Half_Count'];
     var admininfo = document.getElementById('admin_information');
-    admininfo.innerHTML = 'Admin gespielte Hälften: '+gamehalfs;
+    admininfo.innerHTML = 'Admin gespielte Hälften: ' + gamehalfs;
+    if (localStorage.getItem('id') == game.Admin && !isUndecided(game)) {
+      setAdminpanel(game);
+    }
     var game_state = game['State'];
     if (game_state == 'waiting'){
       // Simulate an HTTP redirect:
@@ -844,6 +847,208 @@
     }
     xhttp.send(JSON.stringify({}));
   }
+
+  var ruleSet = [];
+  function getRuleSet() {
+    if (ruleSet.length == 0) {
+      ruleSet = [
+        {
+          "dice": 111,
+          "name": "Schock aus",
+          "chips": -1
+        },
+        {
+          "dice": 421,
+          "name": "Jule",
+          "chips": 7
+        },
+        {
+          "dice": 611,
+          "name": "Schock 6",
+          "chips": 6
+        },
+        {
+          "dice": 511,
+          "name": "Schock 5",
+          "chips": 5
+        },
+        {
+          "dice": 411,
+          "name": "Schock 4",
+          "chips": 4
+        },
+        {
+          "dice": 311,
+          "name": "Schock 3",
+          "chips": 3
+        },
+        {
+          "dice": 211,
+          "name": "Schock doof",
+          "chips": 2
+        },
+        {
+          "dice": 666,
+          "name": "Kardinal 6",
+          "chips": 3
+        },
+        {
+          "dice": 555,
+          "name": "Kardinal 5",
+          "chips": 3
+        },
+        {
+          "dice": 444,
+          "name": "Kardinal 4",
+          "chips": 3
+        },
+        {
+          "dice": 333,
+          "name": "Kardinal 3",
+          "chips": 3
+        },
+        {
+          "dice": 222,
+          "name": "Kardinal 2",
+          "chips": 3
+        },
+        {
+          "dice": 654,
+          "name": "Große Straße",
+          "chips": 2
+        },
+        {
+          "dice": 543,
+          "name": "Straße",
+          "chips": 2
+        },
+        {
+          "dice": 432,
+          "name": "Straße",
+          "chips": 2
+        },
+        {
+          "dice": 321,
+          "name": "Kleine Straße",
+          "chips": 2
+        }
+      ];
+      for (let i = 6; i >= 1; i--) {
+        for (let j = i; j >= 1; j--) {
+          for (let k = j; k >= 1; k--) {
+            const wurf = (i * 100 + j * 10 + k);
+            if (ruleSet.findIndex((diceInfo) => diceInfo.dice === wurf) == -1) {
+              ruleSet.push({
+                dice: wurf,
+                name: "Schrott (" + wurf.toString() + ")",
+                chips: 1,
+              });
+            }
+          }
+        }
+      }
+    }
+    return ruleSet;
+  }
+  function getDice(dices) {
+    if (dices.length != 3) {
+      return 0;
+    } else {
+      const values = dices.map((dice) => Object.values(dice)[0]);
+      values.sort((a, b) => b - a);
+      return values[0] * 100 + values[1] * 10 + values[2];
+    }
+  }
+  function getScoring(dice) {
+    const rules = getRuleSet();
+    const matchIndex = rules.findIndex(
+      (diceInfo) => diceInfo.dice === dice
+    );
+    if (matchIndex > -1) {
+      return {
+        Order: matchIndex,
+        Chips: rules[matchIndex].chips,
+        Name: rules[matchIndex].name,
+      }
+    } else {
+      return {
+        Order: 99999,
+        Chips: 0,
+        Name: "Kaputt " + dice.toString(),
+      }
+    }
+    return result;
+  }
+  function compareScores(a, b) {
+    return b.Result.Order === a.Result.Order
+      ? a.Number_Dice - b.Number_Dice
+      : a.Result.Order - b.Result.Order;
+  }
+  function getScores(game) {
+    const playingUsers = [];
+    const firstIndex = game.User.findIndex(
+      (user) => user.Id === game.First,
+    );
+    if (firstIndex > -1) {
+      for (let i = 0; i < game.User.length; i++) {
+        var u = (firstIndex + i) % game.User.length;
+        if (game.User[u].Passive !== true) {
+          playingUsers.push({
+            Chips: game.User[u].Chips,
+            Id: game.User[u].Id,
+            Name: game.User[u].Name,
+            Number_Dice: game.User[u].Number_Dice,
+            Result: getScoring(getDice(game.User[u].Dices))
+          });
+        }
+      }
+    }
+    playingUsers.sort(compareScores);
+
+    const h = playingUsers[0];
+    const l = playingUsers[playingUsers.length - 1];
+    if (
+      playingUsers.length > 1 &&
+      playingUsers[playingUsers.length - 2].Number_Dice === l.Number_Dice &&
+      playingUsers[playingUsers.length - 2].Result.Order === l.Result.Order
+    ) {
+      l.Result.Name = l.Result.Name + " nachgelegt";
+    };
+    return {
+      High: h.Name + " mit " + h.Result.Name + " im " + h.Number_Dice + ". Wurf",
+      Low: l.Name + " mit " + l.Result.Name + " im " + l.Number_Dice + ". Wurf",
+      Chips: (h.Result.Chips == -1) ? (0) : (
+        (game.Stack > 0) ? (
+          (h.Result.Chips > game.Stack ? game.Stack : h.Result.Chips)
+        ) : (
+          (h.Result.Chips > h.Chips ? h.Chips : h.Result.Chips)
+        )),
+      From: (h.Result.Chips == -1) ? ("schockaus") : (
+        (game.Stack > 0) ? ("stack") : (h.Id)),
+      To: l.Id,
+    };
+  }
+  function isUndecided(game) {
+    var undecided = false;
+    game.User.forEach((user) => {
+      if (!undecided && user.Passive !== true && user.Dices.length < 3)
+        undecided = true;
+    });
+    return undecided;
+  }
+  function setAdminpanel(game) {
+    const result = getScores(game);
+    if (result.High && result.Low) {
+      var admininfo = document.getElementById('admin_information');
+      admininfo.innerHTML = 'Hoch: ' + result.High + ', Tief: ' + result.Low;
+    }
+    document.getElementById('stack_count_id').value = result.Chips;
+    document.getElementById('transfer_source').value = result.From;
+    document.getElementById('transfer_target').value = result.To;
+    document.getElementById('admin_alert').innerHTML = '';
+  }
+
+  const soundEffect = new Audio();
   const soundDice = new Audio("{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}");
   const soundLift = new Audio("{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}");
   const soundDiceY = new Audio("{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}");

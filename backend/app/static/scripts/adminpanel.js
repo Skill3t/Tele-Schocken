@@ -1,3 +1,6 @@
+function admin_alert(message){
+  document.getElementById('admin_alert').innerHTML = message;
+}
 function delete_player(){
   if (confirm('Bist du sicher das du den Spieler entfernen möchtest. Dies kann nicht rückgängig gemacht werden. Die Runde startet von vorne!')) {
     var game = document.getElementById('UUID');
@@ -35,7 +38,7 @@ function sort_dice(){
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 200){
           var res=JSON.parse(xhttp.responseText);
-          alert(''+res.Message);
+          admin_alert(''+res.Message);
         }
       }
     }
@@ -60,13 +63,13 @@ function choose_admin(){
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 200){
-          alert('Fehler');
+          admin_alert('Fehler');
         }else{
           window.location.reload();
         }
       }
     }
-    if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neune Admin rückgängig gemacht werden')) {
+    if (confirm('Bist du sicher das du den Admin wechseln möchtest. Dies kann nur vom neuen Admin rückgängig gemacht werden')) {
       xhttp.send(JSON.stringify({new_admin_id:new_admin_id}));
       var bladi = 'Hallo';
   }
@@ -85,7 +88,7 @@ function back_to_waiting(){
       if (xhttp.readyState == XMLHttpRequest.DONE) {
         if (xhttp.status != 201){
           var res=JSON.parse(xhttp.responseText);
-          alert(''+res.Message);
+          admin_alert(''+res.Message);
         }
       }
     }
@@ -100,7 +103,8 @@ function back_to_waiting(){
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
 
-    var count = document.getElementById('stack_count_id').value;
+    var stack_count = document.getElementById('stack_count_id');
+    var count = stack_count.value;
     // var stack = document.getElementById('stack_cb').checked;
     // var aus = document.getElementById('schockaus_cb').checked;
     var transfer_source = document.getElementById('transfer_source');
@@ -116,14 +120,16 @@ function back_to_waiting(){
         if (xhttp.status != 200){
           try {
             var res=JSON.parse(xhttp.responseText);
-            alert(''+res.Message);
+            admin_alert(''+res.Message);
           }
           catch (e) {
-            alert('Allgemeiner Fehler');
+            admin_alert('Allgemeiner Fehler');
           }
         }else{
           var res=JSON.parse(xhttp.responseText);
-          alert(''+res.Message);
+          stack_count.value = 0;
+          transfer_source.value = 'stack';
+          admin_alert(''+res.Message);
         }
       }
     }
