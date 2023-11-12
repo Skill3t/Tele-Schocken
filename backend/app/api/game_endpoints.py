@@ -21,7 +21,7 @@ from flask_socketio import SocketIO
 # the best option based on installed packages.
 async_mode = "gevent"
 server_name = "https://" + environ.get('SERVER_NAME')
-print('Servername ' + server_name))
+print('Servername ' + server_name)
 socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins=server_name)
 
 @socketio.on('connect', namespace='/game')
