@@ -8,7 +8,7 @@
     <h2 class="message" id="Message"></h2>
   </div>
   <div class="col-md-1 col-xs-2">
-      <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question" title="Fragen?"></i></a>
+    <a class="roundetb" id="faqBtn" href="#"><i class="fas fa-question" title="Fragen?"></i></a>
   </div>
 
 </div>
@@ -23,11 +23,11 @@
       <p id="throw_number_id" hidden></p>
     </div>
     <div class="col-xs-6 col-md-3">
-        <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
-        <p id="UUID" hidden>{{game.UUID}}</p>
-        <p id="admin_id" hidden>{{game.admin_user_id}}</p>
-        <p id="first_user_id" hidden>{{game.first_user_id}}</p>
-        <p id="first_user_dice_count_id" hidden>3</p>
+      <h3 id="waiting_id">Warten auf: {{game.moveName(game.move_user_id)}}</h3>
+      <p id="UUID" hidden>{{game.UUID}}</p>
+      <p id="admin_id" hidden>{{game.admin_user_id}}</p>
+      <p id="first_user_id" hidden>{{game.first_user_id}}</p>
+      <p id="first_user_dice_count_id" hidden>3</p>
     </div>
   </div>
 </div>
@@ -42,15 +42,15 @@
     <div class="col-xs-6 col-md-2 col-md-offset-1">
       <div class="col-xs-6 col-md-6 ">
         <div class="containerturner" id='startgame_id'>
-         <img src="{{ url_for('static', filename = 'image/throw_the_dice.svg')}}" alt="throw the dice">
-         <button id='btn_dice' onclick="dice()" class="btn" title="Würfeln">Würfeln</button>
-         <p style="text-align: center">Würfeln</p>
+          <img src="{{ url_for('static', filename = 'image/throw_the_dice.svg')}}" alt="throw the dice">
+          <button id='btn_dice' onclick="dice()" class="btn" title="Würfeln">Würfeln</button>
+          <p style="text-align: center">Würfeln</p>
         </div>
       </div>
 
       <div class="col-xs-1 col-md-2">
         <div class="row" style="white-space:nowrap">
-          <button class="btn btn-primary" id='finishgame_id'onclick="finish()">Ende</button>
+          <button class="btn btn-primary" id='finishgame_id' onclick="finish()">Ende</button>
         </div>
         <div class="row" style="white-space:nowrap" id='set_passiv_div_id'>
           <input type="checkbox" title="Du wirst übersprungen bis die Runde ausgespielt ist" id="setpassivid"
@@ -62,16 +62,16 @@
     <div class="col-xs-6 col-md-3">
       <div class="col-xs-6 col-md-6">
         <div class="containercup">
-         <img src="{{ url_for('static', filename = 'image/pulldiceup.svg')}}" alt="pull dice cup up" >
-         <button onclick="pullup()" class="btn" title="Aufdecken">Aufdecken</button>
-         <p style="text-align: center">Aufdecken</p>
+          <img src="{{ url_for('static', filename = 'image/pulldiceup.svg')}}" alt="pull dice cup up">
+          <button onclick="pullup()" class="btn" title="Aufdecken">Aufdecken</button>
+          <p style="text-align: center">Aufdecken</p>
         </div>
       </div>
       <div class="col-xs-6 col-md-6 ">
         <div class="containercup">
-         <img src="{{ url_for('static', filename = 'image/pulldicedown.svg')}}" alt="pull dice cup down" >
-         <button onclick="pulldown()" class="btn" title="Zudecken">Zudecken</button>
-         <p style="text-align: center">Zudecken</p>
+          <img src="{{ url_for('static', filename = 'image/pulldicedown.svg')}}" alt="pull dice cup down">
+          <button onclick="pulldown()" class="btn" title="Zudecken">Zudecken</button>
+          <p style="text-align: center">Zudecken</p>
         </div>
       </div>
     </div>
@@ -115,14 +115,14 @@
     <div class="col-xs-12  col-md-3">
       <div id='2_6er' class="col-xs-6 col-md-6" hidden>
         <div class="containerturner">
-         <img src="{{ url_for('static', filename = 'image/2_6er.svg')}}" alt="change two 6er against one 1er" >
-         <button  onclick="turn1()" class="btn" title="6er drehen"></button>
+          <img src="{{ url_for('static', filename = 'image/2_6er.svg')}}" alt="change two 6er against one 1er">
+          <button onclick="turn1()" class="btn" title="6er drehen"></button>
         </div>
       </div>
       <div id='3_6er' class="col-xs-6 col-md-6" hidden>
         <div class="containerturner">
-         <img src="{{ url_for('static', filename = 'image/3_6er.svg')}}" alt="change three 6er against two 1er" >
-         <button  onclick="turn2()" class="btn" title="6er drehen"></button>
+          <img src="{{ url_for('static', filename = 'image/3_6er.svg')}}" alt="change three 6er against two 1er">
+          <button onclick="turn2()" class="btn" title="6er drehen"></button>
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@
 </div>
 <div class="row" data-example-id="striped-table">
   <div class="col-xs-12 col-md-10 col-md-offset-1">
-    <table class="table table-striped table-hover" >
+    <table class="table table-striped table-hover">
       <thead>
         <tr>
           <th>#</th>
@@ -147,7 +147,7 @@
           <th>Würfel3</th>
           <th>Würfe</th>
           {% if game.play_final %}
-            <th>Runden</th>
+          <th>Runden</th>
           {% endif %}
         </tr>
       </thead>
@@ -155,31 +155,31 @@
         {% for user in game.users %}
         <tr id="row{{user.id}}">
           <th class="counterCell" scope="row"></th>
-            <td id="user{{user.id}}">
-              {{user.user_name()}}
-            </td>
-            <td id="chips{{user.id}}">
-              {{user.chips}}
-            </td>
-            <td id="first{{user.id}}">
-            </td>
-            <td id="dice1{{user.id}}">
-            </td>
-            <td id="dice2{{user.id}}">
-            </td>
-            <td id="dice3{{user.id}}">
-            </td>
-            <td id="Number_Dice{{user.id}}">
-              {{user.number_dice}}
-            </td>
-            {% if game.play_final %}
-              <td id="finalcount{{user.id}}">
-                {{user.finalcount}}
-              </td>
-            {% endif %}
+          <td id="user{{user.id}}">
+            {{user.user_name()}}
+          </td>
+          <td id="chips{{user.id}}">
+            {{user.chips}}
+          </td>
+          <td id="first{{user.id}}">
+          </td>
+          <td id="dice1{{user.id}}">
+          </td>
+          <td id="dice2{{user.id}}">
+          </td>
+          <td id="dice3{{user.id}}">
+          </td>
+          <td id="Number_Dice{{user.id}}">
+            {{user.number_dice}}
+          </td>
+          {% if game.play_final %}
+          <td id="finalcount{{user.id}}">
+            {{user.finalcount}}
+          </td>
+          {% endif %}
         </tr>
         {% endfor %}
-        </tbody>
+      </tbody>
     </table>
   </div>
 </div>
@@ -194,11 +194,8 @@
 
 
 
-
-
-
 {% block footer %}
-  {{ super() }}
+{{ super() }}
 {% endblock %}
 {% endblock %}
 {% block scripts %}
@@ -214,9 +211,9 @@
 
 <script>
 
-  function dice(){
+  function dice() {
     document.getElementById("btn_dice").disabled = true;
-    setTimeout(function(){document.getElementById("btn_dice").disabled = false;},2500);
+    setTimeout(function () { document.getElementById("btn_dice").disabled = false; }, 2500);
     var dice1_cb = document.getElementById('dice1_cb');
     dice1_cb.disabled = false;
     var dice2_cb = document.getElementById('dice2_cb');
@@ -242,40 +239,39 @@
     gameid = gameid.replace(/['"]+/g, '');
     var id = localStorage.getItem('id');
 
-    var dicenumber = document.getElementById('Number_Dice'+id).innerHTML;
+    var dicenumber = document.getElementById('Number_Dice' + id).innerHTML;
     dicenumber = parseInt(dicenumber);
-    if (dicenumber == 0){
-      if (!dice1_cb || !dice2_cb || !dice3_cb){
+    if (dicenumber == 0) {
+      if (!dice1_cb || !dice2_cb || !dice3_cb) {
         alert('Beim ersten Wurf alle Würfel in den Becher Packen!');
         return
       }
     }
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/dice");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/dice");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status == 201){
-          if (res.fallen){
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status == 201) {
+          if (res.fallen) {
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
-          }else{
-            soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}";
-            soundEffect.play();
+          } else {
+            soundDice.play();
 
-            if (dice1_cb){
+            if (dice1_cb) {
               dice1_v.className = "spin animated"
               dice1_v.style.animation = 'none';
               dice1_v.offsetHeight; /* trigger reflow */
               dice1_v.style.animation = null;
             }
-            if (dice2_cb){
+            if (dice2_cb) {
               dice2_v.className = "spin animated"
               dice2_v.style.animation = 'none';
               dice2_v.offsetHeight; /* trigger reflow */
               dice2_v.style.animation = null;
             }
-            if (dice3_cb){
+            if (dice3_cb) {
               dice3_v.className = "spin animated"
               dice3_v.style.animation = 'none';
               dice3_v.offsetHeight; /* trigger reflow */
@@ -291,56 +287,56 @@
             var first_user_id = document.getElementById('first_user_id').innerHTML;
             var me = localStorage.getItem('id');
 
-            if (first_user_id != me || res.number_dice == 3){
-              if (String(res.number_dice) == anzahlel_first_mumber || first_user_id == me){
-                if (dice1_cb){
+            if (first_user_id != me || res.number_dice == 3) {
+              if (String(res.number_dice) == anzahlel_first_mumber || first_user_id == me) {
+                if (dice1_cb) {
                   dice1_v.style.display = "none";
                   dice1_v.style.animation = 'none';
                 }
-                if (dice2_cb){
+                if (dice2_cb) {
                   dice2_v.style.display = "none";
                   dice2_v.style.animation = 'none';
                 }
-                if (dice3_cb){
+                if (dice3_cb) {
                   dice3_v.style.display = "none";
                   dice3_v.style.animation = 'none';
                 }
 
 
-              }else{
+              } else {
                 dice1_v.style.display = "block";
                 dice2_v.style.display = "block";
                 dice3_v.style.display = "block";
-                if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
+                if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6) {
                   v2_6er_button.hidden = false;
                 }
-                if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6){
+                if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6) {
                   v3_6er_button.hidden = false;
                 }
               }
-            }else{
+            } else {
               dice1_v.style.display = "block";
               dice2_v.style.display = "block";
               dice3_v.style.display = "block";
-              if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6){
+              if (res.dice1 == 6 && res.dice2 == 6 || res.dice1 == 6 && res.dice3 == 6 || res.dice2 == 6 && res.dice3 == 6) {
                 v2_6er_button.hidden = false;
               }
-              if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6){
+              if (res.dice1 == 6 && res.dice2 == 6 && res.dice3 == 6) {
                 v3_6er_button.hidden = false;
               }
             }
           }
-        }else{
-          alert(''+res.Message);
+        } else {
+          alert('' + res.Message);
         }
       }
     }
-    xhttp.send(JSON.stringify({dice1:dice1_cb, dice2:dice2_cb, dice3:dice3_cb}));
+    xhttp.send(JSON.stringify({ dice1: dice1_cb, dice2: dice2_cb, dice3: dice3_cb }));
   }
 
 
 
-  function dicehelper(eyes){
+  function dicehelper(eyes) {
     switch (eyes) {
       case 1: {
         var div = document.createElement('div');
@@ -457,14 +453,14 @@
         div.appendChild(divc2);
         return div
       }
-      default:{
+      default: {
         var div = document.createElement('div');
         return div
       }
     }
   }
 
-  function set_user_passiv(){
+  function set_user_passiv() {
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
@@ -473,39 +469,39 @@
 
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/passiv");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/passiv");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 200){
-          alert(''+res.Message);
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200) {
+          alert('' + res.Message);
         }
       }
     }
-    xhttp.send(JSON.stringify({userstate:userstate}));
+    xhttp.send(JSON.stringify({ userstate: userstate }));
   }
 
-  function finish(){
+  function finish() {
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/finisch");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/finisch");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 200){
-          alert(''+res.Message);
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status != 200) {
+          alert('' + res.Message);
         }
       }
     }
     xhttp.send(JSON.stringify({}));
   }
 
-  function pullup(){
+  function pullup() {
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
@@ -517,20 +513,20 @@
     dice1_v.style.display = "block";
     dice2_v.style.display = "block";
     dice3_v.style.display = "block";
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 201){
-          alert(''+res.Message);
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status != 201) {
+          alert('' + res.Message);
         }
       }
     }
-    xhttp.send(JSON.stringify({visible:true}));
+    xhttp.send(JSON.stringify({ visible: true }));
   }
 
-  function pulldown(){
+  function pulldown() {
     var id = localStorage.getItem('id');
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
@@ -542,20 +538,20 @@
     dice2_v.style.display = "none";
     dice3_v.style.display = "none";
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/visible");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/visible");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 201){
-          alert(''+res.Message);
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status != 201) {
+          alert('' + res.Message);
         }
       }
     }
-    xhttp.send(JSON.stringify({visible:false}));
+    xhttp.send(JSON.stringify({ visible: false }));
   }
 
-  function turn(count){
+  function turn(count) {
     var dice1_cb = document.getElementById('dice1_cb');
     var dice2_cb = document.getElementById('dice2_cb');
     var dice3_cb = document.getElementById('dice3_cb');
@@ -572,52 +568,52 @@
 
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+gameid+"/user/"+id+"/diceturn");
+    xhttp.open("POST", "/api/game/" + gameid + "/user/" + id + "/diceturn");
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status == 201){
-            dice1_v.innerHTML = '';
-            dice2_v.innerHTML = '';
-            dice3_v.innerHTML = '';
-            if (res.dice1){
-              dice1_v.appendChild(dicehelper(res.dice1));
-            }else{
-              dice1_cb.checked = true;
-              dice1_cb.disabled = true;
-            }
-            if (res.dice2){
-              dice2_v.appendChild(dicehelper(res.dice2));
-            }else{
-                dice2_cb.checked = true;
-                dice2_cb.disabled = true;
-            }
-            if (res.dice3){
-              dice3_v.appendChild(dicehelper(res.dice3));
-            }else{
-                dice3_cb.checked = true;
-                dice3_cb.disabled = true;
-            }
-        }else{
-          alert(''+res.Message);
+        var res = JSON.parse(xhttp.responseText);
+        if (xhttp.status == 201) {
+          dice1_v.innerHTML = '';
+          dice2_v.innerHTML = '';
+          dice3_v.innerHTML = '';
+          if (res.dice1) {
+            dice1_v.appendChild(dicehelper(res.dice1));
+          } else {
+            dice1_cb.checked = true;
+            dice1_cb.disabled = true;
+          }
+          if (res.dice2) {
+            dice2_v.appendChild(dicehelper(res.dice2));
+          } else {
+            dice2_cb.checked = true;
+            dice2_cb.disabled = true;
+          }
+          if (res.dice3) {
+            dice3_v.appendChild(dicehelper(res.dice3));
+          } else {
+            dice3_cb.checked = true;
+            dice3_cb.disabled = true;
+          }
+        } else {
+          alert('' + res.Message);
         }
       }
     }
-    xhttp.send(JSON.stringify({count:count}));
+    xhttp.send(JSON.stringify({ count: count }));
   }
 
-  function turn1(){
+  function turn1() {
     var count = 1;
     turn(count);
   }
-  function turn2(){
+  function turn2() {
     var count = 2;
     turn(count);
   }
 
   var sound_is_played_once = 0;
-  function set_sound_play(val){
+  function set_sound_play(val) {
     sound_is_played_once = val
   }
 
@@ -686,7 +682,7 @@
     xhttp.send(JSON.stringify({}));
   }
 
-  function refresh_game(game){
+  function refresh_game(game) {
     var game_uuid = document.getElementById('UUID');
     var gameid = game_uuid.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
@@ -701,93 +697,91 @@
     if (game_state == 'waiting'){
       // Simulate an HTTP redirect:
       var getUrl = window.location;
-      var baseUrl = getUrl .protocol + "//" + getUrl.host;
-      window.location.replace(baseUrl+'/game_waiting/'+gameid);
+      var baseUrl = getUrl.protocol + "//" + getUrl.host;
+      window.location.replace(baseUrl + '/game_waiting/' + gameid);
     }
     //set stack Chips
     var stackchips = document.getElementById('StackChips_id');
-    stackchips.innerHTML = 'Chips: '+ game.Stack
+    stackchips.innerHTML = 'Chips: ' + game.Stack
     var firstuser_id = game['First']
     var first_user_id_el = document.getElementById('first_user_id');
     first_user_id_el.innerHTML = firstuser_id;
     // set Game Message
     var el_message = document.getElementById('Message');
-    if (game.Message){
+    if (game.Message) {
       // Only animate once
-      if (el_message.innerHTML != 'Nachricht: '+ game.Message){
-        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an") || game.Message.includes("hat das Finale verloren") || game.Message.includes("Finale wird gespielt")){
+      if (el_message.innerHTML != 'Nachricht: ' + game.Message) {
+        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an") || game.Message.includes("hat das Finale verloren") || game.Message.includes("Finale wird gespielt")) {
           document.getElementById("dice1_cb").checked = true;
           document.getElementById("dice2_cb").checked = true;
           document.getElementById("dice3_cb").checked = true;
         }
-        if (game.Message.startsWith('Aufdecken')){
-          soundEffect.src = "{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}";
-          soundEffect.play();
+        if (game.Message.startsWith('Aufdecken')) {
+          soundLift.play();
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
         el_message.offsetHeight; /* trigger reflow */
         el_message.style.animation = null;
       }
-      el_message.innerHTML = 'Nachricht: '+ game.Message
-    }else{
+      el_message.innerHTML = 'Nachricht: ' + game.Message
+    } else {
       el_message.innerHTML = ''
     }
 
     for (num in game.User) {
       var juser = game.User[num];
       // finale
-      var row = document.getElementById('row'+juser['Id']);
-      var str = 'chips'+juser['Id']
-      var chips = document.getElementById('chips'+juser['Id']);
+      var row = document.getElementById('row' + juser['Id']);
+      var str = 'chips' + juser['Id']
+      var chips = document.getElementById('chips' + juser['Id']);
       chips.innerHTML = juser['Chips'];
       //set anzahl würfe
-      if (juser['Id'] == firstuser_id){
+      if (juser['Id'] == firstuser_id) {
         var anzahlel = document.getElementById('throw_id');
         var anzahl_number_el = document.getElementById('throw_number_id');
-        anzahlel.innerHTML = 'Anzahl Würfe: '+juser['Number_Dice'];
+        anzahlel.innerHTML = 'Anzahl Würfe: ' + juser['Number_Dice'];
         anzahl_number_el.innerHTML = juser['Number_Dice'];
-        var row = document.getElementById('row'+juser['Id']);
+        var row = document.getElementById('row' + juser['Id']);
         row.style.backgroundColor = "lightblue";
         var anzahlel_first_mumber = document.getElementById('first_user_dice_count_id');
         anzahlel_first_mumber.innerHTML = juser['Number_Dice'];
-      }else{
-        var row = document.getElementById('row'+juser['Id']);
-        if (juser['Passive']){
+      } else {
+        var row = document.getElementById('row' + juser['Id']);
+        if (juser['Passive']) {
           row.style.backgroundColor = "lightgray";
-        }else{
+        } else {
           row.style.backgroundColor = "#11ffee00";
         }
       }
 
-      var anzahluserel = document.getElementById('Number_Dice'+juser['Id']);
+      var anzahluserel = document.getElementById('Number_Dice' + juser['Id']);
       anzahluserel.innerHTML = juser['Number_Dice'];
 
-      if (game.Message){
+      if (game.Message) {
         // sound whene i have to dice
-        if (juser['Id'] == waiting_user_id){
-          if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
-            if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-              soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}";
-              soundEffect.play();
+        if (juser['Id'] == waiting_user_id) {
+          if (waitinguserstorage.innerHTML != 'Warten auf: ' + juser['Name']) {
+            if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')) {
+              soundDiceY.play();
             }
           }
           // set Waiting user Name
-          waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
+          waitinguserstorage.innerHTML = 'Warten auf: ' + juser['Name'];
         }
-      }else{
-        if (juser['Id'] == waiting_user_id){
+      } else {
+        if (juser['Id'] == waiting_user_id) {
           // set Waiting user Name
-          waitinguserstorage.innerHTML = 'Warten auf: '+juser['Name'];
+          waitinguserstorage.innerHTML = 'Warten auf: ' + juser['Name'];
         }
       }
       // me as user
       var id = localStorage.getItem('id');
-      if (juser['Id'] == id){
-        if (game.Stack == 0 && juser['Chips'] == 0 && game_state != 'playfinal'){
+      if (juser['Id'] == id) {
+        if (game.Stack == 0 && juser['Chips'] == 0 && game_state != 'playfinal') {
           var set_passiv_div_id = document.getElementById('set_passiv_div_id');
           set_passiv_div_id.style.display = "block";
-        }else{
+        } else {
           var set_passiv_div_id = document.getElementById('set_passiv_div_id');
           set_passiv_div_id.style.display = "none";
           var setpassivid = document.getElementById('setpassivid');
@@ -795,26 +789,26 @@
         }
       }
       // set button color
-      if (id == waiting_user_id){
-        throwbutton.className  = 'buttongreen containerturner';
-      }else{
-        throwbutton.className  = 'buttongray containerturner';
+      if (id == waiting_user_id) {
+        throwbutton.className = 'buttongreen containerturner';
+      } else {
+        throwbutton.className = 'buttongray containerturner';
       }
       var userhalfs = juser['Halfcount']
-      var userfirsthalfel = document.getElementById('first'+juser['Id']);
+      var userfirsthalfel = document.getElementById('first' + juser['Id']);
       userfirsthalfel.innerHTML = userhalfs;
 
       var userfinals = juser['Finalcount']
-      var userfinalhalfel = document.getElementById('finalcount'+juser['Id']);
-      if (userfinalhalfel){
+      var userfinalhalfel = document.getElementById('finalcount' + juser['Id']);
+      if (userfinalhalfel) {
         userfinalhalfel.innerHTML = userfinals;
       }
 
       // set dices
-      var dice1_v = document.getElementById('dice1'+juser['Id']);
-      var dice2_v = document.getElementById('dice2'+juser['Id']);
-      var dice3_v = document.getElementById('dice3'+juser['Id']);
-      if (juser.Dices){
+      var dice1_v = document.getElementById('dice1' + juser['Id']);
+      var dice2_v = document.getElementById('dice2' + juser['Id']);
+      var dice3_v = document.getElementById('dice3' + juser['Id']);
+      if (juser.Dices) {
         dice1_v.innerHTML = '';
         dice2_v.innerHTML = '';
         dice3_v.innerHTML = '';
@@ -824,7 +818,7 @@
           dice2_v.appendChild(dicehelper(jdice['Dice2']));
           dice3_v.appendChild(dicehelper(jdice['Dice3']));
         }
-      }else{
+      } else {
         dice1_v.innerHTML = '';
         dice2_v.innerHTML = '';
         dice3_v.innerHTML = '';
@@ -833,24 +827,26 @@
 
   }
 
-  function initial_game_data(){
+  function initial_game_data() {
     var game = document.getElementById('UUID');
     var gameid = game.innerHTML;
     gameid = gameid.replace(/['"]+/g, '');
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "/api/game/"+gameid);
+    xhttp.open("GET", "/api/game/" + gameid);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
-        if (xhttp.status == 200){
-          var res=JSON.parse(xhttp.responseText);
+        if (xhttp.status == 200) {
+          var res = JSON.parse(xhttp.responseText);
           refresh_game(res);
         }
       }
     }
     xhttp.send(JSON.stringify({}));
   }
-  const soundEffect = new Audio();
+  const soundDice = new Audio("{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}");
+  const soundLift = new Audio("{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}");
+  const soundDiceY = new Audio("{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}");
   startup()
 
 </script>
@@ -877,25 +873,25 @@
   // Event handler for new connections.
   // The callback function is invoked when a connection with the
   // server is established.
-  socket.on('connect', function() {
-      var game = document.getElementById('UUID');
-      var gameid = game.innerHTML;
-      gameid = gameid.replace(/^"(.+)"$/,'$1');
-      socket.emit('join', {room: gameid});
+  socket.on('connect', function () {
+    var game = document.getElementById('UUID');
+    var gameid = game.innerHTML;
+    gameid = gameid.replace(/^"(.+)"$/, '$1');
+    socket.emit('join', { room: gameid });
   });
 
-  socket.on('reload_game', function(game) {
-      if (game){
-        refresh_game(game);
-      }
+  socket.on('reload_game', function (game) {
+    if (game) {
+      refresh_game(game);
+    }
   });
-    /*
-  window.on('beforeunload', function(){
-    socket.close();
-  });
+  /*
+window.on('beforeunload', function(){
+  socket.close();
+});
 
-  window.addEventListener('beforeunload', function (e) {
-    socket.close();
+window.addEventListener('beforeunload', function (e) {
+  socket.close();
 });
 */
 
