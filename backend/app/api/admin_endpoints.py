@@ -237,7 +237,7 @@ def transfer_chips(gid):
         if userA.chips >= escapedcount:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0 or userA.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             userA.chips = userA.chips - escapedcount
@@ -267,7 +267,7 @@ def transfer_chips(gid):
         if game.stack >= escapedcount:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             game.stack = game.stack - escapedcount
@@ -291,7 +291,7 @@ def transfer_chips(gid):
         if escapedschockaus:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             game.stack = 0
@@ -362,7 +362,7 @@ def transfer_chips(gid):
                         for user in game.users:
                             user.passive = False
                             user.chips = 0
-                        message = 'Finale wird gespiel'
+                        message = 'Finale wird gespielt'
                         game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
                     else:
                         game.status = Status.ROUNDFINISCH
