@@ -267,9 +267,8 @@
         if (xhttp.status == 201){
           if (res.fallen){
             alert('Würfel vom Tisch gefallen Schnapsrunde!');
-          }else{
-            soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}";
-            soundEffect.play();
+          } else {
+            soundDice.play();
 
             if (dice1_cb){
               dice1_v.className = "spin animated"
@@ -719,9 +718,8 @@
           document.getElementById("dice2_cb").checked = true;
           document.getElementById("dice3_cb").checked = true;
         }
-        if (game.Message.startsWith('Aufdecken')){
-          soundEffect.src = "{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}";
-          soundEffect.play();
+        if (game.Message.startsWith('Aufdecken')) {
+          soundLift.play();
         }
         el_message.className = "message"
         el_message.style.animation = 'none';
@@ -767,8 +765,7 @@
         if (juser['Id'] == waiting_user_id){
           if (waitinguserstorage.innerHTML != 'Warten auf: '+juser['Name']){
             if (juser['Name'] == localStorage.getItem('name') && !game.Message.startsWith('Aufdecken')){
-              soundEffect.src = "{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}";
-              soundEffect.play();
+              soundDiceY.play();
             }
           }
           // set Waiting user Name
@@ -849,7 +846,9 @@
     }
     xhttp.send(JSON.stringify({}));
   }
-  const soundEffect = new Audio();
+  const soundDice = new Audio("{{ url_for('static', filename = 'audio/wuerfeln.mp3')}}");
+  const soundLift = new Audio("{{ url_for('static', filename = 'audio/hoch_die_Becher_Markus.mp3')}}");
+  const soundDiceY = new Audio("{{ url_for('static', filename = 'audio/wuerfelnYannick.mp3')}}");
   startup()
 
 </script>
