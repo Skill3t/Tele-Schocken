@@ -109,7 +109,7 @@ def get_game(gid):
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify(Message='Game id not in Database')
+        response = jsonify(Message='Spiel ist nicht in der Datenbank')
         response.status_code = 404
         return response
     response = jsonify(game.to_dict())
@@ -194,7 +194,7 @@ def set_game_user(gid):
         response.status_code = 404
         return response
     if game.status != Status.WAITING:
-        response = jsonify(Message='Game already started create new Game')
+        response = jsonify(Message='Spiel ist bereits gestartet. Starte ein neues Spiel!')
         response.status_code = 400
         return response
     data = request.get_json() or {}
@@ -203,7 +203,7 @@ def set_game_user(gid):
     escapedusername = str(utils.escape(data['name']))
     inuse = User.query.filter_by(name=escapedusername).first()
     if inuse is not None:
-        response = jsonify(Message='username in use!')
+        response = jsonify(Message='Benutzername schon vergeben!')
         response.status_code = 400
         return response
     user = User()
@@ -258,7 +258,7 @@ def pull_up_dice_cup(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -278,7 +278,7 @@ def pull_up_dice_cup(gid, uid):
             game.message = "Warten auf Vergabe der Chips!"
             db.session.add(game)
             db.session.commit()
-        response = jsonify(Message='success')
+        response = jsonify(Message='Hat geklappt!')
         response.status_code = 201
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
@@ -294,11 +294,11 @@ def finish_throwing(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify(Message='Player not in Game')
+        response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
     # no chips on the stack but user has chips so you need to dice onece
@@ -308,11 +308,11 @@ def finish_throwing(gid, uid):
         return response
     # chips on the stack need to dice onece
     if game.stack != 0 and user.number_dice == 0:
-        response = jsonify(Message='Dice at least once')
+        response = jsonify(Message='Du musst mindestens einmal würfeln!')
         response.status_code = 400
         return response
     if user.dice1 is None or user.dice2 is None or user.dice3 is None:
-        response = jsonify(Message='Dice again after turning 6er')
+        response = jsonify(Message='Nach dem Verwandeln von Sechsen in Einsen musst Du nochmal würfeln')
         response.status_code = 400
         return response
     waitinguser = User.query.get_or_404(game.move_user_id)
@@ -363,12 +363,12 @@ def finish_throwing(gid, uid):
         #    game.message = "Aufdecken!"
         db.session.add(game)
         db.session.commit()
-        response = jsonify(Message='success')
+        response = jsonify(Message='Hat geklappt!')
         response.status_code = 200
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
-        response = jsonify(Message='Its not your turn')
+        response = jsonify(Message='Du bist nicht dran!')
         response.status_code = 400
         return response
     response = jsonify(Message='Error')
@@ -382,7 +382,7 @@ def set_user_passiv(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -395,7 +395,7 @@ def set_user_passiv(gid, uid):
             print('Hier')
         db.session.add(user)
         db.session.commit()
-        response = jsonify(Message='success')
+        response = jsonify(Message='Hat geklappt!')
         response.status_code = 201
         # needed ???
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
@@ -463,11 +463,11 @@ def roll_dice(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.filter_by(id=uid).first()
     if game is None:
-        response = jsonify()
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify(Message='Player not in Game')
+        response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -480,7 +480,7 @@ def roll_dice(gid, uid):
             game.status = Status.STARTED
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.id == user.id:
             if user.number_dice >= 3:
-                response = jsonify(Message='User hase alread dice 3 times')
+                response = jsonify(Message='Du hast schon dreimal gewürfelt!')
                 response.status_code = 404
                 return response
             # Check if a dice fall from the table and return if so
@@ -574,7 +574,7 @@ def roll_dice(gid, uid):
             else:
                 user.dice3_visible = True
         else:
-            response = jsonify(Message='Its not your turn')
+            response = jsonify(Message='Du bist nicht dran!')
             response.status_code = 400
             return response
         # Statistic
@@ -592,7 +592,7 @@ def roll_dice(gid, uid):
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
         return response
     else:
-        response = jsonify(Message='Its not your turn')
+        response = jsonify(Message='Du bist nicht dran!')
         response.status_code = 400
     return response
 
@@ -645,11 +645,11 @@ def turn_dice(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify(Message='User not in game')
+        response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -670,7 +670,7 @@ def turn_dice(gid, uid):
                         user.dice1 = 1
                         user.dice3 = None
                     else:
-                        response = jsonify(Message='Could not finde tow dices with value 6')
+                        response = jsonify(Message='Keine zwei Sechsen gefunden')
                         response.status_code = 400
                         return response
                 elif int(escapedcount) == 2:
@@ -679,7 +679,7 @@ def turn_dice(gid, uid):
                         user.dice2 = 1
                         user.dice3 = None
                     else:
-                        response = jsonify(Message='Could not finde three dices with value 6')
+                        response = jsonify(Message='Keine drei Sechsen gefunden')
                         response.status_code = 400
                         return response
                 else:
@@ -691,11 +691,11 @@ def turn_dice(gid, uid):
                 response.status_code = 400
                 return response
         else:
-            response = jsonify(Message='less then 1 throw left')
+            response = jsonify(Message='Du musst nach dem Umdrehen noch würfeln können')
             response.status_code = 400
             return response
     else:
-        response = jsonify(Message='Its not your turn')
+        response = jsonify(Message='Du bist nicht dran!')
         response.status_code = 400
         return response
     response = jsonify(dice1=user.dice1, dice2=user.dice2, dice3=user.dice3)
@@ -717,11 +717,11 @@ def sort_dice(gid):
         escape = str(utils.escape(data['admin_id']))
         user = User.query.get_or_404(escape)
         if game is None:
-            response = jsonify(Message='Game not found')
+            response = jsonify(Message='Spiel nicht gefunden')
             response.status_code = 404
             return response
         if user.game_id != game.id:
-            response = jsonify(Message='User not in game')
+            response = jsonify(Message='Spieler ist nicht in diesem Spiel')
             response.status_code = 404
             return response
         if game.message == "Warten auf Vergabe der Chips!":

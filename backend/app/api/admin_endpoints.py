@@ -70,7 +70,7 @@ def create_Game():
         game = Game()
         inuse = User.query.filter_by(name=escapedusername).first()
         if inuse is not None:
-            response = jsonify(Message='username in use!')
+            response = jsonify(Message='Benutzername wird bereits verwendet!')
             response.status_code = 400
             return response
         user = User()
@@ -129,7 +129,7 @@ def start_game(gid):
         return response
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     game.status = Status.STARTED
@@ -149,16 +149,16 @@ def start_game(gid):
     db.session.add(game)
     db.session.commit()
     emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-    response = jsonify(Message='success')
+    response = jsonify(Message='Hat geklappt!')
     response.status_code = 201
     return response
 
 
-# transfer s
+# transfer chips
 @bp.route('/game/<gid>/user/chips', methods=['POST'])
 def transfer_chips(gid):
     """At the end of a round the Admin Transers chips from the Stack to a User or
-    Form User A to User B
+    From User A to User B
 
     Parameters
     ----------
@@ -212,7 +212,7 @@ def transfer_chips(gid):
     response = jsonify(Message='success')
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     data = request.get_json() or {}
@@ -237,7 +237,7 @@ def transfer_chips(gid):
         if userA.chips >= escapedcount:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0 or userA.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             userA.chips = userA.chips - escapedcount
@@ -251,7 +251,7 @@ def transfer_chips(gid):
             db.session.add(userB)
             db.session.commit()
         else:
-            response = jsonify(Message='source has not enough chips on his stack. try again')
+            response = jsonify(Message='nicht genügend Chips an der Quelle. Versuch\'s nochmal<!')
             response.status_code = 400
             return response
     # transfer from stack to user B
@@ -267,7 +267,7 @@ def transfer_chips(gid):
         if game.stack >= escapedcount:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             game.stack = game.stack - escapedcount
@@ -280,7 +280,7 @@ def transfer_chips(gid):
             db.session.add(userB)
             db.session.commit()
         else:
-            response = jsonify(Message='Not enough chips on the stack. try again')
+            response = jsonify(Message='Nicht genügend Chips auf dem Stapel. Versuch\'s nochmal!')
             response.status_code = 400
             return response
     # transfer all to B Schockaus
@@ -291,14 +291,14 @@ def transfer_chips(gid):
         if escapedschockaus:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0:
-                    response = jsonify(Message='Benutzer nicht im finale')
+                    response = jsonify(Message='Benutzer nicht im Finale')
                     response.status_code = 400
                     return response
             game.stack = 0
             userB.chips = game.stack_max
             game.first_user_id = userB.id
             game.move_user_id = userB.id
-            game.message = "Schockaus alle Chips an: {} verteilt!".format(userB.name)
+            game.message = "Schockaus! Alle Chips an: {} verteilt!".format(userB.name)
 
             db.session.add(game)
             db.session.add(userB)
@@ -362,11 +362,11 @@ def transfer_chips(gid):
                         for user in game.users:
                             user.passive = False
                             user.chips = 0
-                        message = 'Finale wird gespiel'
+                        message = 'Finale wird gespielt'
                         game.message = 'Finale wird gespielt grau hinterlegte Spieler müssen warten'
                     else:
                         game.status = Status.ROUNDFINISCH
-                        message = 'Player {} lose a half'.format(userB.name)
+                        message = 'Spieler {} verliert eine Hälfte'.format(userB.name)
                 else:
                     message = 'Fehler'
                     print('log error final ')
@@ -376,7 +376,7 @@ def transfer_chips(gid):
             game.status = Status.ROUNDFINISCH
             game.stack = game.stack_max
             game.halfcount = game.halfcount + 1
-            message = 'Player {} lose a half'.format(userB.name)
+            message = 'Spieler {} verliert eine Hälfte'.format(userB.name)
     else:
         message = 'OK'
 
@@ -415,16 +415,16 @@ def delete_player(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
     delete_user = User.query.get_or_404(uid)
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     if delete_user.game_id != game.id:
-        response = jsonify(Message='Player not in Game')
+        response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
 
     if game.admin_user_id == delete_user.id:
-        response = jsonify(Message='Admin can not be removed!')
+        response = jsonify(Message='Admin kann nicht entfernt werden')
         response.status_code = 404
         return response
     if delete_user.id == game.first_user_id:
@@ -477,20 +477,20 @@ def choose_admin(gid, uid):
         new_admin = User.query.get_or_404(new_admin_id)
 
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     if user.game_id != game.id:
-        response = jsonify(Message='Player not in Game')
+        response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
     if game.admin_user_id == user.id:
         game.admin_user_id = new_admin.id
-        game.message = "Admin gewechselt neuer Admin: {}! Neuer Admin muss die Seite einmal neu laden".format(new_admin.name)
+        game.message = "Admin gewechselt, neuer Admin: {}! Neuer Admin muss die Seite einmal neu laden".format(new_admin.name)
         db.session.add(game)
         db.session.commit()
         emit('reload_game', game.to_dict(), room=gid, namespace='/game')
-        response = jsonify(Message='success')
+        response = jsonify(Message='Hat geklappt!')
         response.status_code = 200
         return response
     response = jsonify(Message='Unknown Error')
@@ -529,7 +529,7 @@ def wait_game(gid):
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify(Message='Game not found')
+        response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
     for user in game.users:
