@@ -713,7 +713,7 @@
     if (game.Message){
       // Only animate once
       if (el_message.innerHTML != 'Nachricht: ' + game.Message) {
-        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus alle Chips an") || game.Message.includes("Chip(s) vom Stapel an") || game.Message.includes("hat das Finale verloren") || game.Message.includes("Finale wird gespielt")) {
+        if (game.Message.includes("Chip(s) von") || game.Message.includes("Schockaus! Alle Chips an") || game.Message.includes("Chip(s) vom Stapel an") || game.Message.includes("hat das Finale verloren") || game.Message.includes("Finale wird gespielt")) {
           document.getElementById("dice1_cb").checked = true;
           document.getElementById("dice2_cb").checked = true;
           document.getElementById("dice3_cb").checked = true;
