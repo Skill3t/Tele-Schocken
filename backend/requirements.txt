@@ -24,7 +24,7 @@ idna==2.9
 imagesize==1.2.0
 itsdangerous==1.1.0
 Jinja2==2.11.1
-Mako==1.1.2
+Mako==1.2.2
 MarkupSafe==1.1.1
 packaging==20.3
 Pygments==2.6.1
