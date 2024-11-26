@@ -27,7 +27,7 @@ Jinja2==2.11.1
 Mako==1.1.2
 MarkupSafe==1.1.1
 packaging==20.3
-Pygments==2.6.1
+Pygments==2.7.4
 PyMySQL==0.9.3
 pyparsing==2.4.6
 python-dateutil==2.8.1
