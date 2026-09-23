@@ -38,6 +38,26 @@
           </div>
           <div class="row">
             <div class="col-md-12">
+              <h2>Spiel beitreten</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-11 col-md-8" >
+              <div class="input-group mb-6">
+                <input id="joinlink" placeholder="Link oder Spiel-ID" type="text" size="20" class="form-control" >
+                <div class="input-group-btn">
+                  <button class="btn btn-primary btn-outline-secondary" type="button" onclick="joinGame()">Beitreten</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <p>(Link oder Spiel-ID vom Ersteller des Spiels hier einfügen)</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
               <h2>Keine Lust zu lesen??? Hier gehts zum Erklärvideo 👇</h2>
             </div>
           </div>
@@ -157,37 +177,23 @@
     }
     xhttp.send(JSON.stringify({name:adminname}));
   }
+  // accepts the full invite link or just the game id, useful when the page
+  // is embedded (e.g. as iframe) and there is no address bar to open the link
   function joinGame(){
-    var user = document.getElementById('Name');
-    var game = document.getElementById('UUID');
-    var uuid = game.value;
-    uuid = uuid.replace(/\s/g, '');
-    var usernname = user.value;
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/game/"+uuid+"/user");
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == XMLHttpRequest.DONE) {
-        var res=JSON.parse(xhttp.responseText);
-        if (xhttp.status != 200){
-          alert('Fehler beim erzeugen: '+res.Message);
-          location=location;
-        }else{
-          localStorage.setItem('name', usernname);
-          for (num in res.User) {
-            var juser = res.User[num];
-            var name = juser['Name'];
-            if (name == usernname){
-              localStorage.setItem('id', juser['Id']);
-            }
-          }
-          var id = localStorage.getItem('id');
-          window.location.href = "/game_waiting/"+uuid;
-        }
-      }
+    var input = document.getElementById('joinlink').value;
+    var match = input.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+    if (match == null){
+      alert('Keine gültige Spiel-ID gefunden. Bitte den Link oder die Spiel-ID vom Ersteller des Spiels einfügen.');
+      return;
     }
-    xhttp.send(JSON.stringify({name:usernname}));
+    window.location.href = "/game_waiting/"+match[0].toLowerCase();
   }
+
+  document.getElementById('joinlink').addEventListener('keyup', function(event){
+    if (event.key === 'Enter'){
+      joinGame();
+    }
+  });
 
 
 </script>
