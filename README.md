@@ -38,6 +38,14 @@ poetry add <package>           # add a new dependency
 poetry run pip-audit           # check dependencies for known vulnerabilities
 ```
 
+Run locally (needs a `backend/config.py`, see `exampleConfig.py`):
+```bash
+poetry run flask db upgrade    # create / update the database
+poetry run python teleschocken.py   # http://127.0.0.1:8000 (port via PORT=...)
+```
+`flask run` does not work: its dev server can not handle the gevent based Socket.IO connection,
+so a game never starts. In production use `gunicorn -k gevent -w 1 teleschocken:app`.
+
 ## Doku 📝
 * poetry run make html
 
