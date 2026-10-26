@@ -9,8 +9,11 @@ database is registered before ``app`` is imported.
 """
 import sys
 import types
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple
 
 import pytest
+from flask import Flask
+from flask.testing import FlaskClient
 
 
 class TestConfig(object):
@@ -30,9 +33,13 @@ from app import app as flask_app, db  # noqa: E402
 from app.api import admin_endpoints, game_endpoints  # noqa: E402
 from app.models import Game, User  # noqa: E402
 
+CreateGame = Callable[..., Tuple[str, int]]
+AddUser = Callable[[str, str], int]
+StartedGame = Tuple[str, List[int]]
+
 
 @pytest.fixture
-def app():
+def app() -> Iterator[Flask]:
     with flask_app.app_context():
         db.create_all()
         yield flask_app
@@ -41,16 +48,16 @@ def app():
 
 
 @pytest.fixture
-def client(app):
+def client(app: Flask) -> FlaskClient:
     return app.test_client()
 
 
 @pytest.fixture(autouse=True)
-def emitted(monkeypatch):
+def emitted(monkeypatch: pytest.MonkeyPatch) -> List[Dict[str, Any]]:
     """Replace the socket.io ``emit`` and record the emitted events instead."""
-    events = []
+    events: List[Dict[str, Any]] = []
 
-    def fake_emit(event, data=None, **kwargs):
+    def fake_emit(event: str, data: Any = None, **kwargs: Any) -> None:
         events.append({'event': event, 'data': data, **kwargs})
 
     monkeypatch.setattr(game_endpoints, 'emit', fake_emit)
@@ -59,15 +66,15 @@ def emitted(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def no_falling_dice(monkeypatch):
+def no_falling_dice(monkeypatch: pytest.MonkeyPatch) -> None:
     """Dice never fall from the table unless a test says otherwise."""
     monkeypatch.setattr(game_endpoints, 'decision', lambda probability: False)
 
 
 @pytest.fixture
-def create_game(client):
+def create_game(client: FlaskClient) -> CreateGame:
     """Create a game via the API and return (uuid, admin_id)."""
-    def _create_game(name='admin'):
+    def _create_game(name: str = 'admin') -> Tuple[str, int]:
         response = client.post('/api/game', json={'name': name})
         assert response.status_code == 201
         data = response.get_json()
@@ -76,9 +83,9 @@ def create_game(client):
 
 
 @pytest.fixture
-def add_user(client):
+def add_user(client: FlaskClient) -> AddUser:
     """Add a user to a game via the API and return the new user id."""
-    def _add_user(gid, name):
+    def _add_user(gid: str, name: str) -> int:
         response = client.post('/api/game/{}/user'.format(gid), json={'name': name})
         assert response.status_code == 200
         return next(u['Id'] for u in response.get_json()['User'] if u['Name'] == name)
@@ -86,7 +93,7 @@ def add_user(client):
 
 
 @pytest.fixture
-def started_game(client, create_game, add_user):
+def started_game(client: FlaskClient, create_game: CreateGame, add_user: AddUser) -> StartedGame:
     """A started game with the players admin, bob and carl.
 
     The admin moves first so the tests do not depend on the random start player.
@@ -104,11 +111,11 @@ def started_game(client, create_game, add_user):
     return gid, [admin_id, bob_id, carl_id]
 
 
-def get_game(gid):
+def get_game(gid: str) -> Optional[Game]:
     db.session.expire_all()
     return Game.query.filter_by(UUID=gid).first()
 
 
-def get_user(uid):
+def get_user(uid: int) -> Optional[User]:
     db.session.expire_all()
     return User.query.get(uid)
