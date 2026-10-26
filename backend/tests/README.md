@@ -4,16 +4,16 @@ Pytest suite for the Flask backend and its JSON API (`/api/...`).
 
 ## Setup
 
+Dependencies are managed with [Poetry](https://python-poetry.org/) (Python 3.10 – 3.12).
 From the `backend/` directory:
 
 ```bash
-python3 -m venv .venv-test
-source .venv-test/bin/activate
-pip install -r requirements-test.txt
+poetry install
 ```
 
-`requirements-test.txt` contains versions that install on current Python
-(tested with 3.12). The original pins in `requirements.txt` are too old to build there.
+This creates `backend/.venv` (see `poetry.toml`) with the app and test dependencies.
+If another virtualenv is already activated, Poetry installs into that one instead,
+so run `deactivate` first.
 
 No `config.py`, MySQL server or mail server is needed: the tests register their own
 config with an in-memory SQLite database (see `tests/conftest.py`).
@@ -23,11 +23,11 @@ config with an in-memory SQLite database (see `tests/conftest.py`).
 From the `backend/` directory:
 
 ```bash
-python -m pytest                                     # all tests
-python -m pytest -q -p no:warnings                   # short output, without deprecation warnings
-python -m pytest tests/test_game_endpoints.py        # one file
-python -m pytest -k transfer                         # tests whose name contains "transfer"
-python -m pytest tests/test_admin_endpoints.py::test_play_final -v   # a single test
+poetry run pytest                                    # all tests
+poetry run pytest -q -p no:warnings                   # short output, without deprecation warnings
+poetry run pytest tests/test_game_endpoints.py        # one file
+poetry run pytest -k transfer                         # tests whose name contains "transfer"
+poetry run pytest tests/test_admin_endpoints.py::test_play_final -v   # a single test
 ```
 
 ## Test files

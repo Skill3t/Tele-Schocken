@@ -28,14 +28,22 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 * Thx to [TornadoOma](https://www.twitch.tv/tornadooma) for the instruction video
 * Thx to [Wiiilmaa](https://github.com/Wiiilmaa) for improving the Final game.
 
+## Setup 🛠
+Dependencies are managed with [Poetry](https://python-poetry.org/) (Python 3.10 – 3.12):
+```bash
+cd backend
+poetry install                 # app + test dependencies
+poetry install --with docs     # additionally Sphinx for the documentation
+poetry add <package>           # add a new dependency
+```
+
 ## Doku 📝
-* make HTML
+* poetry run make html
 
 ## Tests 🧪
 ```bash
 cd backend
-pip install -r requirements-test.txt
-python -m pytest
+poetry run pytest
 ```
 Details: [backend/tests/README.md](backend/tests/README.md)
 
