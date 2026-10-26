@@ -11,7 +11,6 @@ Create Date: 2026-10-26 21:00:00.000000
 """
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 
 
 # revision identifiers, used by Alembic.
@@ -21,17 +20,20 @@ branch_labels = None
 depends_on = None
 
 
+# batch mode: plain ALTER TABLE on MySQL, table copy on SQLite (no ALTER COLUMN there)
 def upgrade():
-    op.alter_column('game', 'status',
-                    existing_type=mysql.ENUM('WAITING', 'STARTED', 'ROUNDFINISCH', 'GAMEFINISCH'),
-                    type_=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'PLAYFINAL', 'GAMEFINISCH', name='status'),
-                    existing_nullable=True)
+    with op.batch_alter_table('game') as batch_op:
+        batch_op.alter_column('status',
+                              existing_type=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'GAMEFINISCH', name='status'),
+                              type_=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'PLAYFINAL', 'GAMEFINISCH', name='status'),
+                              existing_nullable=True)
 
 
 def downgrade():
     # games in the final can not keep their status without PLAYFINAL
     op.execute("UPDATE game SET status = 'STARTED' WHERE status = 'PLAYFINAL'")
-    op.alter_column('game', 'status',
-                    existing_type=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'PLAYFINAL', 'GAMEFINISCH', name='status'),
-                    type_=mysql.ENUM('WAITING', 'STARTED', 'ROUNDFINISCH', 'GAMEFINISCH'),
-                    existing_nullable=True)
+    with op.batch_alter_table('game') as batch_op:
+        batch_op.alter_column('status',
+                              existing_type=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'PLAYFINAL', 'GAMEFINISCH', name='status'),
+                              type_=sa.Enum('WAITING', 'STARTED', 'ROUNDFINISCH', 'GAMEFINISCH', name='status'),
+                              existing_nullable=True)
