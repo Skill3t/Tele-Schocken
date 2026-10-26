@@ -1,6 +1,8 @@
 from app.api import bp
 from app import app, db
 
+import click
+
 from flask_socketio import emit, join_room
 from flask import jsonify
 from flask import request
@@ -20,6 +22,15 @@ from flask_socketio import SocketIO
 # the best option based on installed packages.
 async_mode = "gevent"
 socketio = SocketIO(app, async_mode=async_mode)
+
+# "flask run" uses a threaded dev server that can not serve gevent Socket.IO:
+# polling requests return at once, flood the server until no ports are left
+# and a game never starts. Fail early instead.
+_cli_context = click.get_current_context(silent=True)
+if _cli_context is not None and _cli_context.command.name == 'run':
+    raise click.UsageError(
+        '"flask run" wird nicht unterstützt (Socket.IO braucht gevent). '
+        'Lokal starten mit: poetry run python teleschocken.py')
 
 
 @socketio.on('connect', namespace='/game')

@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 from datetime import datetime, timedelta
 
 import flask_socketio
@@ -149,3 +152,27 @@ def test_status_enum_round_trip(app, create_game):
     game.status = game.status.PLAYFINAL
     db.session.commit()
     assert Game.query.filter_by(UUID=gid).one().status.value == 'playfinal'
+
+
+# "flask run" can not serve gevent Socket.IO and is blocked (see game_endpoints.py)
+def _flask(tmp_path, *args):
+    (tmp_path / 'config.py').write_text(
+        "class Config(object):\n"
+        "    SECRET_KEY = 'test'\n"
+        "    SQLALCHEMY_DATABASE_URI = 'sqlite://'\n")
+    backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    env = dict(os.environ, PYTHONPATH=str(tmp_path), FLASK_APP='teleschocken.py')
+    return subprocess.run([sys.executable, '-m', 'flask', *args], cwd=backend, env=env,
+                          capture_output=True, text=True, timeout=60)
+
+
+def test_flask_run_is_blocked(tmp_path):
+    result = _flask(tmp_path, 'run', '-p', '5999')
+    assert result.returncode != 0
+    assert 'python teleschocken.py' in result.stderr
+
+
+def test_other_flask_commands_still_work(tmp_path):
+    result = _flask(tmp_path, 'db', '--help')
+    assert result.returncode == 0
+    assert 'upgrade' in result.stdout
