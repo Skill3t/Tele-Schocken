@@ -4,7 +4,7 @@ Pytest suite for the Flask backend and its JSON API (`/api/...`).
 
 ## Setup
 
-Dependencies are managed with [Poetry](https://python-poetry.org/) (Python 3.10 – 3.12).
+Dependencies are managed with [Poetry](https://python-poetry.org/) (Python 3.11 – 3.14).
 From the `backend/` directory:
 
 ```bash
@@ -36,6 +36,7 @@ poetry run pytest tests/test_admin_endpoints.py::test_play_final -v   # a single
 | --- | --- |
 | `test_admin_endpoints.py` | create / start game, chip transfers, losing a half, final, remove player, change admin, back to waiting |
 | `test_game_endpoints.py` | game state, join, roll dice, finish turn, passive players, reveal dice, turn sixes, sort dice |
+| `test_integration.py` | socket.io rooms/events, CLI cronjobs (`create-statistics`, `send_new_game_mail`), feedback form with CSRF + mail, 404 page, static files |
 | `test_routes.py` | HTML pages (`/`, `/game_waiting/<gid>`, `/game/<gid>`) render |
 
 ## Fixtures (`conftest.py`)

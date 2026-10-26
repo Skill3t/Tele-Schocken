@@ -118,4 +118,4 @@ def get_game(gid: str) -> Optional[Game]:
 
 def get_user(uid: int) -> Optional[User]:
     db.session.expire_all()
-    return User.query.get(uid)
+    return db.session.get(User, uid)

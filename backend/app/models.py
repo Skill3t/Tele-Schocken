@@ -8,7 +8,7 @@ from app import db
 import enum
 import uuid
 from datetime import datetime
-from flask import Markup
+from markupsafe import Markup
 
 
 class Status(enum.Enum):

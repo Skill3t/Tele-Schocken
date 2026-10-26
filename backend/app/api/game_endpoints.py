@@ -7,7 +7,7 @@ from flask import request
 from app.models import User, Game, Status
 from random import randint, random
 from datetime import datetime
-from jinja2 import utils
+from markupsafe import escape
 
 from app.api.errors import bad_request
 
@@ -190,17 +190,17 @@ def set_game_user(gid):
     """
     game = Game.query.filter_by(UUID=gid).first()
     if game is None:
-        response = jsonify()
+        response = jsonify({})
         response.status_code = 404
         return response
     if game.status != Status.WAITING:
         response = jsonify(Message='Spiel ist bereits gestartet. Starte ein neues Spiel!')
         response.status_code = 400
         return response
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     if 'name' not in data:
         return bad_request('must include name field')
-    escapedusername = str(utils.escape(data['name']))
+    escapedusername = str(escape(data['name']))
     inuse = User.query.filter_by(name=escapedusername).first()
     if inuse is not None:
         response = jsonify(Message='Benutzername schon vergeben!')
@@ -256,14 +256,14 @@ def pull_up_dice_cup(gid, uid):
             }
     """
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    user = db.get_or_404(User, uid)
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     if 'visible' in data:
-        escapedvisible = str(utils.escape(data['visible']))
+        escapedvisible = str(escape(data['visible']))
         val = escapedvisible.lower() in ['true', '1']
         user.dice1_visible = val
         user.dice2_visible = val
@@ -292,7 +292,7 @@ def pull_up_dice_cup(gid, uid):
 @bp.route('/game/<gid>/user/<uid>/finisch', methods=['POST'])
 def finish_throwing(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    user = db.get_or_404(User, uid)
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
@@ -315,14 +315,14 @@ def finish_throwing(gid, uid):
         response = jsonify(Message='Nach dem Verwandeln von Sechsen in Einsen musst Du nochmal würfeln')
         response.status_code = 400
         return response
-    waitinguser = User.query.get_or_404(game.move_user_id)
+    waitinguser = db.get_or_404(User, game.move_user_id)
     if waitinguser.id == user.id:
         potenzial_next = None
         upperfound = False
         # first find aktuell user and check all users behind for the next user (not passive)
         for i, x in enumerate(game.users):
             if upperfound:
-                potenzial_next = User.query.get_or_404(game.users[i].id)
+                potenzial_next = db.get_or_404(User, game.users[i].id)
                 # Netxt user is passiv and need to scip
                 if (potenzial_next.passive):
                     potenzial_next = None
@@ -339,7 +339,7 @@ def finish_throwing(gid, uid):
                 if (x == user):
                     break
                 else:
-                    potenzial_next = User.query.get_or_404(game.users[i].id)
+                    potenzial_next = db.get_or_404(User, game.users[i].id)
                     # Netxt user is passiv and need to scip
                     if (potenzial_next.passive):
                         potenzial_next = None
@@ -358,7 +358,7 @@ def finish_throwing(gid, uid):
         #    game.move_user_id = game.users[aktualuserid[0]+1].id
         # else:
         #    game.move_user_id = game.users[0].id
-        # next_user = User.query.get_or_404(game.move_user_id)
+        # next_user = db.get_or_404(User, game.move_user_id)
         # if next_user.number_dice != 0:
         #    game.message = "Aufdecken!"
         db.session.add(game)
@@ -380,14 +380,14 @@ def finish_throwing(gid, uid):
 @bp.route('/game/<gid>/user/<uid>/passiv', methods=['POST'])
 def set_user_passiv(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    user = db.get_or_404(User, uid)
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     if 'userstate' in data:
-        escapeduserstate = str(utils.escape(data['userstate']))
+        escapeduserstate = str(escape(data['userstate']))
         val = escapeduserstate.lower() in ['true', '1']
         user.passive = val
         # # TODO: Wheren player needs to dice and check the box
@@ -470,10 +470,10 @@ def roll_dice(gid, uid):
         response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     # Cloud be improved to game.first_user_id first user.number_dice
-    first_user = User.query.get_or_404(game.first_user_id)
-    waitinguser = User.query.get_or_404(game.move_user_id)
+    first_user = db.get_or_404(User, game.first_user_id)
+    waitinguser = db.get_or_404(User, game.move_user_id)
     game.refreshed = datetime.now()
     if waitinguser.id == user.id:
         if game.status == Status.GAMEFINISCH:
@@ -502,7 +502,7 @@ def roll_dice(gid, uid):
                 # first find aktuell user and check all users behind for the next user (not passive)
                 for i, x in enumerate(game.users):
                     if upperfound:
-                        potenzial_next = User.query.get_or_404(game.users[i].id)
+                        potenzial_next = db.get_or_404(User, game.users[i].id)
                         # Netxt user is passiv and need to scip
                         if (potenzial_next.passive):
                             potenzial_next = None
@@ -519,7 +519,7 @@ def roll_dice(gid, uid):
                         if (x == user):
                             break
                         else:
-                            potenzial_next = User.query.get_or_404(game.users[i].id)
+                            potenzial_next = db.get_or_404(User, game.users[i].id)
                             # Netxt user is passiv and need to scip
                             if (potenzial_next.passive):
                                 potenzial_next = None
@@ -539,14 +539,14 @@ def roll_dice(gid, uid):
                 #    game.move_user_id = game.users[aktualuserid[0]+1].id
                 # else:
                 #    game.move_user_id = game.users[0].id
-                # next_user = User.query.get_or_404(game.move_user_id)
+                # next_user = db.get_or_404(User, game.move_user_id)
                 # Back to first user
                 # if next_user.number_dice != 0:
                 #    game.message = "Aufdecken!"
                 db.session.add(game)
                 db.session.commit()
             if 'dice1' in data:
-                escapeddice1 = str(utils.escape(data['dice1']))
+                escapeddice1 = str(escape(data['dice1']))
                 if escapeddice1.lower() in ['true', '1']:
                     user.dice1 = randint(1, 6)
                     user.dice1_visible = False
@@ -555,7 +555,7 @@ def roll_dice(gid, uid):
             else:
                 user.dice1_visible = True
             if 'dice2' in data:
-                escapeddice2 = str(utils.escape(data['dice2']))
+                escapeddice2 = str(escape(data['dice2']))
                 if escapeddice2.lower() in ['true', '1']:
                     user.dice2 = randint(1, 6)
                     user.dice2_visible = False
@@ -565,7 +565,7 @@ def roll_dice(gid, uid):
                 user.dice2_visible = True
 
             if 'dice3' in data:
-                escapeddice3 = str(utils.escape(data['dice3']))
+                escapeddice3 = str(escape(data['dice3']))
                 if escapeddice3.lower() in ['true', '1']:
                     user.dice3 = randint(1, 6)
                     user.dice3_visible = False
@@ -643,7 +643,7 @@ def turn_dice(gid, uid):
             }
     """
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
+    user = db.get_or_404(User, uid)
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
@@ -652,13 +652,13 @@ def turn_dice(gid, uid):
         response = jsonify(Message='Spieler ist nicht in diesem Spiel')
         response.status_code = 404
         return response
-    data = request.get_json() or {}
-    first_user = User.query.get_or_404(game.first_user_id)
-    waitinguser = User.query.get_or_404(game.move_user_id)
+    data = request.get_json(silent=True) or {}
+    first_user = db.get_or_404(User, game.first_user_id)
+    waitinguser = db.get_or_404(User, game.move_user_id)
     if waitinguser.id == user.id:
         if first_user.number_dice == 0 or user.number_dice < first_user.number_dice or first_user.number_dice < 3:
             if 'count' in data:
-                escapedcount = str(utils.escape(data['count']))
+                escapedcount = str(escape(data['count']))
                 if int(escapedcount) == 1:
                     if user.dice1 == 6 and user.dice2 == 6:
                         user.dice1 = 1
@@ -711,11 +711,11 @@ def turn_dice(gid, uid):
 # Could be enhanced to directly highlight the potensial Winner (not exactly possible because of to many diffrent rules)
 @bp.route('/game/<gid>/sort', methods=['PUT'])
 def sort_dice(gid):
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     if 'admin_id' in data:
         game = Game.query.filter_by(UUID=gid).first()
-        escape = str(utils.escape(data['admin_id']))
-        user = User.query.get_or_404(escape)
+        escapedadminid = str(escape(data['admin_id']))
+        user = db.get_or_404(User, escapedadminid)
         if game is None:
             response = jsonify(Message='Spiel nicht gefunden')
             response.status_code = 404
@@ -761,7 +761,7 @@ def sort_dice(gid):
     else:
         print('Log Bad request')
         return bad_request('must include admin_id')
-    response = jsonify()
+    response = jsonify({})
     response.status_code = 200
     return response
 

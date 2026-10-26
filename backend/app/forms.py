@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, TextField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Optional
 
 BROWSER = (
@@ -20,7 +20,7 @@ class CreateGameFrom(FlaskForm):
 
 
 class FeedbackFrom(FlaskForm):
-    message = TextField('Nachricht', validators=[Length(min=0, max=10000), DataRequired()])
+    message = StringField('Nachricht', validators=[Length(min=0, max=10000), DataRequired()])
     browser = SelectField(
         label='Browser',
         choices=[(browser, browser) for browser in BROWSER],
