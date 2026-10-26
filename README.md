@@ -31,13 +31,21 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 ## Doku 📝
 * make HTML
 
+## Tests 🧪
+```bash
+cd backend
+pip install -r requirements-test.txt
+python -m pytest
+```
+Details: [backend/tests/README.md](backend/tests/README.md)
+
 ## Assets 🖼
 * [Header image](https://pixabay.com/de/photos/w%C3%BCrfel-becher-w%C3%BCrfelbecher-1271185/)
 * [Dice1](https://pixabay.com/de/vectors/w%C3%BCrfel-walzen-werfen-eine-punkt-312625/)
 * [Dice6](https://pixabay.com/de/vectors/w%C3%BCrfel-sechs-augen-spielen-gl%C3%BCck-310333/)
 
 ## TODO's 🚀
-* Add Test's
+* Add Test's ✅
 * change periodic get to socket ✅
 * bring statistic to the public
 * add feedbackchangel with mail gateway ✅
