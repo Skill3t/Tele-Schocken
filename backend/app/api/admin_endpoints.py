@@ -8,7 +8,7 @@ from flask import jsonify
 from flask import request
 from app.models import User, Game, Status
 from random import seed, randrange
-from jinja2 import utils
+from markupsafe import escape
 
 from app.api.errors import bad_request
 
@@ -61,12 +61,12 @@ def create_Game():
           }
     """
     seed(1)
-    data = request.get_json() or {}
-    response = jsonify()
+    data = request.get_json(silent=True) or {}
+    response = jsonify({})
     if 'name' not in data:
         return bad_request('must include name field')
     else:
-        escapedusername = str(utils.escape(data['name']))
+        escapedusername = str(escape(data['name']))
         game = Game()
         inuse = User.query.filter_by(name=escapedusername).first()
         if inuse is not None:
@@ -117,7 +117,7 @@ def start_game(gid):
                 "Message": "success",
             }
     """
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     # requierd attribute not included
     if 'stack_max' not in data:
         response = jsonify(Message='request must include stack_max')
@@ -133,12 +133,12 @@ def start_game(gid):
         response.status_code = 404
         return response
     game.status = Status.STARTED
-    escaped_stack_max = int(utils.escape(data['stack_max']))
+    escaped_stack_max = int(escape(data['stack_max']))
 
     game.stack_max = escaped_stack_max
     game.stack = escaped_stack_max
 
-    escaped_play_final = str(utils.escape(data['play_final']))
+    escaped_play_final = str(escape(data['play_final']))
     if escaped_play_final.lower() in ['true', '1', 't', 'y', 'yes']:
         game.play_final = True
     else:
@@ -215,7 +215,7 @@ def transfer_chips(gid):
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
         return response
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     # requierd attribute not included
     if 'target' not in data:
         response = jsonify(Message='request must include target')
@@ -223,12 +223,12 @@ def transfer_chips(gid):
         return response
     # transfer from user A to B
     if 'count' in data and 'source' in data and 'target' in data:
-        escapedsource = str(utils.escape(data['source']))
-        userA = User.query.get_or_404(escapedsource)
-        escapedtarget = str(utils.escape(data['target']))
-        userB = User.query.get_or_404(escapedtarget)
+        escapedsource = str(escape(data['source']))
+        userA = db.get_or_404(User, escapedsource)
+        escapedtarget = str(escape(data['target']))
+        userB = db.get_or_404(User, escapedtarget)
         if data['count'] is not None:
-            escapedcount = int(utils.escape(data['count']))
+            escapedcount = int(escape(data['count']))
         else:
             response = jsonify(Message='No chips in count. try again')
             response.status_code = 400
@@ -256,10 +256,10 @@ def transfer_chips(gid):
             return response
     # transfer from stack to user B
     if 'count' in data and 'stack' in data and 'target' in data:
-        escapedtarget = str(utils.escape(data['target']))
-        userB = User.query.get_or_404(escapedtarget)
+        escapedtarget = str(escape(data['target']))
+        userB = db.get_or_404(User, escapedtarget)
         if data['count'] is not None:
-            escapedcount = int(utils.escape(data['count']))
+            escapedcount = int(escape(data['count']))
         else:
             response = jsonify(Message='No chips in count. try again')
             response.status_code = 400
@@ -285,9 +285,9 @@ def transfer_chips(gid):
             return response
     # transfer all to B Schockaus
     if 'schockaus' in data and 'target' in data:
-        escapedtarget = str(utils.escape(data['target']))
-        userB = User.query.get_or_404(escapedtarget)
-        escapedschockaus = utils.escape(data['schockaus'])
+        escapedtarget = str(escape(data['target']))
+        userB = db.get_or_404(User, escapedtarget)
+        escapedschockaus = escape(data['schockaus'])
         if escapedschockaus:
             if game.status == Status.PLAYFINAL:
                 if userB.halfcount == 0:
@@ -310,8 +310,8 @@ def transfer_chips(gid):
     if game.status == Status.ROUNDFINISCH or game.status == Status.GAMEFINISCH:
         game.status = Status.STARTED
     # Game GAMEFINISCH or ROUNDFINISCH
-    escapedtarget = str(utils.escape(data['target']))
-    userB = User.query.get_or_404(escapedtarget)
+    escapedtarget = str(escape(data['target']))
+    userB = db.get_or_404(User, escapedtarget)
     # if userB.chips == game.stack_max:
     #    userB.halfcount = userB.halfcount + 1
     #    game.status = Status.ROUNDFINISCH
@@ -413,7 +413,7 @@ def transfer_chips(gid):
 @bp.route('/game/<gid>/user/<uid>', methods=['DELETE'])
 def delete_player(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
-    delete_user = User.query.get_or_404(uid)
+    delete_user = db.get_or_404(User, uid)
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')
         response.status_code = 404
@@ -465,16 +465,16 @@ def delete_player(gid, uid):
 @bp.route('/game/<gid>/user/<uid>/change_admin', methods=['POST'])
 def choose_admin(gid, uid):
     game = Game.query.filter_by(UUID=gid).first()
-    user = User.query.get_or_404(uid)
-    data = request.get_json() or {}
+    user = db.get_or_404(User, uid)
+    data = request.get_json(silent=True) or {}
     # requierd attribute not included
     if 'new_admin_id' not in data:
         response = jsonify(Message='request must include new_admin_id')
         response.status_code = 400
         return response
     else:
-        new_admin_id = str(utils.escape(data['new_admin_id']))
-        new_admin = User.query.get_or_404(new_admin_id)
+        new_admin_id = str(escape(data['new_admin_id']))
+        new_admin = db.get_or_404(User, new_admin_id)
 
     if game is None:
         response = jsonify(Message='Spiel nicht gefunden')

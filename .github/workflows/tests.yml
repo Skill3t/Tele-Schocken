@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+          cache-dependency-path: backend/poetry.lock
+
+      - name: Install dependencies
+        run: |
+          poetry env use "${{ matrix.python-version }}"
+          poetry install --with test --no-interaction
+
+      - name: Run pytest
+        run: poetry run pytest -v

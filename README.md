@@ -28,8 +28,33 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 * Thx to [TornadoOma](https://www.twitch.tv/tornadooma) for the instruction video
 * Thx to [Wiiilmaa](https://github.com/Wiiilmaa) for improving the Final game.
 
+## Setup 🛠
+Dependencies are managed with [Poetry](https://python-poetry.org/) (Python 3.11 – 3.14):
+```bash
+cd backend
+poetry install                 # app + test dependencies
+poetry install --with docs     # additionally Sphinx for the documentation
+poetry add <package>           # add a new dependency
+poetry run pip-audit           # check dependencies for known vulnerabilities
+```
+
+Run locally (needs a `backend/config.py`, see `exampleConfig.py`):
+```bash
+poetry run flask db upgrade    # create / update the database
+poetry run python teleschocken.py   # http://127.0.0.1:8000 (port via PORT=...)
+```
+`flask run` is blocked on purpose: its dev server can not handle the gevent based Socket.IO
+connection, so a game would never start. In production use `gunicorn -k gevent -w 1 teleschocken:app`.
+
 ## Doku 📝
-* make HTML
+* poetry run make html
+
+## Tests 🧪
+```bash
+cd backend
+poetry run pytest
+```
+Details: [backend/tests/README.md](backend/tests/README.md)
 
 ## Assets 🖼
 * [Header image](https://pixabay.com/de/photos/w%C3%BCrfel-becher-w%C3%BCrfelbecher-1271185/)
@@ -37,7 +62,7 @@ Python Backend with Flask. HTML, CSS, JS frontend. Poor mobile optimization.
 * [Dice6](https://pixabay.com/de/vectors/w%C3%BCrfel-sechs-augen-spielen-gl%C3%BCck-310333/)
 
 ## TODO's 🚀
-* Add Test's
+* Add Test's ✅
 * change periodic get to socket ✅
 * bring statistic to the public
 * add feedbackchangel with mail gateway ✅
