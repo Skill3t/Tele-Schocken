@@ -135,3 +135,10 @@ function back_to_waiting(){
       xhttp.send(JSON.stringify({count:parseInt(count), source:parseInt(source), target:parseInt(target)}));
     }
   }
+
+// event handlers (inline onclick is blocked by the CSP)
+document.getElementById('sort_dice_id').addEventListener('click', sort_dice);
+document.getElementById('transfere_chips_id').addEventListener('click', transfer_chips);
+document.getElementById('delete_player_id').addEventListener('click', delete_player);
+document.getElementById('choose_admin_id').addEventListener('click', choose_admin);
+document.getElementById('back_to_waiting').addEventListener('click', back_to_waiting);
