@@ -49,8 +49,6 @@ services:
       MAIL_USE_TLS: ${MAIL_USE_TLS:-false}
       MAIL_USE_SSL: ${MAIL_USE_SSL:-true}
     command:
-      - poetry
-      - run
       - gunicorn
       - -k
       - gevent
