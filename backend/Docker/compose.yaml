@@ -1,0 +1,75 @@
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD fehlt}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?MYSQL_DATABASE fehlt}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER fehlt}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD fehlt}
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    networks:
+      - backend
+
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  app:
+    image: tele-schocken-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      FLASK_APP: teleschocken.py
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY fehlt}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?MYSQL_DATABASE fehlt}
+      MYSQL_USER: ${MYSQL_USER:?MYSQL_USER fehlt}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD fehlt}
+      MYSQL_HOST: db
+      MYSQL_PORT: "3306"
+      MAIL_SERVER: ${MAIL_SERVER:?MAIL_SERVER fehlt}
+      MAIL_PORT: ${MAIL_PORT:-465}
+      MAIL_USERNAME: ${MAIL_USERNAME:?MAIL_USERNAME fehlt}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD fehlt}
+      MAIL_USE_TLS: ${MAIL_USE_TLS:-false}
+      MAIL_USE_SSL: ${MAIL_USE_SSL:-true}
+    command:
+      - poetry
+      - run
+      - gunicorn
+      - -k
+      - gevent
+      - -w
+      - "1"
+      - -b
+      - 0.0.0.0:8000
+      - teleschocken:app
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - backend
+      - frontend
+volumes:
+  mysql_data:
+
+networks:
+  # backend hätte auch internal: true sein können aber dann ist es schwieriger auf die DB zuzugreifen
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
