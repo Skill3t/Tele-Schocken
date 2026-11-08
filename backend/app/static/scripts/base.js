@@ -1,0 +1,4 @@
+function startup(){
+  donate();
+}
+startup();
