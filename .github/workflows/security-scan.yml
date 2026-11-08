@@ -1,0 +1,95 @@
+name: Security scan
+
+on:
+  schedule:
+    # Monday, Wednesday and Friday at 06:00 UTC
+    - cron: "0 6 * * 1,3,5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.13"
+  TRIVY_SEVERITY: HIGH,CRITICAL
+
+jobs:
+  pip-audit:
+    name: pip-audit (Python dependencies)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: poetry
+          cache-dependency-path: backend/poetry.lock
+
+      - name: Install dependencies
+        run: |
+          poetry env use "$PYTHON_VERSION"
+          poetry install --with test,dev --no-interaction --no-root
+
+      - name: Run pip-audit
+        run: poetry run pip-audit --strict --desc
+
+  trivy-fs:
+    name: Trivy (repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Scan dependencies, secrets and Docker/Compose config
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,secret,misconfig
+          severity: ${{ env.TRIVY_SEVERITY }}
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
+
+  trivy-image:
+    name: Trivy (Docker image)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      # The Dockerfile expects the sources under app/backend/ inside the build context
+      - name: Prepare build context
+        run: |
+          mkdir -p "$RUNNER_TEMP/docker-ctx/app"
+          cp -r backend "$RUNNER_TEMP/docker-ctx/app/backend"
+
+      - name: Build image
+        run: |
+          docker build \
+            -f backend/Docker/Dockerfile \
+            -t tele-schocken-app:scan \
+            "$RUNNER_TEMP/docker-ctx"
+
+      - name: Scan image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: tele-schocken-app:scan
+          scanners: vuln
+          severity: ${{ env.TRIVY_SEVERITY }}
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
