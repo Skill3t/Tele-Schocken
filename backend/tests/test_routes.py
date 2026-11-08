@@ -26,3 +26,18 @@ def test_csp_nonce(client, create_game):
         assert scripts
         assert all('nonce="{}"'.format(nonce) in tag and 'src=' in tag for tag in scripts), url
         assert not re.search(r'\son[a-z]+=', html), url
+
+
+def test_security_headers(client):
+    for url in ['/', '/scripts/base.js']:
+        response = client.get(url)
+        assert response.headers['X-Content-Type-Options'] == 'nosniff', url
+        assert response.headers['Referrer-Policy'] == 'strict-origin-when-cross-origin', url
+        assert 'camera=()' in response.headers['Permissions-Policy'], url
+        assert 'Strict-Transport-Security' not in response.headers, url
+    assert "frame-ancestors 'none'" in client.get('/').headers['Content-Security-Policy']
+
+
+def test_hsts_header_behind_https_proxy(client):
+    response = client.get('/', headers={'X-Forwarded-Proto': 'https'})
+    assert response.headers['Strict-Transport-Security'] == 'max-age=31536000; includeSubDomains'
