@@ -11,9 +11,8 @@ from multiprocessing import Lock
 
 lock2 = Lock()
 
-# Will be externely called via cronjob
-@app.cli.command("send_new_game_mail")
-def sendMail():
+# Runs every minute via APScheduler (app/scheduler.py), needs an app context
+def send_new_game_mail():
     try:
         not_notified_games = db.session.query(Game).filter(Game.is_mail_send.is_(False)).with_for_update().all()
         if len(not_notified_games) > 0:
@@ -28,7 +27,12 @@ def sendMail():
                 db.session.commit()
     finally:
         db.session.commit()
-        return
+
+
+# Manual run: flask send_new_game_mail
+@app.cli.command("send_new_game_mail")
+def send_new_game_mail_command():
+    send_new_game_mail()
 
 
 def sendFeedbackMail(browser, body, email):

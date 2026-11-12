@@ -48,15 +48,6 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD fehlt}
       MAIL_USE_TLS: ${MAIL_USE_TLS:-false}
       MAIL_USE_SSL: ${MAIL_USE_SSL:-true}
-    command:
-      - gunicorn
-      - -k
-      - gevent
-      - -w
-      - "1"
-      - -b
-      - 0.0.0.0:8000
-      - teleschocken:app
     ports:
       - "127.0.0.1:8000:8000"
     networks:
