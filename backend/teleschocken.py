@@ -35,7 +35,9 @@ def make_shell_context():
 if __name__ == '__main__':
     import os
     from app.api.game_endpoints import socketio
+    from app.scheduler import start_scheduler
 
+    start_scheduler()
     port = int(os.environ.get('PORT', 8000))
     print('Tele-Schocken running on http://127.0.0.1:{}'.format(port), flush=True)
     socketio.run(app, host='127.0.0.1', port=port)

@@ -4,9 +4,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
-# Will be externely called via cronjob
-@app.cli.command("create-statistics")
-def statistic():
+# Runs every 24 hours via APScheduler (app/scheduler.py), needs an app context
+def create_statistics():
     todayDate = datetime.now()
     delta = relativedelta(days=-1)
     one_day = todayDate + delta
@@ -34,3 +33,9 @@ def statistic():
                 db.session.commit()
     finally:
         db.session.commit()
+
+
+# Manual run: flask create-statistics
+@app.cli.command("create-statistics")
+def create_statistics_command():
+    create_statistics()

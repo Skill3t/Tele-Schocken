@@ -35,7 +35,11 @@ def test_security_headers(client):
         assert response.headers['Referrer-Policy'] == 'strict-origin-when-cross-origin', url
         assert 'camera=()' in response.headers['Permissions-Policy'], url
         assert 'Strict-Transport-Security' not in response.headers, url
-    assert "frame-ancestors 'none'" in client.get('/').headers['Content-Security-Policy']
+
+    # tele-schocken must stay embeddable in iframes
+    response = client.get('/')
+    assert 'frame-ancestors' not in response.headers['Content-Security-Policy']
+    assert 'X-Frame-Options' not in response.headers
 
 
 def test_hsts_header_behind_https_proxy(client):

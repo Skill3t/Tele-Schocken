@@ -36,11 +36,12 @@ app.jinja_env.globals['csp_nonce'] = csp_nonce
 
 @app.after_request
 def set_security_headers(response):
-    # only <script> tags carrying the nonce are executed, inline scripts and onclick handlers are blocked
+    # only <script> tags carrying the nonce are executed, inline scripts and onclick handlers are blocked.
+    # tele-schocken is embedded in iframes on other sites, so neither frame-ancestors nor
+    # X-Frame-Options is set
     if response.mimetype == 'text/html':
         response.headers['Content-Security-Policy'] = (
-            "script-src 'nonce-{}'; object-src 'none'; base-uri 'self'; "
-            "frame-ancestors 'none'".format(csp_nonce()))
+            "script-src 'nonce-{}'; object-src 'none'; base-uri 'self'".format(csp_nonce()))
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = (
