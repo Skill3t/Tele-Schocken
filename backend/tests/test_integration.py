@@ -155,24 +155,22 @@ def test_status_enum_round_trip(app, create_game):
 
 
 # "flask run" can not serve gevent Socket.IO and is blocked (see game_endpoints.py)
-def _flask(tmp_path, *args):
-    (tmp_path / 'config.py').write_text(
-        "class Config(object):\n"
-        "    SECRET_KEY = 'test'\n"
-        "    SQLALCHEMY_DATABASE_URI = 'sqlite://'\n")
+# uses the development part of config.py (MYSQL_HOST removed) with an in-memory database
+def _flask(*args):
     backend = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    env = dict(os.environ, PYTHONPATH=str(tmp_path), FLASK_APP='teleschocken.py')
+    env = dict(os.environ, DATABASE_URL='sqlite://', FLASK_APP='teleschocken.py')
+    env.pop('MYSQL_HOST', None)
     return subprocess.run([sys.executable, '-m', 'flask', *args], cwd=backend, env=env,
                           capture_output=True, text=True, timeout=60)
 
 
-def test_flask_run_is_blocked(tmp_path):
-    result = _flask(tmp_path, 'run', '-p', '5999')
+def test_flask_run_is_blocked():
+    result = _flask('run', '-p', '5999')
     assert result.returncode != 0
     assert 'python teleschocken.py' in result.stderr
 
 
-def test_other_flask_commands_still_work(tmp_path):
-    result = _flask(tmp_path, 'db', '--help')
+def test_other_flask_commands_still_work():
+    result = _flask('db', '--help')
     assert result.returncode == 0
     assert 'upgrade' in result.stdout

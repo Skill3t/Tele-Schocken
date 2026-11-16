@@ -3,9 +3,9 @@ conftest.py
 ====================================
 Shared pytest fixtures for the backend API tests.
 
-The app imports ``Config`` from a local (gitignored) ``config`` module that
-points to MySQL. For the tests a stand-in module with an in-memory SQLite
-database is registered before ``app`` is imported.
+The app imports ``Config`` from ``config.py``. For the tests a stand-in
+module with an in-memory SQLite database is registered before ``app`` is
+imported, so the tests never touch a real database or mail server.
 """
 import sys
 import types

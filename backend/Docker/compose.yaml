@@ -24,7 +24,9 @@ services:
       start_period: 60s
 
   app:
-    image: tele-schocken-app:latest
+    # fertiges Image aus der CI (.github/workflows/docker-publish.yml);
+    # "docker compose build app" baut es stattdessen lokal
+    image: ghcr.io/skill3t/tele-schocken:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -48,6 +50,7 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD:?MAIL_PASSWORD fehlt}
       MAIL_USE_TLS: ${MAIL_USE_TLS:-false}
       MAIL_USE_SSL: ${MAIL_USE_SSL:-true}
+      SESSION_COOKIE_SAMESITE: ${SESSION_COOKIE_SAMESITE:-Lax}
     ports:
       - "127.0.0.1:8000:8000"
     networks:
