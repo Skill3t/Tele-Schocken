@@ -1,0 +1,97 @@
+name: Docker image
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  # ghcr.io only accepts lowercase names (ghcr.io/skill3t/tele-schocken)
+  IMAGE_NAME: skill3t/tele-schocken
+
+jobs:
+  build-and-push:
+    name: Build, scan and push
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v5
+
+      # The Dockerfile expects the sources under app/backend/ inside the build context
+      - name: Prepare build context
+        run: |
+          mkdir -p "$RUNNER_TEMP/docker-ctx/app"
+          cp -r backend "$RUNNER_TEMP/docker-ctx/app/backend"
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # latest + sha-<commit> on master, 1.2.3 / 1.2 for tags v1.2.3
+      - name: Image tags and labels
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=ref,event=pr
+
+      # build once and load it locally, so Trivy can scan it before anything is pushed
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ runner.temp }}/docker-ctx
+          file: backend/Docker/Dockerfile
+          platforms: linux/amd64
+          load: true
+          tags: tele-schocken-app:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Scan image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: tele-schocken-app:ci
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
+
+      # reuses the cached layers from the build step, so this only pushes
+      - name: Push image
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ runner.temp }}/docker-ctx
+          file: backend/Docker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha

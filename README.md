@@ -38,7 +38,7 @@ poetry add <package>           # add a new dependency
 poetry run pip-audit           # check dependencies for known vulnerabilities
 ```
 
-Run locally (needs a `backend/config.py`, see `exampleConfig.py`):
+Run locally (`backend/config.py` uses SQLite and suppresses mails as long as `MYSQL_HOST` is not set):
 ```bash
 poetry run flask db upgrade    # create / update the database
 poetry run python teleschocken.py   # http://127.0.0.1:8000 (port via PORT=...)
